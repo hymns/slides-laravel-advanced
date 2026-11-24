@@ -1,0 +1,2808 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 1 — Senibina Kod &amp; Corak Reka Bentuk</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 1 · Senibina Kod &amp; Corak Reka Bentuk</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- PEMBUKA                                                       -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 1 / 6</span>
+  <h1 style="margin-top:.1em">Senibina Kod &amp; Corak Reka Bentuk</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-cubes"></i>SOLID</span>
+    <span><i class="fa-solid fa-gears"></i>Service Layer</span>
+    <span><i class="fa-solid fa-database"></i>Repository Pattern</span>
+    <span><i class="fa-solid fa-diagram-project"></i>Service Container &amp; Dependency Injection (DI)</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">6 jam</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Teori · Live coding · Lab</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">
+    Modul ini asas kepada semua modul lain: kod yang kita tulis di sini akan kita optimasi (Modul 2),
+    jadikan API (Modul 3), offload ke queue (Modul 4) dan uji (Modul 5).
+  </aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu menulis kod yang <strong>bersih</strong>, <strong>terstruktur</strong> dan <strong>mudah diselenggara</strong> menggunakan prinsip industri.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh <strong>refactor codebase sedia ada</strong> menggunakan Service Layer dan Repository Pattern.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">
+    <strong>Prasyarat:</strong> routing, controller, model, migration. Contoh kod guna <strong>PHP 8.4</strong> dan <strong>Laravel 13</strong>.
+  </div>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual hari ini</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">8:30</span><h3>Kes kajian</h3><p>Fat controller (controller gemuk) &amp; kenapa ia bermasalah</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">9:00</span><h3>SOLID</h3><p>5 prinsip, contoh Laravel, pitfalls</p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">10:25</span><h3>Service Layer</h3><p>FormRequest, DTO (Data Transfer Object), service</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">11:30</span><h3>Repository</h3><p>Abstraksi data, decorator cache</p></div>
+    <div class="slot" style="background:var(--good-soft)"><span class="time">12:15</span><h3>Container &amp; DI</h3><p>Dependency Injection: binding, resolving</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">2:15</span><h3 style="color:#fff">Lab</h3><p style="color:#b9c3d3">Refactor + code review</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 1: 8:30 pagi – 3:20 petang. Bahagian Container &amp; DI (12:15) bersambung selepas makan tengah hari.</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Kes kajian sepanjang modul</span>
+  <h2>Sistem Bayaran Yuran Pelajar</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p style="font-size:.7em">Pelajar membayar invois yuran secara dalam talian.</p>
+      <ul style="font-size:.62em">
+        <li>Jenis invois: <strong>yuran semester</strong>, <strong>asrama</strong>, <strong>denda perpustakaan</strong></li>
+        <li>Bayar selepas tarikh akhir → <strong>penalti lewat</strong>:
+          semester <code>5%</code>, asrama <code>2%</code>, denda <code>0%</code></li>
+        <li>Kaedah bayaran: <strong>FPX</strong>, <strong>kad</strong>, <strong>e-wallet</strong>, kaunter Bendahari</li>
+        <li>Selepas bayaran: invois ditanda berbayar, <strong>resit</strong> dihantar melalui emel</li>
+        <li>Bayaran dibuat dari <strong>web</strong>, <strong>app mobile (API)</strong> dan <strong>import penyata kaunter</strong> (Artisan)</li>
+      </ul>
+    </div>
+    <svg class="info" viewBox="0 0 440 320" role="img" aria-label="Entiti: Student, Invoice, Payment">
+      <defs><marker id="ah0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+      <rect class="box-p" x="0" y="20" width="180" height="90" rx="10"/>
+      <text class="t" x="90" y="55" text-anchor="middle">Student</text>
+      <text class="t-s" x="90" y="82" text-anchor="middle">matric, programme</text>
+      <rect class="box-a" x="250" y="20" width="190" height="110" rx="10"/>
+      <text class="t" x="345" y="52" text-anchor="middle">Invoice</text>
+      <text class="t-s" x="345" y="78" text-anchor="middle">type, amount</text>
+      <text class="t-s" x="345" y="100" text-anchor="middle">due_date, paid_at</text>
+      <rect class="box-g" x="230" y="210" width="210" height="100" rx="10"/>
+      <text class="t" x="335" y="245" text-anchor="middle">Payment</text>
+      <text class="t-s" x="335" y="270" text-anchor="middle">method, amount</text>
+      <text class="t-s" x="335" y="292" text-anchor="middle">reference, paid_at</text>
+      <path d="M180 65 L245 65" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ah0)"/>
+      <path d="M345 130 L340 205" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ah0)"/>
+      <text class="t-s" x="190" y="55">1 : N</text>
+      <text class="t-s" x="355" y="175">1 : N</text>
+    </svg>
+  </div>
+  <aside class="notes">Domain ini sengaja dipilih kerana peserta (staf IT UTM) sudah kenal prosesnya. Semua contoh SOLID, Service Layer, Repository dan Container dalam modul ini guna domain yang sama.</aside>
+</section>
+
+<section data-timing="480">
+  <span class="kicker">Titik mula</span>
+  <h2>Controller yang “buat semua benda”</h2>
+  <div class="rule"></div>
+  <p class="code-label">app/Http/Controllers/PaymentController.php</p>
+  <pre class="xs"><code class="language-php" data-trim data-line-numbers="3-6|7-10|11-15|16-20|22-24|25-26">
+public function store(Request $request)
+{
+    $request->validate([
+        'invoice_id' => 'required|exists:invoices,id',
+        'method'     => 'required|in:fpx,card,ewallet',
+    ]);
+    $invoice = Invoice::find($request->invoice_id);
+    if ($invoice->paid_at) {
+        return back()->withErrors(['invoice_id' => 'Invois sudah dibayar.']);
+    }
+    $amount = $invoice->amount;
+    if (now()->gt($invoice->due_date)) {
+        if ($invoice->type == 'semester') { $amount = $amount * 1.05; }
+        elseif ($invoice->type == 'hostel') { $amount = $amount * 1.02; }
+    }
+    if ($request->input('method') == 'fpx') {
+        $ref = (new FpxClient(env('FPX_KEY')))->pay($invoice->number, $amount);
+    } elseif ($request->input('method') == 'card') {
+        $ref = (new CardClient(env('CARD_KEY')))->charge($amount);
+    } else { $ref = (new EWalletClient(env('EWALLET_KEY')))->debit($amount); }
+
+    $payment = Payment::create($request->all()
+        + ['student_id' => auth()->user()->student->id, 'amount' => $amount, 'reference' => $ref]);
+    $invoice->update(['paid_at' => now()]);
+    Mail::to(auth()->user())->send(new PaymentReceipt($payment));
+    return redirect()->route('payments.show', $payment);
+}
+  </code></pre>
+  <aside class="notes">Tekan anak panah untuk sorot setiap blok: validasi → semak invois → kira penalti → caj gateway → simpan → emel. Tanya peserta: berapa pihak yang boleh minta fail ini diubah?</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Diagnosis</span>
+  <h2>Apa masalahnya?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <div class="card bad fragment" style="margin-bottom:14px"><h3><i class="fa-solid fa-flask"></i>Susah diuji</h3><p>Nak uji kiraan penalti, kena hantar HTTP request, ada DB, dan FPX betul-betul dicaj.</p></div>
+      <div class="card bad fragment" style="margin-bottom:14px"><h3><i class="fa-solid fa-recycle"></i>Tidak boleh guna semula</h3><p>App mobile dan import penyata kaunter perlu salin-tampal logik yang sama → 3 versi berbeza dalam 6 bulan.</p></div>
+      <div class="card bad fragment"><h3><i class="fa-solid fa-lock-open"></i>Isu tersembunyi</h3><p><code>$request->all()</code> → mass assignment. <code>env()</code> di luar config → null bila <code>config:cache</code>.</p></div>
+    </div>
+    <div>
+      <div class="card warn fragment" style="margin-bottom:14px"><h3><i class="fa-solid fa-arrows-rotate"></i>Terlalu banyak sebab berubah</h3><p>Kadar penalti berubah? Bank tukar API FPX? Kaedah bayaran baru? Semua sentuh fail yang sama.</p></div>
+      <div class="card warn fragment" style="margin-bottom:14px"><h3><i class="fa-solid fa-hourglass-half"></i>Emel blok response</h3><p>Pelajar tunggu pelayan emel hantar resit sebelum nampak halaman "bayaran berjaya".</p></div>
+      <div class="card warn fragment"><h3><i class="fa-solid fa-shuffle"></i>Race condition</h3><p>Dua klik serentak boleh bayar invois yang sama dua kali. (Kita selesaikan dalam Modul 2.)</p></div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Sebelum SOLID · enum (PHP 8.1+)</span>
+  <h2>Ganti magic string dengan enum</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Enums/FeeType.php</p>
+      <pre class="sm"><code class="language-php" data-trim>
+namespace App\Enums;
+
+enum FeeType: string
+{
+    case Semester    = 'semester';
+    case Hostel      = 'hostel';
+    case LibraryFine = 'library_fine';
+}
+      </code></pre>
+      <p class="code-label">app/Enums/PaymentMethod.php</p>
+      <pre class="sm"><code class="language-php" data-trim>
+namespace App\Enums;
+
+enum PaymentMethod: string
+{
+    case Fpx     = 'fpx';
+    case Card    = 'card';
+    case EWallet = 'ewallet';
+    case Counter = 'counter';   // kaunter Bendahari
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Cara guna</p>
+      <pre class="sm"><code class="language-php" data-trim>
+// string (nilai dalam DB / request) → enum
+$method = PaymentMethod::from('fpx');    // PaymentMethod::Fpx
+PaymentMethod::from('cash');             // ValueError
+
+// enum → string
+$method->value;                          // 'fpx'
+
+// banding
+$method === PaymentMethod::Fpx;          // true
+      </code></pre>
+      <table style="font-size:.5em; margin-top:.6em">
+        <thead><tr><th>Magic string (nilai ditulis terus dalam kod)</th><th>Enum</th></tr></thead>
+        <tbody>
+          <tr><td><code>$type == 'semster'</code>: salah eja, diam-diam <code>false</code></td><td><code>FeeType::Semster</code>: PHP terus beri ralat</td></tr>
+          <tr><td>Nilai sah tersebar dalam banyak fail</td><td>Semua nilai sah dalam satu fail</td></tr>
+          <tr><td>Parameter <code>string $method</code> terima apa sahaja</td><td>Parameter <code>PaymentMethod $method</code> hanya terima 4 nilai</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.52em">Model <code>Invoice</code> tukar kolum <code>type</code> kepada <code>FeeType</code> secara automatik. Kod penuh model ditunjuk dalam Bahagian 03.</div>
+    </div>
+  </div>
+  <aside class="notes">Kedua-dua enum ini digunakan dalam semua contoh SOLID selepas ini: FeeType dalam LatePenaltyCalculator (SRP), PaymentMethod dalam PaymentGateway::supports() (OCP, LSP, ISP).</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Destinasi</span>
+  <h2>Senibina berlapis yang kita tuju</h2>
+  <div class="rule"></div>
+  <svg class="info" style="max-width:1000px; margin:0 auto" viewBox="0 0 1160 520" role="img" aria-label="Lapisan: HTTP, Application, Domain, Data">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker>
+      <marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6ea8ff"/></marker>
+      <marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f0a91f"/></marker>
+      <marker id="ahi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6ea8ff"/></marker>
+    </defs>
+    <!-- label lapisan -->
+    <text class="t-h" x="0" y="60">HTTP</text>
+    <text class="t-h" x="0" y="190">APPLICATION</text>
+    <text class="t-h" x="0" y="320">DOMAIN</text>
+    <text class="t-h" x="0" y="450">DATA</text>
+    <line x1="160" y1="110" x2="1160" y2="110" stroke="#2a3140" stroke-dasharray="4 6"/>
+    <line x1="160" y1="240" x2="1160" y2="240" stroke="#2a3140" stroke-dasharray="4 6"/>
+    <line x1="160" y1="370" x2="1160" y2="370" stroke="#2a3140" stroke-dasharray="4 6"/>
+
+    <!-- HTTP -->
+    <rect class="box" x="170" y="20" width="210" height="72" rx="10"/>
+    <text class="t" x="275" y="52" text-anchor="middle">Route + Middleware</text>
+    <text class="t-s" x="275" y="76" text-anchor="middle">auth, throttle</text>
+    <rect class="box-p" x="430" y="20" width="210" height="72" rx="10"/>
+    <text class="t" x="535" y="52" text-anchor="middle">FormRequest</text>
+    <text class="t-s" x="535" y="76" text-anchor="middle">validate + authorize</text>
+    <rect class="box-p" x="690" y="20" width="210" height="72" rx="10"/>
+    <text class="t" x="795" y="52" text-anchor="middle">Controller</text>
+    <text class="t-s" x="795" y="76" text-anchor="middle">thin (controller kurus)</text>
+    <path class="arr" d="M380 56 L425 56"/>
+    <path class="arr" d="M640 56 L685 56"/>
+
+    <!-- APPLICATION -->
+    <rect class="box-w" x="430" y="150" width="210" height="72" rx="10"/>
+    <text class="t" x="535" y="182" text-anchor="middle">DTO</text>
+    <text class="t-s" x="535" y="206" text-anchor="middle">Data Transfer Object</text>
+    <rect class="box-a" x="690" y="150" width="210" height="72" rx="10"/>
+    <text class="t" x="795" y="182" text-anchor="middle">PaymentService</text>
+    <text class="t-s" x="795" y="206" text-anchor="middle">orkestrasi + transaksi</text>
+    <rect class="box" x="950" y="150" width="200" height="72" rx="10"/>
+    <text class="t" x="1050" y="182" text-anchor="middle">Event → Listener</text>
+    <text class="t-s" x="1050" y="206" text-anchor="middle">emel resit (queue)</text>
+    <path class="arr-a" d="M795 92 L795 145"/>
+    <path class="arr" d="M640 186 L685 186"/>
+    <path class="arr" d="M900 186 L945 186"/>
+
+    <!-- DOMAIN -->
+    <rect class="box-g" x="560" y="280" width="210" height="72" rx="10"/>
+    <text class="t" x="665" y="312" text-anchor="middle">PaymentProcessor</text>
+    <text class="t-s" x="665" y="336" text-anchor="middle">FPX · kad · e-wallet</text>
+    <rect class="box-i" x="820" y="280" width="250" height="72" rx="10"/>
+    <text class="t-i" x="945" y="302" text-anchor="middle">«interface»</text>
+    <text class="t" x="945" y="332" text-anchor="middle">InvoiceRepository</text>
+    <path class="arr" d="M760 222 L700 275"/>
+    <path class="arr-i" d="M830 222 L900 275"/>
+
+    <!-- DATA -->
+    <rect class="box-p" x="820" y="410" width="250" height="72" rx="10"/>
+    <text class="t" x="945" y="442" text-anchor="middle">EloquentInvoiceRepo</text>
+    <text class="t-s" x="945" y="466" text-anchor="middle">implements interface</text>
+    <rect class="box-d" x="560" y="410" width="210" height="72" rx="10"/>
+    <text class="t-w" x="665" y="442" text-anchor="middle">MySQL / PostgreSQL</text>
+    <text class="t-ws" x="665" y="466" text-anchor="middle">Eloquent Model</text>
+    <path class="arr-p" d="M945 405 L945 357"/>
+    <path class="arr" d="M820 446 L775 446"/>
+  </svg>
+  <p class="small" style="text-align:center; margin:.2em 0 0">Anak panah putus-putus = bergantung pada <em>abstraksi</em>, bukan implementasi.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 1: SOLID                                             -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-cubes"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>Prinsip SOLID</h2>
+  <p>Definisi, contoh praktikal Laravel, dan common pitfalls</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Gambaran besar</span>
+  <h2>SOLID dalam satu skrin</h2>
+  <div class="rule"></div>
+  <div class="cols-5">
+    <div class="card solid-card primary"><div class="letter">S</div><div class="acr">SRP</div><h3>Single Responsibility Principle</h3><p>Satu class, satu sebab untuk berubah</p></div>
+    <div class="card solid-card"><div class="letter">O</div><div class="acr">OCP</div><h3>Open / Closed Principle</h3><p>Tambah ciri dengan kod baru, bukan ubah kod lama</p></div>
+    <div class="card solid-card"><div class="letter">L</div><div class="acr">LSP</div><h3>Liskov Substitution Principle</h3><p>Subclass mesti boleh ganti parent tanpa kejutan</p></div>
+    <div class="card solid-card"><div class="letter">I</div><div class="acr">ISP</div><h3>Interface Segregation Principle</h3><p>Interface kecil &amp; khusus, bukan satu gergasi</p></div>
+    <div class="card solid-card accent"><div class="letter" style="color:var(--accent)">D</div><div class="acr">DIP</div><h3>Dependency Inversion Principle</h3><p>Bergantung pada abstraksi, bukan implementasi</p></div>
+  </div>
+  <div class="callout" style="margin-top:1.2em">
+    SOLID bukan peraturan mutlak — ia <strong>alat untuk mengurus perubahan</strong>. Soalan yang betul: <em>“Bahagian mana kod ini yang paling kerap berubah?”</em>
+  </div>
+</section>
+
+<!-- S -->
+<section data-timing="300">
+  <span class="kicker">S · Single Responsibility Principle (SRP)</span>
+  <h2>“Satu sebab untuk berubah”</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.65em">Robert C. Martin: <em>“A module should be responsible to one, and only one, actor.”</em></p>
+      <p style="font-size:.65em">Bukan “satu method” — tetapi <strong>satu pihak</strong> yang meminta perubahan.</p>
+      <h4 style="margin-top:1em">Fat controller tadi melayan 6 pihak:</h4>
+    </div>
+    <div>
+      <div class="resp"><span class="dot" style="background:#1e4e8c"></span>Pasukan UX (validasi) <span class="arrow">→</span> <code>StorePaymentRequest</code></div>
+      <div class="resp"><span class="dot" style="background:#f05340"></span>Bendahari (kadar penalti) <span class="arrow">→</span> <code>LatePenaltyCalculator</code></div>
+      <div class="resp"><span class="dot" style="background:#1f8a4c"></span>Integrasi bank (FPX / kad) <span class="arrow">→</span> <code>PaymentProcessor</code></div>
+      <div class="resp"><span class="dot" style="background:#b7791f"></span>Aliran bayaran <span class="arrow">→</span> <code>PaymentService</code></div>
+      <div class="resp"><span class="dot" style="background:#7a4fb5"></span>Komunikasi (emel resit) <span class="arrow">→</span> <code>SendPaymentReceipt</code></div>
+      <div class="resp"><span class="dot" style="background:#5b6678"></span>Web / API (format response) <span class="arrow">→</span> <code>PaymentController</code></div>
+    </div>
+  </div>
+  <div class="callout good" style="margin-top:1em">Ujian cepat: cuba terangkan class anda dalam satu ayat <strong>tanpa perkataan “dan”</strong>.</div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">S · Single Responsibility Principle (SRP)</span>
+  <h2>Sebelum → selepas</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="sm"><code class="language-php" data-trim>
+final class PaymentController extends Controller
+{
+    public function store(Request $request)
+    {
+        // ... validasi, semak invois ...
+
+        $amount = $invoice->amount;
+        if (now()->gt($invoice->due_date)) {
+            if ($invoice->type == 'semester') {
+                $amount = $amount * 1.05;
+            } elseif ($invoice->type == 'hostel') {
+                $amount = $amount * 1.02;
+            }
+        }
+
+        // ... caj FPX, simpan, emel ...
+    }
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">Bendahari nak tukar kadar penalti → kena buka controller HTTP.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <pre class="sm"><code class="language-php" data-trim>
+final class LatePenaltyCalculator
+{
+    public function for(Invoice $invoice, CarbonInterface $today): float
+    {
+        if ($today->lte($invoice->due_date)) {
+            return 0.0;
+        }
+
+        return match ($invoice->type) {
+            FeeType::Semester    => $invoice->amount * 0.05,
+            FeeType::Hostel      => $invoice->amount * 0.02,
+            FeeType::LibraryFine => 0.0,
+        };
+    }
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">Satu tempat, satu pihak (Bendahari), mudah diuji tanpa HTTP/DB.</p>
+    </div>
+  </div>
+  <aside class="notes">$invoice->type ialah enum FeeType (cast dalam model Invoice). match + enum: jika jenis invois baru ditambah dan match tidak dikemas kini, PHP throw UnhandledMatchError, bukan diam-diam kira penalti salah.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Sampingan · kata kunci <code>final</code></span>
+  <h2>Bila guna <code>final</code>?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="sm"><code class="language-php" data-trim>
+final class LatePenaltyCalculator
+{
+    // ...
+}
+
+// Cuba extend:
+class HostelPenaltyCalculator extends LatePenaltyCalculator {}
+      </code></pre>
+      <pre style="font-size:.4em; margin-top:.5em"><code class="language-plaintext" style="white-space:pre-wrap">Fatal error: Class HostelPenaltyCalculator cannot extend final class LatePenaltyCalculator</code></pre>
+      <div class="callout" style="font-size:.55em"><code>final</code> = class ini <strong>tidak boleh di-extend</strong>. Itu sahaja. Ia tak ubah cara class itu berfungsi.</div>
+    </div>
+    <div>
+      <table style="font-size:.52em">
+        <thead><tr><th style="color:var(--good)">Guna <code>final</code></th><th style="color:var(--bad)">Jangan guna <code>final</code></th></tr></thead>
+        <tbody>
+          <tr><td>Class yang kita tulis sendiri: controller, <code>LatePenaltyCalculator</code>, gateway, service</td><td>Model Eloquent (<code>Invoice</code>, <code>Payment</code>)</td></tr>
+          <tr><td>Bila tiada sebab untuk class lain mewarisinya</td><td>Base class yang memang direka untuk di-extend (cth. <code>abstract class</code>)</td></tr>
+          <tr><td></td><td>Fail yang dijana Laravel, cth. <code>AppServiceProvider</code>: biar seperti asal</td></tr>
+        </tbody>
+      </table>
+      <div class="card good" style="margin-top:12px; font-size:.55em">
+        <h3>Kenapa jadikan default</h3>
+        <ul style="margin:0">
+          <li>Nak tingkah laku berbeza? Tulis class baru yang implement interface yang sama (slide seterusnya), bukan extend class sedia ada.</li>
+          <li>Boleh ubah class dengan selamat: tiada subclass tersembunyi yang bergantung pada dalamannya.</li>
+          <li>Dalam test, kita mock <strong>interface</strong>, bukan class <code>final</code> (Bahagian 04).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Interface tak boleh final, dan enum sudah final secara automatik. final ialah pilihan, bukan wajib: dalam kursus ini ia default untuk class aplikasi. Kalau peserta tanya "kalau saya perlu extend nanti?": buang final bila sebab itu muncul. Lebih mudah buang final daripada betulkan subclass yang dah bergantung pada dalaman class.</aside>
+</section>
+
+<!-- O -->
+<section data-timing="180">
+  <span class="kicker">O · Open / Closed Principle (OCP)</span>
+  <h2>Terbuka untuk tambahan, tertutup untuk ubah suai</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.65em">Permintaan baru daripada Bendahari:</p>
+      <ul style="font-size:.62em">
+        <li>DuitNow QR untuk pelajar antarabangsa</li>
+        <li>Kad kredit dengan pelan ansuran</li>
+        <li>E-wallet kedua</li>
+      </ul>
+      <p style="font-size:.62em">Setiap kali → tambah <code>elseif</code> dalam controller → risiko pecahkan FPX yang sedang berjalan.</p>
+      <div class="callout warn"><strong>OCP</strong> berbaloi bila <strong>variasi bertambah</strong>. Kalau hanya 2 kes yang stabil, <code>match</code> sudah cukup.</div>
+    </div>
+    <svg class="info" viewBox="0 0 520 380" role="img" aria-label="Strategy pattern untuk kaedah bayaran">
+      <defs><marker id="ahi2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6ea8ff"/></marker></defs>
+      <rect class="box-a" x="150" y="10" width="220" height="64" rx="10"/>
+      <text class="t" x="260" y="48" text-anchor="middle">PaymentProcessor</text>
+      <rect class="box-i" x="150" y="130" width="220" height="70" rx="10"/>
+      <text class="t-i" x="260" y="155" text-anchor="middle">«interface»</text>
+      <text class="t" x="260" y="183" text-anchor="middle">PaymentGateway</text>
+      <path d="M260 74 L260 125" stroke="#6ea8ff" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#ahi2)"/>
+      <rect class="box-g" x="0" y="290" width="120" height="56" rx="8"/><text class="t" x="60" y="324" text-anchor="middle" style="font-size:17px">FPX</text>
+      <rect class="box-g" x="132" y="290" width="120" height="56" rx="8"/><text class="t" x="192" y="324" text-anchor="middle" style="font-size:17px">Kad</text>
+      <rect class="box-g" x="264" y="290" width="120" height="56" rx="8"/><text class="t" x="324" y="324" text-anchor="middle" style="font-size:17px">E-wallet</text>
+      <rect class="box-i" x="396" y="290" width="120" height="56" rx="8"/><text class="t" x="456" y="324" text-anchor="middle" style="font-size:17px; fill:#f0a91f">DuitNow</text>
+      <path d="M60 288 L220 204" stroke="#6ea8ff" stroke-width="2" marker-end="url(#ahi2)"/>
+      <path d="M192 288 L245 204" stroke="#6ea8ff" stroke-width="2" marker-end="url(#ahi2)"/>
+      <path d="M324 288 L275 204" stroke="#6ea8ff" stroke-width="2" marker-end="url(#ahi2)"/>
+      <path d="M456 288 L300 204" stroke="#f0a91f" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ahi2)"/>
+      <text class="t-s" x="192" y="372" text-anchor="middle">satu class …Gateway setiap kaedah</text>
+      <text class="t-s" x="456" y="372" text-anchor="middle" style="fill:#f0a91f">+ fail baru sahaja</text>
+    </svg>
+  </div>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">O · Open / Closed Principle (OCP)</span>
+  <h2>Strategy pattern: satu class setiap kaedah bayaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Payments/PaymentGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+
+interface PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool;
+    public function charge(Invoice $invoice, float $amount): string;
+}
+
+// app/Payments/FpxGateway.php: namespace + use yang sama, tambah:
+// use Illuminate\Support\Facades\Http;
+final class FpxGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Fpx;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return Http::withToken(config('services.fpx.key'))
+            ->post(config('services.fpx.url'), [
+                'invoice' => $invoice->number, 'amount' => $amount])
+            ->throw()->json('reference');
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Payments/PaymentProcessor.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use LogicException;
+
+final class PaymentProcessor
+{
+    public function __construct(private iterable $gateways) {}
+
+    public function charge(Invoice $invoice, PaymentMethod $method, float $amount): string
+    {
+        foreach ($this->gateways as $gateway) {
+            if ($gateway->supports($method)) {
+                return $gateway->charge($invoice, $amount);
+            }
+        }
+
+        throw new LogicException("Kaedah bayaran tidak disokong: {$method->value}");
+    }
+}
+      </code></pre>
+
+    </div>
+  </div>
+  <aside class="notes">Slide seterusnya tunjuk gateway lain dan cara guna PaymentProcessor. Tambah DuitNow = cipta DuitNowGateway dan masukkan ke dalam array; PaymentProcessor tidak disentuh. Dalam Bahagian 04 kita lihat bagaimana Service Container bina array ini secara automatik.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">O · Open / Closed Principle (OCP)</span>
+  <h2>Gateway lain: corak yang sama</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Payments/CardGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use Illuminate\Support\Facades\Http;
+
+final class CardGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Card;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return Http::withToken(config('services.card.key'))
+            ->post(config('services.card.url').'/charge', [
+                'invoice' => $invoice->number, 'amount' => $amount])
+            ->throw()->json('reference');
+    }
+}
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>EWalletGateway</code> sama seperti ini: tukar <code>PaymentMethod::EWallet</code> dan <code>services.ewallet</code>.</p>
+    </div>
+    <div>
+      <p class="code-label">app/Payments/CounterGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+
+// Pelajar bayar tunai di kaunter Pejabat Bendahari.
+// Tiada API bank: rujukan ialah nombor resit kaunter.
+final class CounterGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Counter;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return 'KTR-'.$invoice->number;
+    }
+}
+      </code></pre>
+      <p class="code-label">Cara guna</p>
+      <pre class="xs"><code class="language-php" data-trim>
+$processor = new PaymentProcessor([
+    new FpxGateway(), new CardGateway(),
+    new EWalletGateway(), new CounterGateway(),
+]);
+
+$reference = $processor->charge($invoice, PaymentMethod::Fpx, 1250.00);
+// hanya FpxGateway jawab supports(Fpx) = true → charge() dia dipanggil
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Simpan CardGateway dan CounterGateway dalam ingatan: kedua-duanya digunakan semula dalam slide LSP (refund) dan ISP (auto-debit).</aside>
+</section>
+
+<!-- L -->
+<section data-timing="360">
+  <span class="kicker">L · Liskov Substitution Principle (LSP)</span>
+  <h2>Implementasi tak boleh “mungkir janji”</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">Semester berikutnya, Bendahari minta ciri refund. Kita tambah refund() pada interface:</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1-7|9-19|21-29">
+interface PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool;
+    public function charge(Invoice $invoice, float $amount): string;
+    public function refund(Payment $payment): void;   // baru
+}
+// Method baru → SEMUA gateway (Fpx, Card, EWallet, Counter) wajib ada refund()
+
+final class CardGateway implements PaymentGateway
+{
+    // ...supports() dan charge() seperti slide sebelum
+    public function refund(Payment $payment): void
+    {
+        Http::withToken(config('services.card.key'))
+            ->post(config('services.card.url').'/refund', [
+                'reference' => $payment->reference])
+            ->throw();   // wang dipulangkan ke kad pelajar
+    }
+}
+
+final class CounterGateway implements PaymentGateway
+{
+    // ...supports() dan charge() seperti slide sebelum
+    public function refund(Payment $payment): void
+    {
+        // bayaran tunai: tiada API untuk pulangkan wang
+        throw new RuntimeException('Refund kaunter mesti diproses manual');
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <div class="card bad" style="margin-bottom:14px">
+        <h3>Tanda-tanda langgar LSP</h3>
+        <ul style="margin:0">
+          <li>Method yang <code>throw</code> “not supported”</li>
+          <li>Method kosong yang tak buat apa-apa</li>
+          <li><code>if ($x instanceof Something)</code> dalam pemanggil</li>
+          <li>Return type lebih longgar (null bila parent janji objek)</li>
+        </ul>
+      </div>
+      <div class="card good">
+        <h3>Pembetulan</h3>
+        <p>Bayaran kaunter memang <em>tidak boleh</em> di-refund secara automatik. Pisahkan kontrak:</p>
+        <p><code>PaymentGateway</code> + <code>Refundable</code>. <code>CounterGateway</code> hanya implement yang pertama.</p>
+        <p class="muted">→ Pembetulan LSP selalunya membawa kepada ISP (Interface Segregation Principle).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">L · Liskov Substitution Principle (LSP)</span>
+  <h2>Kenapa <code>RuntimeException</code>?</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <p class="code-label">Kod yang memanggil refund()</p>
+      <pre class="sm"><code class="language-php" data-trim>
+final class RefundService
+{
+    // Terima apa-apa objek yang implement PaymentGateway
+    public function __construct(private PaymentGateway $gateway) {}
+
+    public function refund(Payment $payment): void
+    {
+        $this->gateway->refund($payment);
+        $payment->update(['status' => 'refunded']);
+    }
+}
+
+// Bayaran kad: refund() memang pulangkan wang
+$service = new RefundService(new CardGateway());
+$service->refund($cardPayment);      // OK
+
+// Bayaran di kaunter Bendahari
+$service = new RefundService(new CounterGateway());
+$service->refund($counterPayment);   // RuntimeException!
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:0">
+        <li><code>RefundService</code> hanya kenal interface <code>PaymentGateway</code>, jadi ia percaya <code>refund()</code> akan pulangkan wang</li>
+        <li>Dengan <code>CardGateway</code>, janji itu ditepati: API kad pulangkan wang</li>
+        <li>Dengan <code>CounterGateway</code>, <code>refund()</code> <strong>throw</strong>. Status bayaran tak sempat dikemas kini, pelajar nampak HTTP 500</li>
+      </ol>
+      <div class="callout warn" style="font-size:.55em">
+        <strong>PHP semak signature, bukan janji.</strong> <code>CounterGateway</code> lulus <code>implements PaymentGateway</code> kerana nama method dan jenis parameter sama. Tapi tingkah lakunya berbeza.
+      </div>
+      <div class="callout" style="font-size:.55em">
+        Kod <code>refund()</code> tak salah. Untuk "selamatkan" ia, pemanggil terpaksa tulis <code>if ($gateway instanceof CounterGateway)</code>. Itu tanda langgar LSP yang kedua.
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    Sengaja guna "new" di sini. Dalam Bahagian 04, Service Container yang akan pilih dan suntik objek ini secara automatik, tapi masalah LSP tetap sama.
+    Tekankan: ujian unit dengan CardGateway lulus; bug hanya muncul bila bayaran kaunter di-refund.
+  </aside>
+</section>
+
+<!-- I -->
+<section data-timing="240">
+  <span class="kicker">I · Interface Segregation Principle (ISP)</span>
+  <h2>Jangan paksa class implement apa yang ia tak guna</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">INTERFACE GERGASI</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+interface PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool;
+    public function charge(Invoice $invoice, float $amount): string;
+    public function refund(Payment $payment): void;
+    public function autoDebit(Student $student, Invoice $invoice): void;
+}
+
+final class CounterGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $m): bool { /* ... */ }
+    public function charge(Invoice $i, float $a): string { /* ... */ }
+    public function refund(Payment $p): void {}               // kosong
+    public function autoDebit(Student $s, Invoice $i): void {} // kosong
+}
+final class FpxGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $m): bool { /* ... */ }
+    public function charge(Invoice $i, float $a): string { /* ... */ }
+    public function refund(Payment $p): void { /* ... */ }
+    public function autoDebit(Student $s, Invoice $i): void {} // kosong
+}
+final class EWalletGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $m): bool { /* ... */ }
+    public function charge(Invoice $i, float $a): string { /* ... */ }
+    public function refund(Payment $p): void { /* ... */ }
+    public function autoDebit(Student $s, Invoice $i): void {} // kosong
+}
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">ROLE INTERFACE</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+interface PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool;
+    public function charge(Invoice $invoice, float $amount): string;
+}
+
+interface Refundable
+{
+    public function refund(Payment $payment): void;
+}
+
+interface SupportsAutoDebit
+{
+    public function autoDebit(Student $student, Invoice $invoice): void;
+}
+
+// Class hanya bergantung pada apa yang ia perlukan
+final class RefundService
+{
+    public function __construct(private Refundable $gateway) {}
+}
+      </code></pre>
+      <div class="callout" style="font-size:.55em">Laravel sendiri buat begini: <code>Illuminate\Contracts\Cache\Repository</code> vs <code>Cache\Store</code>, <code>Queue\ShouldQueue</code>, <code>ShouldBeUnique</code>…</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">I · Interface Segregation Principle (ISP)</span>
+  <h2>Setiap gateway implement apa yang ia mampu</h2>
+  <div class="rule"></div>
+  <table class="why-dto" style="font-size:.5em !important">
+    <thead><tr><th>Gateway</th><th><code>PaymentGateway</code><br><span class="muted">caj bayaran</span></th><th><code>Refundable</code><br><span class="muted">pulangkan wang</span></th><th><code>SupportsAutoDebit</code><br><span class="muted">tolak automatik</span></th><th>Kenapa</th></tr></thead>
+    <tbody>
+      <tr><td><code>FpxGateway</code></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="no"><i class="fa-solid fa-xmark"></i></td><td>Bank boleh pulangkan wang. Pelajar mesti log masuk bank setiap kali, jadi tiada auto-debit.</td></tr>
+      <tr><td><code>CardGateway</code></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="ok"><i class="fa-solid fa-check"></i></td><td>Token kad pelajar disimpan: boleh refund dan tolak yuran setiap semester.</td></tr>
+      <tr><td><code>EWalletGateway</code></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="no"><i class="fa-solid fa-xmark"></i></td><td>Wang dipulangkan ke dompet. Tiada auto-debit.</td></tr>
+      <tr><td><code>CounterGateway</code></td><td class="ok"><i class="fa-solid fa-check"></i></td><td class="no"><i class="fa-solid fa-xmark"></i></td><td class="no"><i class="fa-solid fa-xmark"></i></td><td>Tunai di kaunter. Hanya implement <code>PaymentGateway</code>, jadi <strong>tiada method kosong</strong>.</td></tr>
+      <tr><td><strong>Siapa guna</strong></td><td><code>PaymentProcessor</code></td><td><code>RefundService</code></td><td><code>AutoDebitSemesterFees</code></td><td></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.5em; margin:.5em 0 0" class="muted">Cara tulis: senaraikan semua interface selepas <code>implements</code>, dan tulis setiap method yang interface itu minta. Contoh penuh: <code>CounterGateway implements PaymentGateway</code> (slide "Gateway lain"), <code>CardGateway implements PaymentGateway, Refundable, SupportsAutoDebit</code> (slide seterusnya).</p>
+  <div class="cols" style="margin-top:10px">
+    <pre class="xs"><code class="language-php" data-trim>
+final class AutoDebitSemesterFees
+{
+    // hanya terima gateway yang mampu auto-debit
+    public function __construct(private SupportsAutoDebit $gateway) {}
+
+    public function run(Student $student, Invoice $invoice): void
+    {
+        $this->gateway->autoDebit($student, $invoice);
+    }
+}
+    </code></pre>
+    <pre class="xs"><code class="language-php" data-trim>
+new RefundService(new CardGateway());          // OK
+new RefundService(new CounterGateway());       // TypeError
+
+new AutoDebitSemesterFees(new CardGateway());  // OK
+new AutoDebitSemesterFees(new FpxGateway());   // TypeError
+// PHP tolak semasa objek dibina, sebelum
+// sebarang wang diproses
+    </code></pre>
+  </div>
+  <aside class="notes">Bandingkan dengan LSP: dulu CounterGateway::refund() throw semasa refund sedang berjalan. Sekarang PHP tolak terus semasa new RefundService(new CounterGateway()), dan IDE pun boleh tandakan ralat ini. Slide seterusnya tunjuk apa yang berlaku kalau kita kekal dengan interface gergasi: method kosong.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">I · Interface Segregation Principle (ISP) · kod 1 / 2</span>
+  <h2>Boleh refund, tak boleh auto-debit</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Payments/FpxGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\{Invoice, Payment};
+use Illuminate\Support\Facades\Http;
+
+final class FpxGateway implements PaymentGateway, Refundable
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Fpx;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return Http::withToken(config('services.fpx.key'))
+            ->post(config('services.fpx.url').'/charge', [
+                'invoice' => $invoice->number, 'amount' => $amount])
+            ->throw()->json('reference');
+    }
+
+    public function refund(Payment $payment): void
+    {
+        Http::withToken(config('services.fpx.key'))
+            ->post(config('services.fpx.url').'/refund', [
+                'reference' => $payment->reference])
+            ->throw();
+    }
+
+    // tiada autoDebit(): pelajar mesti log masuk bank setiap kali
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Payments/EWalletGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\{Invoice, Payment};
+use Illuminate\Support\Facades\Http;
+
+final class EWalletGateway implements PaymentGateway, Refundable
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::EWallet;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return Http::withToken(config('services.ewallet.key'))
+            ->post(config('services.ewallet.url').'/charge', [
+                'invoice' => $invoice->number, 'amount' => $amount])
+            ->throw()->json('reference');
+    }
+
+    public function refund(Payment $payment): void
+    {
+        Http::withToken(config('services.ewallet.key'))
+            ->post(config('services.ewallet.url').'/refund', [
+                'reference' => $payment->reference])
+            ->throw();
+    }
+
+    // tiada autoDebit(): e-wallet tak sokong
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Dua class ini implement PaymentGateway dan Refundable sahaja. Kerana SupportsAutoDebit tidak disenaraikan selepas implements, PHP tidak minta autoDebit(): tiada method kosong.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">I · Interface Segregation Principle (ISP) · kod 2 / 2</span>
+  <h2>Satu class, tiga peranan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Payments/CardGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Payments;
+
+use App\Enums\PaymentMethod;
+use App\Models\{Invoice, Payment, Student};
+use Illuminate\Support\Facades\Http;
+
+final class CardGateway implements PaymentGateway, Refundable, SupportsAutoDebit
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Card;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return Http::withToken(config('services.card.key'))
+            ->post(config('services.card.url').'/charge', [
+                'invoice' => $invoice->number, 'amount' => $amount])
+            ->throw()->json('reference');
+    }
+
+    public function refund(Payment $payment): void
+    {
+        Http::withToken(config('services.card.key'))
+            ->post(config('services.card.url').'/refund', [
+                'reference' => $payment->reference])
+            ->throw();
+    }
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">sambungan CardGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+    // Hanya CardGateway ada method ini,
+    // kerana hanya ia implement SupportsAutoDebit
+    public function autoDebit(Student $student, Invoice $invoice): void
+    {
+        Http::withToken(config('services.card.key'))
+            ->post(config('services.card.url').'/auto-debit', [
+                'token'   => $student->card_token,
+                'invoice' => $invoice->number,
+                'amount'  => $invoice->amount,
+            ])
+            ->throw();
+    }
+}
+      </code></pre>
+      <table style="font-size:.5em; margin-top:.6em">
+        <thead><tr><th>Interface selepas <code>implements</code></th><th>Method yang PHP minta</th></tr></thead>
+        <tbody>
+          <tr><td><code>PaymentGateway</code></td><td><code>supports()</code>, <code>charge()</code></td></tr>
+          <tr><td><code>Refundable</code></td><td><code>refund()</code></td></tr>
+          <tr><td><code>SupportsAutoDebit</code></td><td><code>autoDebit()</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout good" style="font-size:.52em">Setiap method ada kerja sebenar. <code>CounterGateway</code> pula senaraikan <code>PaymentGateway</code> sahaja, jadi ia hanya perlu <code>supports()</code> dan <code>charge()</code> (slide seterusnya).</div>
+    </div>
+  </div>
+  <aside class="notes">Tunjuk padanan: setiap interface yang disenaraikan selepas implements = satu set method yang wajib ditulis. Fpx dan EWallet senaraikan dua interface (slide sebelum), Card tiga, Counter satu.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">I · Interface Segregation Principle (ISP)</span>
+  <h2>Kosong vs tak kosong</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SALAH · METHOD KOSONG</span> <span class="muted" style="font-size:.6em; font-weight:400">akibat interface gergasi</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+final class CounterGateway implements PaymentGateway   // interface gergasi
+{
+    // supports() dan charge() seperti slide "Gateway lain"
+
+    // Dipaksa wujud oleh PaymentGateway: tiada kerja sebenar
+    public function refund(Payment $payment): void {}
+    public function autoDebit(Student $student, Invoice $invoice): void {}
+}
+
+// AutoDebitSemesterFees versi interface gergasi terima PaymentGateway,
+// jadi CounterGateway pun diterima:
+$job = new AutoDebitSemesterFees(new CounterGateway());
+$job->run($student, $invoice);
+// tiada error, tiada log: yuran tak pernah ditolak
+      </code></pre>
+      <p style="font-size:.55em" class="muted">Invois kekal belum bayar, dan pelajar dikenakan penalti lewat tanpa tahu sebabnya.</p>
+      <div class="callout warn" style="font-size:.5em"><strong>Kenapa developer tulis method kosong?</strong> Buang dua baris itu dan PHP gagal sebaik fail dimuat:
+        <pre style="margin:.4em 0; font-size:.85em"><code class="language-plaintext" style="white-space:pre-wrap">Fatal error: Class CounterGateway contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (PaymentGateway::refund, PaymentGateway::autoDebit)</code></pre>
+        Jadi developer terpaksa pilih: <code>throw</code> (slide <code>RuntimeException</code>) atau kosong (di sini). Kedua-duanya salah.</div>
+    </div>
+    <div>
+      <h3><span class="tag good">BETUL · ROLE INTERFACE</span> <span class="muted" style="font-size:.6em; font-weight:400">tiada method kosong</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+// CounterGateway yang sama, selepas pecah interface
+final class CounterGateway implements PaymentGateway
+{
+    public function supports(PaymentMethod $method): bool
+    {
+        return $method === PaymentMethod::Counter;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        return 'KTR-'.$invoice->number;
+    }
+    // tiada refund(), tiada autoDebit(): tak perlu tulis langsung
+}
+
+$job = new AutoDebitSemesterFees(new CounterGateway());
+// TypeError: CounterGateway bukan SupportsAutoDebit.
+// Kod berhenti di sini, run() tak pernah dipanggil.
+
+// Hanya gateway yang benar-benar boleh auto-debit diterima:
+$job = new AutoDebitSemesterFees(new CardGateway());   // OK
+$job->run($student, $invoice);
+// run() → CardGateway::autoDebit() → API kad: yuran ditolak
+      </code></pre>
+      <div class="callout good" style="font-size:.55em"><strong>Penyelesaian terbaik:</strong> jangan tulis method yang class itu tak mampu buat. Pecahkan interface, dan biar setiap class implement hanya yang ia mampu (jadual dan kod 1 / 2, 2 / 2 sebelum ini).</div>
+    </div>
+  </div>
+  <aside class="notes">
+    Sambungan terus dari slide sebelum: PaymentGateway gergasi vs role interface.
+    Method kosong juga melanggar LSP (Liskov Substitution Principle): rujuk semula senarai tanda-tanda di slide LSP. Tiga pilihan: throw (gagal kuat, slide RuntimeException), kosong (gagal senyap, paling teruk), role interface (method tak wujud langsung, PHP tolak semasa objek dibina: terbaik). Tekankan: kosongkan method BUKAN penyelesaian. CardGateway penuh dengan refund() dan autoDebit() ada di slide LSP dan jadual slide sebelum.
+  </aside>
+</section>
+
+<!-- D -->
+<section data-timing="180">
+  <span class="kicker">D · Dependency Inversion Principle (DIP)</span>
+  <h2>Logik bisnes tidak patut tahu tentang SDK bank</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1160 300" style="max-width:820px; margin:0 auto" role="img" aria-label="Perbandingan dependency sebelum dan selepas DIP">
+    <defs><marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker>
+          <marker id="ahd2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6ea8ff"/></marker></defs>
+    <text class="t-h" x="0" y="22">SEBELUM</text>
+    <rect class="box-a" x="40" y="50" width="260" height="70" rx="10"/>
+    <text class="t" x="170" y="92" text-anchor="middle">PaymentService</text>
+    <rect class="box" x="40" y="200" width="260" height="70" rx="10"/>
+    <text class="t" x="170" y="232" text-anchor="middle">FpxClient</text>
+    <text class="t-s" x="170" y="256" text-anchor="middle">Software Development Kit (SDK)</text>
+    <path d="M170 120 L170 195" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahd)"/>
+    <text class="t-s" x="185" y="165">new FpxClient()</text>
+
+    <line x1="420" y1="10" x2="420" y2="290" stroke="#2a3140" stroke-width="2"/>
+
+    <text class="t-h" x="460" y="22">SELEPAS</text>
+    <rect class="box-a" x="480" y="50" width="260" height="70" rx="10"/>
+    <text class="t" x="610" y="92" text-anchor="middle">PaymentService</text>
+    <rect class="box-i" x="820" y="50" width="280" height="70" rx="10"/>
+    <text class="t-i" x="960" y="75" text-anchor="middle">«interface» — milik domain</text>
+    <text class="t" x="960" y="103" text-anchor="middle">PaymentGateway</text>
+    <path d="M740 85 L815 85" stroke="#6ea8ff" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#ahd2)"/>
+    <rect class="box" x="740" y="200" width="190" height="70" rx="10"/>
+    <text class="t" x="835" y="240" text-anchor="middle" style="font-size:17px">FpxGateway</text>
+    <rect class="box" x="950" y="200" width="190" height="70" rx="10"/>
+    <text class="t" x="1045" y="240" text-anchor="middle" style="font-size:17px">SandboxGateway</text>
+    <path d="M835 198 L920 124" stroke="#6ea8ff" stroke-width="2.5" marker-end="url(#ahd2)"/>
+    <path d="M1045 198 L995 124" stroke="#6ea8ff" stroke-width="2.5" marker-end="url(#ahd2)"/>
+    <text class="t-s" x="1140" y="292" text-anchor="end">anak panah kini menghala ke atas → “inversion”</text>
+  </svg>
+  <div class="cols" style="margin-top:.3em">
+    <pre class="xs"><code class="language-php" data-trim>
+// ✘ high-level bergantung pada detail
+final class PaymentService
+{
+    public function pay(Invoice $invoice): string
+    {
+        $client = new FpxClient(config('services.fpx.key'));
+        return $client->pay($invoice->number, $invoice->amount);
+    }
+}
+    </code></pre>
+    <pre class="xs"><code class="language-php" data-trim>
+// ✔ bergantung pada abstraksi; pemanggil hantar PaymentGateway
+final class PaymentService
+{
+    public function __construct(private PaymentGateway $gateway) {}
+
+    public function pay(Invoice $invoice): string
+    {
+        return $this->gateway->charge($invoice, $invoice->amount);
+    }
+}
+    </code></pre>
+  </div>
+  <aside class="notes">
+    SandboxGateway berguna untuk local dev dan staging — pulangkan rujukan palsu, tiada wang sebenar dicaj.
+    Bind ikut environment dalam provider (Bahagian 4).
+  </aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Common pitfalls</span>
+  <h2>Bila SOLID jadi beban</h2>
+  <div class="rule"></div>
+  <table>
+    <thead><tr><th>Pitfall</th><th>Gejala</th><th>Panduan</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Interface untuk semua benda</strong></td><td><code>UserServiceInterface</code> dengan satu implementasi selama-lamanya</td><td>Buat interface bila ada ≥2 implementasi, sempadan I/O, atau perlu swap dalam test</td></tr>
+      <tr><td><strong>SRP (Single Responsibility Principle) terlampau</strong></td><td>30 class kecil untuk satu ciri; susah ikut aliran</td><td>Kumpulkan ikut <em>sebab berubah</em>, bukan ikut bilangan baris</td></tr>
+      <tr><td><strong>Abstraksi pramatang</strong></td><td>Strategy untuk 2 kes yang tak pernah berubah</td><td>Rule of three: refactor bila variasi ke-3 muncul</td></tr>
+      <tr><td><strong>Melawan framework</strong></td><td>Bungkus Eloquent sampai hilang ciri relationship/scopes</td><td>Laravel sudah ikut banyak prinsip — guna, jangan sembunyikan</td></tr>
+      <tr><td><strong>Inheritance untuk reuse</strong></td><td><code>BaseService</code> 800 baris yang semua class extend</td><td>Utamakan composition (inject) dan trait kecil</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">10:00 – 10:15 pagi</span>
+  <h1 style="margin:.1em 0 .2em">Sarapan · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: kuiz meja SOLID, kemudian Bahagian 02 — Service Layer Pattern</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Kuiz meja · 5 minit</span>
+  <h2>Prinsip mana yang dilanggar?</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <pre class="sm"><code class="language-php" data-trim>
+class MonthlyReportService
+{
+    public function generate(string $format, int $month)
+    {
+        $rows = Payment::whereMonth('paid_at', $month)->get();
+
+        if ($format === 'pdf') {
+            $file = Pdf::loadView('reports.collection', compact('rows'))->output();
+        } elseif ($format === 'xlsx') {
+            $file = Excel::raw(new PaymentsExport($rows), 'Xlsx');
+        } elseif ($format === 'csv') {
+            $file = $this->toCsv($rows);
+        }
+
+        Mail::to('bendahari@example.com')
+            ->send(new CollectionReport($file, $format));
+    }
+}
+    </code></pre>
+    <div>
+      <div class="card fragment" style="margin-bottom:12px"><h3><span class="tag info">S</span> SRP <span class="muted" style="font-weight:400; font-size:.75em">· Single Responsibility Principle</span></h3><p>Query + format fail + hantar emel dalam satu method.</p></div>
+      <div class="card fragment" style="margin-bottom:12px"><h3><span class="tag info">O</span> OCP <span class="muted" style="font-weight:400; font-size:.75em">· Open/Closed Principle</span></h3><p>Format baru (ODS?) → ubah rantaian <code>if</code>. Guna <code>ReportExporter</code> per format.</p></div>
+      <div class="card fragment" style="margin-bottom:12px"><h3><span class="tag info">D</span> DIP <span class="muted" style="font-weight:400; font-size:.75em">· Dependency Inversion Principle</span></h3><p>Terikat terus pada Eloquent, Pdf, Excel dan alamat emel hardcode.</p></div>
+      <div class="card warn fragment"><h3><i class="fa-solid fa-bug"></i>Bonus</h3><p><code>$file</code> undefined jika format tak dikenali. <code>whereMonth</code> tanpa tahun!</p></div>
+    </div>
+  </div>
+  <aside class="notes">Setiap meja bincang 3 minit dan tulis prinsip yang dilanggar. Minta satu wakil dari meja berbeza jawab setiap prinsip, kemudian dedah kad satu per satu. Meja yang jumpa bug Bonus dapat pujian.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Jawapan kuiz · contoh yang betul</span>
+  <h2><code>MonthlyReportService</code> selepas refactor</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <pre class="sm"><code class="language-php" data-trim>
+interface ReportExporter
+{
+    public function export(Collection $rows): string;
+}
+
+final class PdfExporter implements ReportExporter
+{
+    public function export(Collection $rows): string
+    {
+        return Pdf::loadView('reports.collection', compact('rows'))->output();
+    }
+}
+// XlsxExporter, CsvExporter: satu class setiap format
+      </code></pre>
+      <div class="fix-grid">
+        <div class="card"><h3><span class="tag info">S</span> SRP</h3><p class="full">Single Responsibility Principle</p><p>Kerja format dipindah ke exporter.</p></div>
+        <div class="card"><h3><span class="tag info">O</span> OCP</h3><p class="full">Open/Closed Principle</p><p>Format ODS = 1 class baru, tiada <code>if</code>.</p></div>
+        <div class="card"><h3><span class="tag info">D</span> DIP</h3><p class="full">Dependency Inversion Principle</p><p>Bergantung pada <code>ReportExporter</code>, bukan Pdf/Excel terus.</p></div>
+        <div class="card warn"><h3><i class="fa-solid fa-bug"></i>Bonus</h3><p>Format salah → exception. Ada tahun.</p></div>
+      </div>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-php" data-trim>
+final class MonthlyReportService
+{
+    /** @param array&lt;string, ReportExporter&gt; $exporters */
+    public function __construct(
+        private array $exporters,   // ['pdf' => PdfExporter, ...]
+        private string $recipient,  // tidak lagi hardcode
+    ) {}
+
+    public function generate(string $format, int $year, int $month): void
+    {
+        $exporter = $this->exporters[$format]
+            ?? throw new InvalidArgumentException("Format tidak disokong: {$format}");
+
+        $rows = Payment::whereYear('paid_at', $year)
+            ->whereMonth('paid_at', $month)->get();
+
+        Mail::to($this->recipient)
+            ->send(new CollectionReport($exporter->export($rows), $format));
+    }
+}
+
+// Cara guna
+$service = new MonthlyReportService(
+    ['pdf' => new PdfExporter(), 'xlsx' => new XlsxExporter(), 'csv' => new CsvExporter()],
+    'bendahari@example.com',
+);
+
+$service->generate('pdf', 2026, 3);
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    Sengaja kekalkan Payment:: dan Mail:: di sini. Langkah seterusnya dalam kursus: query ke Repository (Bahagian 03), dan Service Container yang bina objek ini secara automatik (Bahagian 04). Kembali ke contoh ini masa itu.
+    Tunjuk: tambah OdsExporter = 1 fail baru + 1 baris dalam array.
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 2: SERVICE LAYER                                     -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-gears"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>Service Layer Pattern</h2>
+  <p>Memisahkan business logic daripada Controller</p>
+</section>
+
+<section data-timing="480">
+  <span class="kicker">Siapa buat apa</span>
+  <h2>Pembahagian tanggungjawab</h2>
+  <div class="rule"></div>
+  <div class="cols-3">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-globe"></i>Controller</h3>
+      <p class="muted" style="margin-bottom:.5em">Bahasa: HTTP</p>
+      <ul class="check" style="font-size:.95em">
+        <li>Terima request yang sudah divalidasi</li>
+        <li>Tukar ke DTO (Data Transfer Object)</li>
+        <li>Panggil service</li>
+        <li>Pilih response (view / JSON / redirect)</li>
+      </ul>
+      <ul class="cross" style="font-size:.95em">
+        <li>Query DB</li><li>Kira penalti</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3><i class="fa-solid fa-gears"></i>Service</h3>
+      <p class="muted" style="margin-bottom:.5em">Bahasa: use case bisnes</p>
+      <ul class="check" style="font-size:.95em">
+        <li>Peraturan bisnes &amp; invariant</li>
+        <li>Orkestrasi beberapa komponen</li>
+        <li>Sempadan transaksi DB</li>
+        <li>Dispatch domain event</li>
+      </ul>
+      <ul class="cross" style="font-size:.95em">
+        <li><code>request()</code>, <code>session()</code></li><li>Return <code>Response</code></li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <h3><i class="fa-solid fa-database"></i>Model / Repository</h3>
+      <p class="muted" style="margin-bottom:.5em">Bahasa: data</p>
+      <ul class="check" style="font-size:.95em">
+        <li>Relationship, casts, scopes</li>
+        <li>Query yang dinamakan dengan jelas</li>
+        <li>Persist &amp; ambil data</li>
+      </ul>
+      <ul class="cross" style="font-size:.95em">
+        <li>Hantar emel</li><li>Tahu tentang HTTP</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout good" style="margin-top:.8em">Setiap lapisan cakap <strong>satu "bahasa" sahaja</strong>. Bila satu class guna dua bahasa (cth. service yang baca <code>request()</code>), tanggungjawab dah bercampur.</div>
+</section>
+
+<section data-timing="480">
+  <span class="kicker">Aliran request</span>
+  <h2>Dari HTTP ke DB dan kembali</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1160 430" role="img" aria-label="Aliran request melalui lapisan">
+    <defs><marker id="ahf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker>
+          <marker id="ahf2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f0a91f"/></marker></defs>
+    <!-- baris utama -->
+    <rect class="box-d" x="0" y="40" width="140" height="80" rx="10"/>
+    <text class="t-w" x="70" y="76" text-anchor="middle">POST</text>
+    <text class="t-ws" x="70" y="100" text-anchor="middle">/payments</text>
+    <rect class="box-p" x="180" y="40" width="170" height="80" rx="10"/>
+    <text class="t" x="265" y="76" text-anchor="middle">FormRequest</text>
+    <text class="t-s" x="265" y="100" text-anchor="middle">422 / 403 di sini</text>
+    <rect class="box-p" x="390" y="40" width="170" height="80" rx="10"/>
+    <text class="t" x="475" y="76" text-anchor="middle">Controller</text>
+    <text class="t-s" x="475" y="100" text-anchor="middle">fromRequest()</text>
+    <rect class="box-a" x="600" y="40" width="190" height="80" rx="10"/>
+    <text class="t" x="695" y="76" text-anchor="middle">PaymentService</text>
+    <text class="t-s" x="695" y="100" text-anchor="middle">caj bank + transaksi</text>
+    <rect class="box-w" x="830" y="40" width="160" height="80" rx="10"/>
+    <text class="t" x="910" y="76" text-anchor="middle">Repository</text>
+    <text class="t-s" x="910" y="100" text-anchor="middle">recordPayment</text>
+    <rect class="box-d" x="1030" y="40" width="130" height="80" rx="10"/>
+    <text class="t-w" x="1095" y="86" text-anchor="middle">DB</text>
+    <path d="M140 80 L175 80" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+    <path d="M350 80 L385 80" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+    <path d="M560 80 L595 80" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+    <path d="M790 80 L825 80" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+    <path d="M990 80 L1025 80" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+    <text class="t-s" x="580" y="150" text-anchor="middle" style="fill:#f5873a">→ PaymentData (Data Transfer Object) →</text>
+
+    <!-- cabang domain -->
+    <rect class="box-g" x="520" y="210" width="190" height="70" rx="10"/>
+    <text class="t" x="615" y="242" text-anchor="middle">PaymentProcessor</text>
+    <text class="t-s" x="615" y="264" text-anchor="middle">caj FPX / kad / e-wallet</text>
+    <path d="M670 120 L630 205" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#ahf)"/>
+
+    <!-- cabang event -->
+    <rect class="box" x="760" y="210" width="190" height="70" rx="10"/>
+    <text class="t" x="855" y="242" text-anchor="middle">PaymentReceived</text>
+    <text class="t-s" x="855" y="264" text-anchor="middle">event (after commit)</text>
+    <path d="M730 120 L820 205" stroke="#f0a91f" stroke-width="2.5" marker-end="url(#ahf2)"/>
+    <rect class="box" x="760" y="330" width="190" height="70" rx="10"/>
+    <text class="t" x="855" y="362" text-anchor="middle">Listener</text>
+    <text class="t-s" x="855" y="384" text-anchor="middle">ShouldQueue</text>
+    <path d="M855 280 L855 325" stroke="#f0a91f" stroke-width="2.5" marker-end="url(#ahf2)"/>
+    <rect class="box" x="990" y="330" width="170" height="70" rx="10"/><text class="t" x="1075" y="372" text-anchor="middle" style="font-size:16px">Emel resit</text>
+    <path d="M950 365 L985 365" stroke="#9aa5b8" stroke-width="2" marker-end="url(#ahf)"/>
+
+    <!-- response -->
+    <path d="M475 120 C 475 330, 200 330, 140 330" stroke="#4cc47f" stroke-width="2.5" fill="none" marker-end="url(#ahf)"/>
+    <text class="t" x="20" y="337" style="fill:#4cc47f">302 / 201</text>
+    <text class="t-s" x="20" y="362">response pantas — emel resit</text>
+    <text class="t-s" x="20" y="382">diproses di background</text>
+  </svg>
+</section>
+
+<section data-timing="600">
+  <span class="kicker">Langkah 1 · Input</span>
+  <h2>FormRequest + DTO</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Requests/StorePaymentRequest.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Requests;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+final class StorePaymentRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        // pelajar hanya boleh bayar invois sendiri
+        return Invoice::whereKey($this->integer('invoice_id'))
+            ->where('student_id', $this->user()->student->id)
+            ->exists();
+    }
+
+    public function rules(): array
+    {
+        return [
+            'invoice_id' => ['required', 'integer', 'exists:invoices,id'],
+            'method'     => ['required', Rule::enum(PaymentMethod::class)],
+        ];
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Data/PaymentData.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Data;
+
+use App\Enums\PaymentMethod;
+use App\Http\Requests\StorePaymentRequest;
+
+final readonly class PaymentData
+{
+    public function __construct(
+        public int $invoiceId,
+        public PaymentMethod $method,
+    ) {}
+
+    public static function fromRequest(StorePaymentRequest $r): self
+    {
+        return new self(
+            invoiceId: $r->integer('invoice_id'),
+            method:    $r->enum('method', PaymentMethod::class),
+        );
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Kenapa <strong>DTO (Data Transfer Object)</strong>, bukan <code>array</code>? Type-safe, autocomplete, immutable, dan service <strong>tidak tahu</strong> data datang dari HTTP, fail CSV (Comma-Separated Values) atau API.</div>
+    </div>
+  </div>
+  <aside class="notes">$r->enum() tukar string 'fpx' kepada PaymentMethod::Fpx. Rule::enum() pastikan hanya nilai enum yang sah diterima.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Soalan biasa</span>
+  <h2>Kenapa tak hantar request terus ke service?</h2>
+  <div class="rule"></div>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr; gap:22px">
+    <div>
+      <table class="why-dto">
+        <thead><tr><th>Service dipanggil dari</th><th>Terima <code>StorePaymentRequest</code></th><th>Terima <code>PaymentData</code></th></tr></thead>
+        <tbody>
+          <tr><td><i class="fa-solid fa-globe"></i> Borang web</td><td class="ok"><i class="fa-solid fa-check"></i> OK</td><td class="ok"><i class="fa-solid fa-check"></i> OK</td></tr>
+          <tr><td><i class="fa-solid fa-mobile-screen"></i> API</td><td class="ok"><i class="fa-solid fa-check"></i> OK</td><td class="ok"><i class="fa-solid fa-check"></i> OK</td></tr>
+          <tr><td><i class="fa-solid fa-terminal"></i> Artisan import penyata kaunter</td><td class="no"><i class="fa-solid fa-xmark"></i> Tiada HTTP: kena palsukan request</td><td class="ok"><i class="fa-solid fa-check"></i> <code>new PaymentData(...)</code></td></tr>
+          <tr><td><i class="fa-solid fa-layer-group"></i> Queue job, seeder</td><td class="no"><i class="fa-solid fa-xmark"></i> Kena palsukan request</td><td class="ok"><i class="fa-solid fa-check"></i> <code>new PaymentData(...)</code></td></tr>
+          <tr><td><i class="fa-solid fa-flask"></i> Unit test service</td><td class="no"><i class="fa-solid fa-xmark"></i> Bina request penuh + validasi</td><td class="ok"><i class="fa-solid fa-check"></i> Satu baris</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="why-lbl">Apa yang service boleh capai</p>
+      <div class="card bad" style="font-size:.55em; margin-bottom:10px">
+        <h3><i class="fa-solid fa-box-open"></i>StorePaymentRequest</h3>
+        <p>Header, cookie, session, IP, fail upload, user login, dan <strong>semua input</strong>, termasuk yang tidak divalidasi.</p>
+      </div>
+      <div class="card good" style="font-size:.55em">
+        <h3><i class="fa-solid fa-box"></i>PaymentData</h3>
+        <p><code>invoiceId</code>, <code>method</code>. Itu sahaja.</p>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.55em; margin-top:.7em">Jujurnya: jika service hanya dipanggil dari <strong>satu</strong> controller web, hantar request terus pun boleh jalan. DTO (Data Transfer Object) berbaloi bila service yang sama dipanggil dari lebih satu tempat, seperti Sistem Bayaran Yuran: web, app mobile dan import penyata kaunter.</div>
+  <aside class="notes">
+    Soalan ini hampir pasti ditanya. Tekankan: data yang sampai sama sahaja; bezanya ialah apa yang service bergantung padanya.
+    Contoh lengkap command import CSV ada di slide "Satu service, tiga pintu masuk: Artisan" nanti.
+  </aside>
+</section>
+
+<section data-timing="780">
+  <span class="kicker">Langkah 2 · Logik</span>
+  <h2>PaymentService</h2>
+  <div class="rule"></div>
+  <div class="cols" style="grid-template-columns:0.62fr 1.38fr; gap:18px">
+  <div>
+    <p class="code-label">app/Services/PaymentService.php: bahagian atas</p>
+    <pre class="xs"><code class="language-php" data-trim>
+namespace App\Services;
+
+use App\Billing\LatePenaltyCalculator;
+use App\Data\PaymentData;
+use App\Events\PaymentReceived;
+use App\Exceptions\InvoiceAlreadyPaidException;
+use App\Models\{Payment, Student};
+use App\Payments\PaymentProcessor;
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Support\Facades\DB;
+    </code></pre>
+    <div class="callout" style="font-size:.5em">Setiap class yang disebut dalam fail mesti di-<code>use</code>, termasuk exception dan event. Tanpanya PHP cari dalam namespace <code>App\Services</code> dan gagal: <em>Class "App\Services\InvoiceAlreadyPaidException" not found</em>.</div>
+    <div class="callout warn" style="font-size:.5em"><code>InvoiceRepository</code> diterangkan dalam Bahagian 03. Buat masa ini: "tempat ambil dan simpan invois".</div>
+  </div>
+  <div>
+  <p class="code-label">sambungan: class</p>
+  <pre class="xs"><code class="language-php" data-trim data-line-numbers="3-7|11-14|15|16-17|18-22|23-24">
+final class PaymentService
+{
+    public function __construct(
+        private InvoiceRepository $invoices,
+        private LatePenaltyCalculator $penalties,
+        private PaymentProcessor $processor,
+    ) {}
+
+    public function pay(Student $student, PaymentData $data): Payment
+    {
+        $invoice = $this->invoices->findOrFail($data->invoiceId);
+        if ($invoice->paid_at !== null) {
+            throw InvoiceAlreadyPaidException::for($invoice);
+        }
+        $amount = $invoice->amount + $this->penalties->for($invoice, now());
+        // panggilan ke bank: di luar transaksi DB
+        $reference = $this->processor->charge($invoice, $data->method, $amount);
+        return DB::transaction(function () use ($invoice, $student, $data, $amount, $reference) {
+            $payment = $this->invoices->recordPayment($invoice, [
+                'student_id' => $student->id, 'method' => $data->method,
+                'amount' => $amount, 'reference' => $reference, 'paid_at' => now(),
+            ]);
+            PaymentReceived::dispatch($payment);
+            return $payment;
+        });
+    }
+}
+  </code></pre>
+  </div>
+  </div>
+  <aside class="notes">
+    1) Dependency di constructor: tiga keperluan service, semuanya jelas.
+    2) Invois sudah dibayar = throw domain exception, bukan return redirect.
+    3) Penalti dikira oleh LatePenaltyCalculator (slide SRP).
+    4) Caj bank DI LUAR transaksi: jangan pegang transaksi DB sambil tunggu bank yang mungkin ambil 10 saat.
+    5) Rekod bayaran + tanda invois berbayar dalam satu transaksi.
+    6) Event: listener hanya jalan selepas commit (slide seterusnya).
+  </aside>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Langkah 3 · Output · 1 / 2</span>
+  <h2>Thin controller + domain exception</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/PaymentController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers;
+
+use App\Data\PaymentData;
+use App\Http\Requests\StorePaymentRequest;
+use App\Services\PaymentService;
+use Illuminate\Http\RedirectResponse;
+
+final class PaymentController extends Controller
+{
+    public function __construct(
+        private PaymentService $service,
+    ) {}
+
+    public function store(StorePaymentRequest $request): RedirectResponse
+    {
+        $payment = $this->service->pay(
+            $request->user()->student,
+            PaymentData::fromRequest($request),
+        );
+
+        return to_route('payments.show', $payment)
+            ->with('status', 'Bayaran berjaya.');
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Exceptions/InvoiceAlreadyPaidException.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Exceptions;
+
+use App\Models\Invoice;
+use DomainException;
+use Illuminate\Http\Request;
+
+final class InvoiceAlreadyPaidException extends DomainException
+{
+    public static function for(Invoice $invoice): self
+    {
+        return new self(sprintf(
+            'Invois %s sudah dibayar pada %s.',
+            $invoice->number, $invoice->paid_at->format('d/m/Y H:i'),
+        ));
+    }
+
+    // Laravel panggil method ini secara automatik bila exception tidak ditangkap
+    public function render(Request $request)
+    {
+        return $request->expectsJson()
+            ? response()->json(['message' => $this->getMessage()], 409)
+            : back()->withInput()->withErrors(['invoice_id' => $this->getMessage()]);
+    }
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Controller tidak tangkap exception. Bila service throw InvoiceAlreadyPaidException, Laravel panggil render() dalam exception itu: 409 untuk JSON (app mobile), kembali ke borang dengan ralat untuk web.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Langkah 3 · Output · 2 / 2</span>
+  <h2>Event selepas transaksi berjaya</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Events/PaymentReceived.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Events;
+
+use App\Models\Payment;
+use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Illuminate\Foundation\Events\Dispatchable;
+
+final class PaymentReceived implements ShouldDispatchAfterCommit
+{
+    use Dispatchable;
+
+    public function __construct(public Payment $payment) {}
+}
+      </code></pre>
+      <p class="code-label">app/Listeners/SendPaymentReceipt.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Listeners;
+
+use App\Events\PaymentReceived;
+use App\Mail\PaymentReceipt;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
+
+final class SendPaymentReceipt implements ShouldQueue
+{
+    public function handle(PaymentReceived $event): void
+    {
+        Mail::to($event->payment->student->email)
+            ->send(new PaymentReceipt($event->payment));
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <div class="callout warn" style="font-size:.6em; margin-top:1.4em"><strong>Tanpa <code>ShouldDispatchAfterCommit</code></strong>, event dihantar serta-merta di dalam <code>DB::transaction()</code>. Kalau transaksi gagal dan di-rollback, resit sudah pun dihantar untuk bayaran yang tidak direkod.</div>
+      <div class="callout good" style="font-size:.6em"><strong>Dengan <code>ShouldDispatchAfterCommit</code></strong>, Laravel tunggu sehingga transaksi commit. Rollback = tiada event, tiada resit.</div>
+      <div class="callout" style="font-size:.6em"><strong><code>ShouldQueue</code></strong> pada listener: emel dihantar di background, pelajar terus nampak "Bayaran berjaya". Laravel kenal pasti listener ini secara automatik melalui type-hint <code>handle(PaymentReceived $event)</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Tiada pendaftaran listener diperlukan: Laravel event discovery imbas folder app/Listeners.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Ganjaran · 1 / 2</span>
+  <h2>Satu service, tiga pintu masuk: Web &amp; API</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3><i class="fa-solid fa-globe"></i>Web</h3>
+      <p class="code-label">app/Http/Controllers/PaymentController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers;
+
+use App\Data\PaymentData;
+use App\Http\Requests\StorePaymentRequest;
+use App\Services\PaymentService;
+
+final class PaymentController extends Controller
+{
+    public function __construct(
+        private PaymentService $service,
+    ) {}
+
+    public function store(StorePaymentRequest $request)
+    {
+        $payment = $this->service->pay(
+            $request->user()->student,
+            PaymentData::fromRequest($request),
+        );
+
+        return to_route('payments.show', $payment);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <h3><i class="fa-solid fa-mobile-screen"></i>API (app mobile)</h3>
+      <p class="code-label">app/Http/Controllers/Api/PaymentController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api;
+
+use App\Data\PaymentData;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePaymentRequest;
+use App\Http\Resources\PaymentResource;
+use App\Services\PaymentService;
+
+final class PaymentController extends Controller
+{
+    public function __construct(
+        private PaymentService $service,
+    ) {}
+
+    public function store(StorePaymentRequest $request)
+    {
+        $payment = $this->service->pay(
+            $request->user()->student,
+            PaymentData::fromRequest($request),
+        );
+
+        return PaymentResource::make($payment)
+            ->response()
+            ->setStatusCode(201);
+    }
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Beza Web dan API hanya pada baris return. Logik bayaran sama, kerana kedua-duanya panggil PaymentService::pay().</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Ganjaran · 2 / 2</span>
+  <h2>Satu service, tiga pintu masuk: Artisan</h2>
+  <div class="rule"></div>
+  <div class="cols" style="grid-template-columns:1.6fr 1fr">
+    <div>
+      <p class="code-label">app/Console/Commands/ImportCounterPayments.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Console\Commands;
+
+use App\Data\PaymentData;
+use App\Enums\PaymentMethod;
+use App\Exceptions\InvoiceAlreadyPaidException;
+use App\Models\Student;
+use App\Services\PaymentService;
+use Illuminate\Console\Command;
+
+final class ImportCounterPayments extends Command
+{
+    protected $signature = 'payments:import {file}';
+
+    public function handle(PaymentService $service): void
+    {
+        foreach (file($this->argument('file')) as $line) {
+            [$matric, $invoiceId] = str_getcsv($line);
+
+            try {
+                $service->pay(
+                    Student::where('matric', $matric)->firstOrFail(),
+                    new PaymentData((int) $invoiceId, PaymentMethod::Counter),
+                );
+            } catch (InvoiceAlreadyPaidException $e) {
+                $this->warn($e->getMessage());
+            }
+        }
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Cara jalankan</p>
+      <pre class="sm"><code class="language-bash" data-trim>
+php artisan payments:import storage/kaunter.csv
+      </code></pre>
+      <p class="code-label">storage/kaunter.csv (penyata kaunter Bendahari)</p>
+      <pre class="sm"><code class="language-plaintext" data-trim>
+A23CS0012,1042
+A23CS0057,1043
+A23CS0012,1042
+      </code></pre>
+      <div class="callout warn" style="font-size:.55em">Baris ketiga ulang baris pertama: service throw <code>InvoiceAlreadyPaidException</code>, command papar amaran dan teruskan.</div>
+      <div class="callout good" style="font-size:.55em">Penalti lewat dan semakan "sudah dibayar" ditulis <strong>sekali</strong> dalam service. Ubah polisi → ketiga-tiga saluran ikut serta.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Panduan</span>
+  <h2>Do &amp; don't Service Layer</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card good">
+      <h3><i class="fa-solid fa-circle-check"></i>Lakukan</h3>
+      <ul style="margin:0">
+        <li>Namakan ikut use case: <code>pay</code>, <code>refund</code>, <code>waive</code></li>
+        <li>Terima DTO (Data Transfer Object) / model / scalar (nilai tunggal: <code>int</code>, <code>string</code>, <code>float</code>, <code>bool</code>) — bukan <code>Request</code></li>
+        <li>Return model, DTO atau <code>void</code></li>
+        <li>Throw domain exception untuk peraturan bisnes yang gagal</li>
+        <li>Inject dependency melalui constructor</li>
+        <li>Pecahkan bila service melebihi ~7 dependency</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h3><i class="fa-solid fa-circle-xmark"></i>Elakkan</h3>
+      <ul style="margin:0">
+        <li><code>request()</code>, <code>auth()</code>, <code>session()</code> dalam service</li>
+        <li>Return <code>redirect()</code> / <code>response()</code></li>
+        <li>“God service”: <code>UserService</code> 2,000 baris</li>
+        <li>Service yang hanya forward ke model tanpa logik (<em>anemic pass-through</em>)</li>
+        <li>Static method — susah di-mock</li>
+        <li>Service panggil controller</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.8em">Alternatif yang popular: <strong>Action class</strong> (satu class per use case, cth. <code>PayInvoice::handle()</code>). Prinsipnya sama — pilih satu konvensyen untuk pasukan.</p>
+  <aside class="notes">Contoh tiga jenis parameter: pay(Student $student, PaymentData $data) guna model + DTO; waive(int $invoiceId, string $reason) guna scalar. Semua boleh dipanggil dari web, API atau Artisan; Request hanya wujud dalam HTTP.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 3: REPOSITORY                                        -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-database"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Repository Pattern</h2>
+  <p>Abstraksi lapisan data</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Konsep</span>
+  <h2>Service bercakap dengan kontrak, bukan dengan SQL</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1160 380" role="img" aria-label="Repository interface dengan beberapa implementasi">
+    <defs><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6ea8ff"/></marker></defs>
+    <rect class="box-a" x="440" y="10" width="280" height="70" rx="10"/>
+    <text class="t" x="580" y="52" text-anchor="middle">PaymentService</text>
+    <rect class="box-i" x="365" y="140" width="430" height="90" rx="10"/>
+    <text class="t-i" x="580" y="165" text-anchor="middle">«interface»</text>
+    <text class="t" x="580" y="192" text-anchor="middle">InvoiceRepository</text>
+    <text class="t-s" x="580" y="215" text-anchor="middle">findOrFail() · outstandingFor() · recordPayment()</text>
+    <path d="M580 80 L580 135" stroke="#6ea8ff" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#ahr)"/>
+
+    <rect class="box-p" x="40" y="290" width="300" height="80" rx="10"/>
+    <text class="t" x="190" y="322" text-anchor="middle">EloquentInvoiceRepository</text>
+    <text class="t-s" x="190" y="348" text-anchor="middle">produksi</text>
+    <rect class="box-w" x="430" y="290" width="300" height="80" rx="10"/>
+    <text class="t" x="580" y="322" text-anchor="middle">CachedInvoiceRepository</text>
+    <text class="t-s" x="580" y="348" text-anchor="middle">decorator → balut Eloquent</text>
+    <rect class="box-g" x="820" y="290" width="300" height="80" rx="10"/>
+    <text class="t" x="970" y="322" text-anchor="middle">InMemoryInvoiceRepository</text>
+    <text class="t-s" x="970" y="348" text-anchor="middle">unit test — tiada DB</text>
+    <path d="M190 288 L470 234" stroke="#6ea8ff" stroke-width="2.5" marker-end="url(#ahr)"/>
+    <path d="M580 288 L580 234" stroke="#6ea8ff" stroke-width="2.5" marker-end="url(#ahr)"/>
+    <path d="M970 288 L690 234" stroke="#6ea8ff" stroke-width="2.5" marker-end="url(#ahr)"/>
+    <path d="M430 330 L345 330" stroke="#f5873a" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ahr)"/>
+    <text class="t-s" x="388" y="318" text-anchor="middle" style="fill:#f5873a">wraps</text>
+  </svg>
+</section>
+
+<section data-timing="540">
+  <span class="kicker">Kod</span>
+  <h2>Kontrak + implementasi Eloquent</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Contracts/InvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Repositories\Contracts;
+
+use App\Models\{Invoice, Payment, Student};
+use Illuminate\Database\Eloquent\Collection;
+
+interface InvoiceRepository
+{
+    public function findOrFail(int $id): Invoice;
+
+    /** Invois belum bayar, tarikh akhir paling awal dahulu. */
+    public function outstandingFor(Student $student): Collection;
+
+    /** Rekod bayaran dan tanda invois berbayar. */
+    public function recordPayment(Invoice $invoice, array $attributes): Payment;
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Nama method guna <strong>bahasa domain</strong> (<code>outstandingFor</code>, <code>recordPayment</code>), bukan bahasa SQL (<code>whereNull('paid_at')</code>).</div>
+    </div>
+    <div>
+      <p class="code-label">app/Repositories/Eloquent/EloquentInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Repositories\Eloquent;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Database\Eloquent\Collection;
+
+final class EloquentInvoiceRepository implements InvoiceRepository
+{
+    public function findOrFail(int $id): Invoice
+    {
+        return Invoice::findOrFail($id);
+    }
+
+    public function outstandingFor(Student $student): Collection
+    {
+        return $student->invoices()
+            ->whereNull('paid_at')
+            ->orderBy('due_date')
+            ->get();
+    }
+
+    public function recordPayment(Invoice $invoice, array $attributes): Payment
+    {
+        $payment = $invoice->payments()->create($attributes);
+        $invoice->update(['paid_at' => $payment->paid_at]);
+
+        return $payment;
+    }
+}
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Kod · siapa panggil repository?</span>
+  <h2>Dari service ke <code>EloquentInvoiceRepository</code></h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">① Siapa beri repository kepada service</p>
+      <pre class="xs"><code class="language-php" data-trim>
+// Laravel bina PaymentService untuk PaymentController.
+// Hasilnya sama seperti kita tulis sendiri:
+$service = new PaymentService(
+    new EloquentInvoiceRepository(),   // ← masuk sebagai $invoices
+    new LatePenaltyCalculator(),
+    new PaymentProcessor([new FpxGateway(), new CardGateway()]),
+);
+
+$payment = $service->pay($student, $data);
+      </code></pre>
+      <div class="callout warn" style="font-size:.5em"><code>InvoiceRepository</code> ialah interface. Cara Laravel tahu nak beri <code>EloquentInvoiceRepository</code>: binding dalam <code>AppServiceProvider</code>, Bahagian 04.</div>
+      <p class="code-label">② Dalam PaymentService::pay() (Bahagian 02)</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="2-8">
+// $this->invoices ialah EloquentInvoiceRepository dari ①
+$payment = $this->invoices->recordPayment($invoice, [
+    'student_id' => $student->id,
+    'method'     => $data->method,
+    'amount'     => $amount,
+    'reference'  => $reference,
+    'paid_at'    => now(),
+]);   // ↑ array ini = $attributes
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">③ EloquentInvoiceRepository::recordPayment()</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1|3|4|6">
+public function recordPayment(Invoice $invoice, array $attributes): Payment
+{
+    $payment = $invoice->payments()->create($attributes);
+    $invoice->update(['paid_at' => $payment->paid_at]);
+
+    return $payment;
+}
+      </code></pre>
+      <ol class="steps" style="font-size:.52em">
+        <li>Array dari ② sampai sebagai <code>$attributes</code></li>
+        <li><code>payments()->create()</code> cipta row <code>payments</code> baru dan isi <code>invoice_id</code> sendiri melalui relationship</li>
+        <li>Invois ditanda berbayar dengan masa yang sama</li>
+        <li><code>Payment</code> dipulangkan kepada service, kemudian ke controller</li>
+      </ol>
+      <div class="callout good" style="font-size:.5em"><code>PaymentService</code> tak tahu ini Eloquent. Ia hanya panggil <code>recordPayment()</code> pada interface. Tukar ke repository lain (cth. untuk test) tanpa ubah service.</div>
+    </div>
+  </div>
+  <aside class="notes">Jejak dengan peserta: ① siapa cipta objek, ② siapa hantar array, ③ siapa terima dan simpan. Slide seterusnya tunjuk model Invoice dan Payment: medan mana yang dibenarkan masuk ($fillable) dan cast enum.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Kod · sambungan</span>
+  <h2>Ke mana <code>$attributes</code> pergi?</h2>
+  <div class="rule"></div>
+  <div class="cols" style="grid-template-columns:1.1fr 1fr; gap:20px">
+    <div>
+      <p class="code-label">app/Models/Invoice.php</p>
+      <pre class="xxs"><code class="language-php" data-trim>
+namespace App\Models;
+
+use App\Enums\FeeType;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Invoice extends Model
+{
+    protected $fillable = ['student_id', 'number', 'type', 'amount', 'due_date', 'paid_at'];
+
+    protected $casts = ['type' => FeeType::class, 'due_date' => 'date', 'paid_at' => 'datetime'];
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+}
+      </code></pre>
+      <p class="code-label">app/Models/Payment.php</p>
+      <pre class="xxs"><code class="language-php" data-trim>
+namespace App\Models;
+
+use App\Enums\PaymentMethod;
+use Illuminate\Database\Eloquent\Model;
+
+class Payment extends Model
+{
+    // invoice_id diisi oleh $invoice->payments()->create()
+    protected $fillable = ['student_id', 'method', 'amount', 'reference', 'paid_at'];
+
+    protected $casts = ['method' => PaymentMethod::class, 'paid_at' => 'datetime'];
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:.52em; margin-top:1.2em">
+        <li><code>$invoice->payments()->create($attributes)</code> (slide sebelum) cipta satu <code>Payment</code> baru.</li>
+        <li>Laravel isi <code>invoice_id</code> sendiri melalui relationship <code>payments()</code> dalam model <code>Invoice</code>.</li>
+        <li><code>Payment::$fillable</code> tentukan kunci mana dalam <code>$attributes</code> dibenarkan masuk ke DB.</li>
+      </ol>
+      <div class="callout warn" style="font-size:.5em">Kunci array mesti sama dengan nama kolum dan ada dalam <code>$fillable</code>. Kalau tidak, medan itu diabaikan tanpa ralat.</div>
+      <div class="callout" style="font-size:.5em"><strong>Peranan <code>$casts</code> dalam aliran ini:</strong> dalam <code>$attributes</code>, <code>'method'</code> ialah enum <code>PaymentMethod::Fpx</code> (dari <code>PaymentData</code>), bukan string.
+        <pre style="margin:.4em 0 0; font-size:.9em"><code class="language-php" data-trim>
+// simpan: enum → 'fpx' dalam kolum payments.method
+$payment = $invoice->payments()->create($attributes);
+
+// baca semula: 'fpx' → enum
+$payment->method;                          // PaymentMethod::Fpx
+$payment->method === PaymentMethod::Fpx;   // true
+        </code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="480">
+  <span class="kicker">Decorator</span>
+  <h2>Tambah cache tanpa sentuh service</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Cached/CachedInvoiceRepository.php</p>
+      <pre class="xxs"><code class="language-php" data-trim>
+namespace App\Repositories\Cached;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Database\Eloquent\Collection;
+
+final class CachedInvoiceRepository implements InvoiceRepository
+{
+    public function __construct(private InvoiceRepository $inner, private Cache $cache) {}
+
+    public function findOrFail(int $id): Invoice
+    {
+        return $this->inner->findOrFail($id);
+    }
+
+    public function outstandingFor(Student $student): Collection
+    {
+        return $this->cache->remember(
+            "invoices:outstanding:{$student->id}",
+            now()->addMinutes(10),
+            fn () => $this->inner->outstandingFor($student),
+        );
+    }
+
+    public function recordPayment(Invoice $invoice, array $attributes): Payment
+    {
+        $payment = $this->inner->recordPayment($invoice, $attributes);
+        $this->cache->forget("invoices:outstanding:{$invoice->student_id}");
+
+        return $payment;
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Providers;
+
+use App\Repositories\Cached\CachedInvoiceRepository;
+use App\Repositories\Contracts\InvoiceRepository;
+use App\Repositories\Eloquent\EloquentInvoiceRepository;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(InvoiceRepository::class, function () {
+            return new CachedInvoiceRepository(
+                new EloquentInvoiceRepository(),
+                cache()->store(),
+            );
+        });
+    }
+}
+      </code></pre>
+      <div class="card good" style="margin-top:10px; font-size:.55em">
+        <h3>Kenapa ini kuat</h3>
+        <ul style="margin:0">
+          <li><code>PaymentService</code> tidak berubah langsung — OCP (Open/Closed Principle)</li>
+          <li>Cache boleh dimatikan dengan tukar satu binding</li>
+          <li>Strategi invalidation &amp; Redis → <strong>Modul 2</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Debat jujur</span>
+  <h2>Perlu ke Repository dengan Eloquent?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card good">
+      <h3><i class="fa-solid fa-thumbs-up"></i>Berbaloi bila…</h3>
+      <ul style="margin:0">
+        <li>Query kompleks digunakan di banyak tempat</li>
+        <li>Data datang dari pelbagai sumber (DB + API luar + cache)</li>
+        <li>Mahu unit test service tanpa DB</li>
+        <li>Pasukan besar — kontrak jelas antara lapisan</li>
+        <li>Perlu decorator (cache, audit log, multi-tenant scope)</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h3><i class="fa-solid fa-thumbs-down"></i>Beban bila…</h3>
+      <ul style="margin:0">
+        <li>CRUD ringkas — repo cuma forward ke <code>Model::find()</code></li>
+        <li>Method bocor Eloquent: return <code>Builder</code> atau terima closure query</li>
+        <li><code>BaseRepository</code> generik dengan 40 method</li>
+        <li>Alasan “nanti nak tukar ORM (Object-Relational Mapping)” — jarang berlaku</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn" style="margin-top:.8em">
+    <strong>Pendekatan pragmatik:</strong> mula dengan <em>query scopes</em> &amp; service. Perkenalkan repository untuk agregat yang <strong>kompleks atau kritikal</strong>, bukan semua model secara automatik.
+  </div>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Anti-pattern</span>
+  <h2>Repository yang membocor</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">BOCOR</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+interface InvoiceRepository
+{
+    // Pemanggil masih perlu tahu Eloquent
+    public function query(): Builder;
+    public function findWhere(array $conditions): Collection;
+    public function paginate(
+        int $perPage, array $with = [], ?Closure $scope = null
+    ): LengthAwarePaginator;
+}
+
+final class OverdueReminderService
+{
+    public function __construct(private InvoiceRepository $invoices) {}
+
+    public function overdue(): Collection
+    {
+        // SQL sudah balik ke dalam service
+        return $this->invoices->query()
+            ->whereNull('paid_at')
+            ->whereDate('due_date', '<', today())
+            ->get();
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">NIAT JELAS</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+interface InvoiceRepository
+{
+    public function overdue(): Collection;
+    public function paginateForStudent(
+        Student $student, int $perPage = 20
+    ): LengthAwarePaginator;
+}
+
+final class OverdueReminderService
+{
+    public function __construct(private InvoiceRepository $invoices) {}
+
+    public function overdue(): Collection
+    {
+        // Baca macam ayat
+        return $this->invoices->overdue();
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Jika setiap kes perlukan method baru dan repo jadi 40 method → mungkin repository bukan alat yang sesuai untuk model itu.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 4: CONTAINER & DI                                    -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-diagram-project"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Service Container &amp; Dependency Injection</h2>
+  <p>Binding, resolving dan interface-based injection</p>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Mental model</span>
+  <h2>Container = kilang objek yang tahu resepi</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1160 420" role="img" aria-label="Aliran register dan resolve dalam service container">
+    <defs><marker id="ahc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <text class="t-h" x="0" y="24">① REGISTER</text>
+    <rect class="box" x="0" y="44" width="330" height="330" rx="12"/>
+    <text class="t" x="20" y="80">ServiceProvider::register()</text>
+    <text class="t-s" x="20" y="120" style="font-family:monospace">bind(InvoiceRepository,</text>
+    <text class="t-s" x="40" y="142" style="font-family:monospace">EloquentInvoiceRepository)</text>
+    <text class="t-s" x="20" y="182" style="font-family:monospace">singleton(PaymentProcessor,</text>
+    <text class="t-s" x="40" y="204" style="font-family:monospace">fn =&gt; [Fpx, Kad, ...])</text>
+    <text class="t-s" x="20" y="244" style="font-family:monospace">when(ReceiptService)</text>
+    <text class="t-s" x="40" y="266" style="font-family:monospace">->needs(Filesystem)</text>
+    <text class="t-s" x="40" y="288" style="font-family:monospace">->give(s3-private)</text>
+    <text class="t-i" x="20" y="340">“Bila diminta X, beri Y”</text>
+
+    <path d="M335 210 L405 210" stroke="#9aa5b8" stroke-width="3" marker-end="url(#ahc)"/>
+
+    <text class="t-h" x="415" y="24">② CONTAINER</text>
+    <rect class="box-d" x="415" y="44" width="330" height="330" rx="12"/>
+    <text class="t-w" x="580" y="90" text-anchor="middle">app()</text>
+    <rect x="440" y="115" width="280" height="44" rx="6" fill="#2a3547"/>
+    <text class="t-ws" x="455" y="143">Interface → resepi</text>
+    <rect x="440" y="170" width="280" height="44" rx="6" fill="#2a3547"/>
+    <text class="t-ws" x="455" y="198">Singleton → instance cache</text>
+    <rect x="440" y="225" width="280" height="44" rx="6" fill="#2a3547"/>
+    <text class="t-ws" x="455" y="253">Reflection → autowire class</text>
+    <rect x="440" y="280" width="280" height="44" rx="6" fill="#2a3547"/>
+    <text class="t-ws" x="455" y="308">Contextual → ikut siapa minta</text>
+
+    <path d="M750 210 L820 210" stroke="#9aa5b8" stroke-width="3" marker-end="url(#ahc)"/>
+
+    <text class="t-h" x="830" y="24">③ RESOLVE</text>
+    <rect class="box-p" x="830" y="44" width="330" height="330" rx="12"/>
+    <text class="t" x="850" y="80">Laravel minta:</text>
+    <text class="t-s" x="850" y="115">PaymentController</text>
+    <text class="t-s" x="870" y="140">└ PaymentService</text>
+    <text class="t-s" x="890" y="165">├ InvoiceRepository → Cached…</text>
+    <text class="t-s" x="910" y="190">  └ Eloquent… + Cache</text>
+    <text class="t-s" x="890" y="215">├ LatePenaltyCalculator</text>
+    <text class="t-s" x="890" y="240">└ PaymentProcessor</text>
+    <text class="t-s" x="910" y="265">  └ [FPX, Kad, E-wallet, Kaunter]</text>
+    <text class="t-i" x="850" y="340">Satu baris: graf penuh dibina</text>
+  </svg>
+  <aside class="notes">
+    Penekanan: kita tidak pernah tulis "new PaymentService(new CachedInvoiceRepository(...), new LatePenaltyCalculator(), new PaymentProcessor([...]))" — container bina keseluruhan graf secara rekursif.
+  </aside>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Autowiring</span>
+  <h2>Class konkrit: tiada binding diperlukan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="sm"><code class="language-php" data-trim>
+// Tiada binding apa-apa untuk LatePenaltyCalculator / PaymentService.
+// Container guna Reflection untuk baca constructor.
+
+final class PaymentService
+{
+    public function __construct(
+        private InvoiceRepository $invoices,       // interface → perlu binding
+        private LatePenaltyCalculator $penalties,  // class konkrit → autowire
+        private PaymentProcessor $processor,       // perlu senarai gateway → binding
+    ) {}
+}
+
+// Di mana sahaja Laravel resolve untuk anda:
+//  - constructor & method Controller
+//  - handle() Job, Listener, Command
+//  - Middleware, FormRequest, Policy
+      </code></pre>
+    </div>
+    <div>
+      <div class="card warn" style="margin-bottom:12px">
+        <h3>Ralat paling biasa</h3>
+        <pre class="sm" style="margin:.4em 0"><code class="language-text" data-trim>
+Target [App\Repositories\Contracts\InvoiceRepository]
+is not instantiable while building
+[App\Http\Controllers\PaymentController,
+ App\Services\PaymentService].
+        </code></pre>
+        <p>Maksud: Laravel tak tahu class mana nak guna untuk interface ini. Tambah binding dalam <code>AppServiceProvider</code>.</p>
+      </div>
+      <div class="callout" style="font-size:.55em">Primitive (<code>string $merchantId</code>) <strong>tidak boleh</strong> di-autowire — guna contextual binding atau attribute <code>#[Config('services.fpx.merchant_id')]</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Jenis binding</span>
+  <h2>Kitaran hayat objek</h2>
+  <div class="rule"></div>
+  <table>
+    <thead><tr><th>Method</th><th>Instance</th><th>Sesuai untuk</th><th>Awas</th></tr></thead>
+    <tbody>
+      <tr><td><code>bind()</code></td><td>Baru setiap kali resolve</td><td>Repository, service tanpa state</td><td>—</td></tr>
+      <tr><td><code>singleton()</code></td><td>Satu untuk seluruh hayat proses</td><td>HTTP client, SDK (Software Development Kit) yang mahal dibina</td><td>Dalam <strong>Octane / queue worker</strong>, state bocor antara request/job</td></tr>
+      <tr><td><code>scoped()</code></td><td>Satu per request / job</td><td>Konteks tenant, user semasa, cache per-request</td><td>Disarankan berbanding singleton untuk state</td></tr>
+      <tr><td><code>instance()</code></td><td>Objek sedia ada yang anda beri</td><td>Test (fake), konfigurasi runtime</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="callout bad" style="margin-top:1em">
+    Jangan simpan <code>auth()->user()</code> atau <code>request()</code> dalam singleton — pengguna A boleh nampak data pengguna B dalam worker yang berjalan lama.
+  </div>
+</section>
+
+<section data-timing="540">
+  <span class="kicker">Interface-based injection</span>
+  <h2>Satu provider untuk semua binding</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Providers;
+
+use App\Payments\{CardGateway, CounterGateway, EWalletGateway,
+    FpxGateway, PaymentProcessor, SandboxGateway};
+use App\Repositories\Contracts\InvoiceRepository;
+use App\Repositories\Eloquent\EloquentInvoiceRepository;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /** Binding mudah: interface => class */
+    public array $bindings = [
+        InvoiceRepository::class => EloquentInvoiceRepository::class,
+    ];
+
+    public function register(): void
+    {
+        // Jawapan slide Strategy: siapa bina senarai gateway?
+        $this->app->singleton(PaymentProcessor::class, fn ($app) =>
+            new PaymentProcessor($app->environment('production')
+                ? [$app->make(FpxGateway::class), $app->make(CardGateway::class),
+                   $app->make(EWalletGateway::class), $app->make(CounterGateway::class)]
+                : [new SandboxGateway()]
+            )
+        );
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <div class="callout good" style="font-size:.6em; margin-top:0"><code>AppServiceProvider</code> <strong>sudah wujud dan sudah aktif</strong> dalam setiap projek Laravel baru. Tak perlu cipta atau daftar apa-apa: terus tambah binding di sini.</div>
+      <div class="callout" style="font-size:.6em">Di <code>local</code> dan <code>testing</code>, semua bayaran pergi ke <code>SandboxGateway</code>: tiada wang sebenar dicaj semasa development.</div>
+      <div class="card" style="margin-top:12px">
+        <h3>register() vs boot()</h3>
+        <p><code>register()</code> — <strong>hanya</strong> binding. Jangan resolve service lain di sini.</p>
+        <p><code>boot()</code> — selepas semua provider didaftar: event, macro, observer, Gate.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    Sengaja guna AppServiceProvider sahaja. Projek besar boleh pecahkan ke provider berasingan (php artisan make:provider), tapi itu tidak perlu untuk kursus ini.
+    Dalam projek sebenar pilih satu binding untuk InvoiceRepository: terus ke Eloquent (slide ini) atau ke CachedInvoiceRepository (slide Decorator).
+  </aside>
+</section>
+
+<section data-timing="600">
+  <span class="kicker">Contextual binding</span>
+  <h2>Interface sama, implementasi ikut siapa yang minta</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">Cara klasik: app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Providers;
+
+use App\Payments\FpxGateway;
+use App\Services\{ReceiptService, StudentPhotoService};
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->when(ReceiptService::class)
+            ->needs(Filesystem::class)
+            ->give(fn () => Storage::disk('s3-private'));
+
+        $this->app->when(StudentPhotoService::class)
+            ->needs(Filesystem::class)
+            ->give(fn () => Storage::disk('public'));
+
+        $this->app->when(FpxGateway::class)
+            ->needs('$merchantId')
+            ->giveConfig('services.fpx.merchant_id');
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Laravel 13 — contextual attributes</p>
+      <pre class="sm"><code class="language-php" data-trim>
+use App\Payments\PaymentGateway;
+use Illuminate\Container\Attributes\{Config, Storage};
+use Illuminate\Contracts\Filesystem\Filesystem;
+
+final class ReceiptService   // simpan PDF resit
+{
+    public function __construct(
+        #[Storage('s3-private')] private Filesystem $disk,
+    ) {}
+}
+
+final class FpxGateway implements PaymentGateway
+{
+    public function __construct(
+        #[Config('services.fpx.merchant_id')] private string $merchantId,
+    ) {}
+
+    // supports() dan charge() seperti slide Strategy
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Attribute lain: <code>#[Auth]</code>, <code>#[Cache('redis')]</code>, <code>#[DB('pgsql')]</code>, <code>#[Log('daily')]</code>, <code>#[CurrentUser]</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="3600" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-utensils"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">1:00 – 2:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Makan tengah hari</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>60:00</p>
+  <p class="cover-sub">Seterusnya: Service Locator, tukar implementasi dalam test, kemudian lab</p>
+  <aside class="notes">Selepas makan, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula dari situ.</aside>
+</section>
+
+<section data-timing="480">
+  <span class="kicker">Anti-pattern</span>
+  <h2>Service Locator: dependency tersembunyi</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">TERSEMBUNYI</span></h3>
+      <pre class="sm"><code class="language-php" data-trim>
+final class PaymentService
+{
+    public function pay(Student $student, PaymentData $data): Payment
+    {
+        $invoices  = app(InvoiceRepository::class);
+        $penalties = resolve(LatePenaltyCalculator::class);
+        $processor = App::make(PaymentProcessor::class);
+        // ...
+    }
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">Baca constructor → nampak tiada dependency. Tipu. Test perlu tahu dalaman method.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">JUJUR</span></h3>
+      <pre class="sm"><code class="language-php" data-trim>
+final class PaymentService
+{
+    public function __construct(
+        private InvoiceRepository $invoices,
+        private LatePenaltyCalculator $penalties,
+        private PaymentProcessor $processor,
+    ) {}
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">Constructor = senarai keperluan yang lengkap. Terlalu panjang? Itu isyarat langgar SRP (Single Responsibility Principle).</p>
+      <div class="callout" style="font-size:.52em"><code>app()</code> masih OK di sempadan: route closure, Blade, dan dalam ServiceProvider.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Ganjaran Dependency Injection (DI) · 1 / 2</span>
+  <h2>Tukar implementasi dalam test: fake sendiri</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Feature/PayInvoiceTest.php (Pest)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\{Invoice, Payment, Student};
+use App\Payments\PaymentProcessor;
+use Tests\Fakes\FakePaymentGateway;
+
+it('merekod bayaran dan caj gateway sekali sahaja', function () {
+    $gateway = new FakePaymentGateway();
+    $this->app->instance(PaymentProcessor::class, new PaymentProcessor([$gateway]));
+
+    $student = Student::factory()->create();
+    $invoice = Invoice::factory()->for($student)->create([
+        'amount' => 1250, 'due_date' => now()->addWeek(),
+    ]);
+
+    $this->actingAs($student->user)->post('/payments', [
+        'invoice_id' => $invoice->id,
+        'method'     => 'fpx',
+    ])->assertRedirect();
+
+    expect(Payment::sole()->amount)->toEqual(1250.0)   // belum lewat: tiada penalti
+        ->and($invoice->fresh()->paid_at)->not->toBeNull()
+        ->and($gateway->charges)->toHaveCount(1);
+});
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">tests/Fakes/FakePaymentGateway.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace Tests\Fakes;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use App\Payments\PaymentGateway;
+
+final class FakePaymentGateway implements PaymentGateway
+{
+    public array $charges = [];
+
+    public function supports(PaymentMethod $method): bool
+    {
+        return true;
+    }
+
+    public function charge(Invoice $invoice, float $amount): string
+    {
+        $this->charges[] = compact('invoice', 'amount');
+
+        return 'FAKE-'.count($this->charges);
+    }
+}
+      </code></pre>
+      <div class="callout good" style="font-size:.55em"><code>$this->app->instance()</code> beritahu Laravel: bila ada yang minta <code>PaymentProcessor</code>, beri objek ini dengan gateway fake. Tiada wang sebenar dicaj.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Ganjaran Dependency Injection (DI) · 2 / 2</span>
+  <h2>Tukar implementasi dalam test: mock</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Feature/PayInvoiceTest.php (sambungan)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\{Invoice, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+
+it('tidak merekod bayaran untuk invois yang sudah dibayar', function () {
+    $student = Student::factory()->create();
+    $invoice = Invoice::factory()->for($student)->create(['paid_at' => now()]);
+
+    $this->mock(InvoiceRepository::class, function ($mock) use ($invoice) {
+        $mock->shouldReceive('findOrFail')->andReturn($invoice);
+        $mock->shouldNotReceive('recordPayment');
+    });
+
+    $this->actingAs($student->user)->post('/payments', [
+        'invoice_id' => $invoice->id,
+        'method'     => 'fpx',
+    ])->assertSessionHasErrors('invoice_id');
+});
+      </code></pre>
+    </div>
+    <div>
+      <div class="card primary" style="margin-bottom:10px; font-size:.6em">
+        <h3>3 cara tukar</h3>
+        <ul style="margin:0">
+          <li><code>$this->app->instance()</code>: fake buatan sendiri</li>
+          <li><code>$this->mock()</code> / <code>partialMock()</code>: Mockery</li>
+          <li><code>Mail::fake()</code>, <code>Queue::fake()</code>: fake terbina Laravel</li>
+        </ul>
+      </div>
+      <div class="callout good" style="font-size:.55em"><code>shouldNotReceive('recordPayment')</code>: test gagal jika service cuba rekod bayaran untuk invois yang sudah dibayar.</div>
+      <div class="callout" style="font-size:.55em">Semua ini hanya mungkin kerana kod <strong>tidak</strong> buat <code>new FpxClient()</code> sendiri. Testing mendalam → <strong>Modul 5</strong>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- LAB                                                           -->
+<!-- ============================================================ -->
+
+<section data-timing="3000" class="lab">
+  <span class="kicker"><i class="fa-solid fa-flask"></i>&nbsp; Hands-on lab · 50 minit · baki <span data-countdown>50:00</span></span>
+  <h2>Refactor PaymentController</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.65em">Starter repo, branch <code style="background:#0b2e20; color:#9be3b7; border-color:#1d5a3f">modul-1-start</code>. Ujian feature sudah disediakan dan <strong>sedang lulus</strong> — pastikan ia kekal hijau selepas setiap langkah. Setiap peserta kod di laptop sendiri; rakan semeja bantu bila tersekat.</p>
+      <ol style="font-size:.6em">
+        <li><strong>8′</strong> Pindahkan validasi ke <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">StorePaymentRequest</code></li>
+        <li><strong>8′</strong> Cipta <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentData</code> DTO (Data Transfer Object)</li>
+        <li><strong>8′</strong> Ekstrak <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">LatePenaltyCalculator</code> + <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentProcessor</code> dan 3 gateway</li>
+        <li><strong>8′</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">InvoiceRepository</code> interface + Eloquent + binding</li>
+        <li><strong>8′</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentService</code> + exception + event/listener</li>
+        <li><strong>10′</strong> Code review ikut meja: pilih satu repo, semak guna checklist</li>
+      </ol>
+    </div>
+    <div>
+      <div class="tree">app/
+├─ <span class="n">Billing/</span>LatePenaltyCalculator.php
+├─ <span class="n">Data/</span>PaymentData.php
+├─ <span class="n">Events/</span>PaymentReceived.php
+├─ <span class="n">Exceptions/</span>InvoiceAlreadyPaidException.php
+├─ Http/
+│   ├─ Controllers/PaymentController.php
+│   └─ <span class="n">Requests/</span>StorePaymentRequest.php
+├─ <span class="n">Listeners/</span>SendPaymentReceipt.php
+├─ <span class="n">Payments/</span>
+│   ├─ PaymentGateway.php · PaymentProcessor.php
+│   └─ FpxGateway.php · CardGateway.php · EWalletGateway.php
+├─ <span class="n">Providers/</span>AppServiceProvider.php
+├─ <span class="n">Repositories/</span>
+│   ├─ Contracts/InvoiceRepository.php
+│   └─ Eloquent/EloquentInvoiceRepository.php
+└─ <span class="n">Services/</span>PaymentService.php</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300" class="lab">
+  <span class="kicker"><i class="fa-solid fa-clipboard-check"></i>&nbsp; Lab · kriteria siap</span>
+  <h2>Checklist code review</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card">
+      <h3>Struktur</h3>
+      <ul class="check" style="margin:0">
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">store()</code> ≤ 10 baris</li>
+        <li>Tiada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DB::</code> / <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Model::</code> dalam controller</li>
+        <li>Service tidak sentuh <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">request()</code> / <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">auth()</code>
+          <div class="grep-hint">Semak dari root projek (tiada output = lulus):
+            <pre><code class="language-bash">grep -rnE "request\(|session\(|auth\(|redirect\(" \
+     app --exclude-dir=Http</code></pre></div></li>
+        <li>Semua dependency melalui constructor</li>
+        <li>Tiada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">env()</code> di luar <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">config/</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Tingkah laku</h3>
+      <ul class="check" style="margin:0">
+        <li>Semua ujian sedia ada masih lulus</li>
+        <li>Tiada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">$request->all()</code> → guna <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">validated()</code> / DTO (Data Transfer Object)</li>
+        <li>Invois sudah dibayar → 409 (JSON) / error session (web)</li>
+        <li>Event guna <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ShouldDispatchAfterCommit</code></li>
+        <li>Listener implement <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ShouldQueue</code></li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3><i class="fa-solid fa-star"></i>Cabaran tambahan</h3>
+    <p>Tambah <strong><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DuitNowGateway</code></strong> tanpa mengubah satu baris pun dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentProcessor</code> atau gateway sedia ada. Tulis test dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">FakePaymentGateway</code> sebagai panduan.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PENUTUP                                                       -->
+<!-- ============================================================ -->
+
+<section data-timing="240">
+  <span class="kicker">Cheat sheet</span>
+  <h2>Ringkasan Modul 1</h2>
+  <div class="rule"></div>
+  <div class="cols-4">
+    <div class="card primary">
+      <h3>SOLID</h3>
+      <p><strong>S</strong> satu aktor<br><strong>O</strong> tambah, jangan ubah<br><strong>L</strong> jangan mungkir kontrak<br><strong>I</strong> interface kecil<br><strong>D</strong> bergantung pada abstraksi</p>
+    </div>
+    <div class="card accent">
+      <h3>Service Layer</h3>
+      <p>Thin controller → DTO (Data Transfer Object) → Service (transaksi, peraturan, event). Gagal = domain exception.</p>
+    </div>
+    <div class="card warn">
+      <h3>Repository</h3>
+      <p>Method berbahasa domain. Jangan bocor <code>Builder</code>. Guna di tempat yang berbaloi. Decorator untuk cache.</p>
+    </div>
+    <div class="card good">
+      <h3>Container</h3>
+      <p><code>bind</code> / <code>singleton</code> / <code>scoped</code> / <code>instance</code>. Contextual binding. Constructor injection, bukan <code>app()</code>.</p>
+    </div>
+  </div>
+  <table style="margin-top:1em">
+    <thead><tr><th>Soalan semasa review</th><th>Jika “ya”…</th></tr></thead>
+    <tbody>
+      <tr><td>Controller ada logik selain terima-panggil-balas?</td><td>Pindah ke service</td></tr>
+      <tr><td>Ada <code>new</code> untuk class yang bercakap dengan dunia luar?</td><td>Inject interface</td></tr>
+      <tr><td>Ada rantaian <code>if/match</code> ikut jenis yang terus membesar?</td><td>Strategy: satu class setiap variasi</td></tr>
+      <tr><td>Interface ada method yang implementasi biarkan kosong?</td><td>Pecahkan interface</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Seterusnya</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Modul 2 — Optimasi Data &amp; Prestasi</h1>
+  <p class="cover-sub">Kod yang bersih belum tentu laju. Kita bawa <code>PaymentService</code> yang sama dan:</p>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-magnifying-glass-chart"></i>N+1 dalam <code>outstandingFor()</code></span>
+    <span><i class="fa-solid fa-table-list"></i>Composite index <code>(student_id, paid_at, due_date)</code></span>
+    <span><i class="fa-solid fa-lock"></i>Locking: elak invois dibayar dua kali</span>
+    <span><i class="fa-solid fa-bolt"></i>Redis cache &amp; invalidation</span>
+  </div>
+  <h3 style="margin-top:1.6em"><i class="fa-regular fa-comments" style="color:var(--accent); margin-right:.4em"></i>Soalan &amp; perbincangan</h3>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

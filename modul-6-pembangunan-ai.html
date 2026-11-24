@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 6 — Pembangunan Dipandu AI</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-b    { fill:#2a1416; stroke:#ff6b6b; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 6 · Pembangunan Dipandu AI</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- HARI 4 · 11:36 · PEMBUKA, BAHAGIAN 01: PROMPT ENGINEERING  -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 6 / 6</span>
+  <h1 style="margin-top:.1em">Pembangunan Dipandu AI</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-comment-dots"></i>Prompt engineering</span>
+    <span><i class="fa-solid fa-magnifying-glass"></i>AI-assisted code review</span>
+    <span><i class="fa-solid fa-bolt"></i>Boilerplate</span>
+    <span><i class="fa-solid fa-scale-balanced"></i>Batas &amp; risiko</span>
+    <span><i class="fa-solid fa-folder-tree"></i>Kerja tersusun</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">2 jam</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Demo · Lab · Code review</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-robot"></i>&nbsp; Alat</span><span class="val">Mana-mana AI assistant</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">Modul 6 bermula Hari 4 sejurus selepas Modul 5 (kira-kira 11:36 pagi). Tekan Shift+T di slide ini. Modul ini tidak bergantung pada satu alat: peserta boleh guna ChatGPT, Claude, Gemini, GitHub Copilot atau alat yang diluluskan universiti. Kod contoh dan semua bukti (status HTTP, bilangan query, output ujian) diambil daripada larian sebenar pada Laravel 13.43. Jawapan AI berbeza setiap kali; jangan janjikan output AI yang tepat sama seperti slide.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu menggunakan AI (artificial intelligence, kecerdasan buatan) assistant secara berkesan dalam workflow pembangunan Laravel <strong>tanpa bergantung sepenuhnya padanya</strong>.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh guna AI dalam kerja harian untuk mempercepat pembangunan tanpa mengorbankan kualiti kod.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Modul 1 hingga 5 ialah alat untuk <strong>menilai</strong> kod: SOLID, policy, query, ujian, log. Hari ini kita guna alat yang sama untuk menilai kod yang ditulis oleh AI.</div>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual Modul 6</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">H4 11:42</span><h3>Prompt engineering</h3><p>Konteks, versi, kekangan</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H4 2:45</span><h3>AI-assisted code review</h3><p>Cari dan buktikan</p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">H4 3:18</span><h3>Boilerplate</h3><p>Artisan dahulu, ujian dijana</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">H4 4:00</span><h3>Batas &amp; risiko</h3><p>Pakej palsu, data, pemilikan kod</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H4 4:18</span><h3>Kerja tersusun</h3><p>ADR (Architecture Decision Record)</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">H4 4:31</span><h3 style="color:#fff">Penutup</h3><p style="color:#b9c3d3">Kursus dalam satu slide</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 6: Hari 4, 11:36 pagi – 4:39 petang, termasuk penutup kursus.</p>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Pembuka</span>
+  <h2>Laravel 13 sudah menulis untuk AI</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag good">DEVELOPER</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test
+
+   FAIL  Tests\Feature\ExampleTest
+  ⨯ the application returns a successful response
+   FAILED  Tests\Feature\ExampleTest > the application…
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/ExampleTest.php:17
+  ➜  17▕         $response->assertStatus(200);
+
+  Tests:    1 failed, 1 passed (2 assertions)
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag bad">AI AGENT</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ CLAUDECODE=1 php artisan test
+{"tool":"phpunit","result":"failed","tests":2,
+ "passed":1,"assertions":2,"duration_ms":67,
+ "failed":1,"failures":[{"test":"Tests\\Feature\\
+ ExampleTest::test_the_application_returns_a_
+ successful_response","file":".../ExampleTest.php",
+ "line":17,"message":"Expected response status
+ code [200] but received 404. ..."}]}
+      </code></pre>
+      <p style="font-size:.5em">Pakej <code>laravel/pao</code> ("Agent-optimized output for PHP testing tools") ada dalam <code>composer.json</code> Laravel 13. Bila ia kesan AI agent (contohnya pemboleh ubah <code>CLAUDECODE</code> atau <code>CURSOR_AGENT</code>), output ujian bertukar kepada JSON.</p>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.53em; margin-top:.4em">AI sudah menjalankan arahan dalam projek anda. Soalan hari ini bukan "patutkah guna AI", tetapi <strong>bagaimana memastikan kod yang ia hasilkan betul</strong>.</div>
+  <aside class="notes">Diuji pada Laravel 13.43 dengan laravel/pao 1.1.6: projek baru yang sama, ujian ExampleTest asal, dijalankan tanpa dan dengan CLAUDECODE=1. Output JSON di kanan dipotong ke beberapa baris supaya muat. Pengesanan dibuat oleh pakej laravel/agent-detector.</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-comment-dots"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>Prompt Engineering</h2>
+  <p>Cara bertanya supaya dapat kod yang berguna</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Tugas yang sama, dua prompt</span>
+  <h2>AI hanya tahu apa yang anda beritahu</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">LEMAH</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+buat api resit bayaran laravel
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li>Versi Laravel? AI teka, selalunya versi lama</li>
+        <li>Model apa? AI cipta model dan kolum sendiri</li>
+        <li>Siapa boleh lihat resit? Tidak disebut, jadi tidak dikawal</li>
+        <li>Ujian? Tidak diminta, tidak diberi</li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="tag good">KUAT</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Konteks: Laravel 13, PHP 8.4, Sanctum. Sistem bayaran yuran.
+Model Payment belongsTo Student dan Invoice.
+InvoicePolicy::view() benarkan pemilik invois dan Bendahari.
+
+Tugas: GET /api/v1/receipts/{payment} pulangkan reference,
+nama pelajar, nombor invois dan amaun.
+
+Kekangan:
+- Pelajar hanya boleh lihat resit sendiri (guna InvoicePolicy)
+- Ikut gaya controller sedia ada: final class, JsonResponse
+- Jangan ubah bootstrap/app.php
+
+Output: controller, baris route, ujian Pest untuk 200, 403, 401.
+Tanya saya dahulu jika ada yang tidak jelas.
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Tunjuk secara langsung dengan alat AI kelas: hantar kedua-dua prompt dalam sembang baru dan bandingkan. Biasanya prompt lemah menghasilkan controller tanpa sebarang semakan kebenaran, kerana peraturan "resit sendiri sahaja" tidak pernah disebut. Jawapan AI berbeza setiap kali, jadi bincang apa yang muncul, bukan apa yang dijangka.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Templat</span>
+  <h2>Lima bahagian prompt developer</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Bahagian</th><th>Isi</th><th>Contoh dari sistem yuran</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Konteks</strong></td><td>Versi, pakej, domain</td><td>Laravel 13, PHP 8.4, Sanctum, Pest; sistem bayaran yuran</td></tr>
+      <tr><td><strong>Kod sedia ada</strong></td><td>Tampal yang berkaitan sahaja</td><td>Interface <code>PaymentGateway</code>, <code>InvoicePolicy</code>, satu controller sebagai contoh gaya</td></tr>
+      <tr><td><strong>Tugas</strong></td><td>Satu hasil yang jelas</td><td>Endpoint resit, atau ujian untuk <code>LatePenaltyCalculator</code></td></tr>
+      <tr><td><strong>Kekangan</strong></td><td>Peraturan yang AI tidak boleh teka</td><td>Hanya pemilik dan Bendahari; wang dua tempat perpuluhan; masa Malaysia</td></tr>
+      <tr><td><strong>Format output</strong></td><td>Fail, bentuk, apa yang tidak mahu</td><td>Laluan fail penuh; ujian Pest; tiada penerangan panjang</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.54em; margin-top:.7em">Kekangan ialah bahagian paling berharga. Peraturan bisnes yang anda pelajari dalam Modul 1 hingga 5 (policy, penalti, zon masa) <strong>tidak wujud dalam kepala AI</strong> sehingga anda menulisnya.</div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Perangkap · versi</span>
+  <h2>Jawapan untuk Laravel 10 dalam projek Laravel 13</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">TANPA VERSI</span></h3>
+      <p style="font-size:.55em">Prompt: "cara daftar middleware AssignRequestId dalam Laravel". Jawapan lazim dari AI yang dilatih dengan tutorial lama:</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Tambah dalam app/Http/Kernel.php:
+protected $middlewareAliases = [ ... ];
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ ls app/Http/Kernel.php
+ls: app/Http/Kernel.php: No such file or directory
+      </code></pre>
+      <p style="font-size:.5em">Fail ini dibuang sejak Laravel 11. Pemula akan cipta fail itu sendiri, dan middleware tidak pernah berjalan.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">DENGAN VERSI</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Laravel 13. Middleware App\Http\Middleware\AssignRequestId
+untuk semua route /api/v1 sahaja. Jangan guna Kernel.php
+(tiada dalam Laravel 11 ke atas).
+      </code></pre>
+      <p style="font-size:.53em">Jawapan yang betul untuk projek kita (Modul 5):</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::prefix('v1')->middleware(AssignRequestId::class)->group(function () {
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li>Sentiasa nyatakan versi Laravel dan PHP</li>
+        <li>Jika jawapan menyebut fail yang tiada dalam projek anda, itu tanda jawapan untuk versi lain</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">ls dijalankan pada projek Laravel 13.43 kursus ini. Untuk Laravel 11 ke atas, middleware global dan alias didaftar dalam bootstrap/app.php melalui withMiddleware(); dalam kursus ini kita pasang terus pada kumpulan route. Kandungan jawapan AI di kiri ialah contoh corak lazim, bukan salinan jawapan satu alat tertentu; tunjuk secara langsung jika alat kelas menghasilkannya.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Kerja bersama AI</span>
+  <h2>Pelan dahulu, kod kemudian</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.56em">
+        <li><strong>Minta pelan</strong>: "Senaraikan fail yang akan diubah dan kenapa. Jangan tulis kod lagi."</li>
+        <li><strong>Betulkan pelan</strong>: buang yang tidak perlu, tambah kekangan yang terlepas</li>
+        <li><strong>Satu langkah setiap kali</strong>: satu fail atau satu method, jalankan ujian, kemudian langkah seterusnya</li>
+        <li><strong>Tampal ralat sebenar</strong>: output penuh <code>php artisan test</code>, bukan "tak jalan"</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-lightbulb"></i>Kenapa?</h3>
+      <p>Membetulkan pelan lima baris jauh lebih murah daripada membaca 200 baris kod yang salah arah.</p>
+      <p>Langkah kecil bermakna setiap perubahan boleh diuji dengan ujian Modul 5 sebelum perubahan seterusnya.</p>
+    </div>
+  </div>
+  <aside class="notes">Kitaran ini sama seperti TDD dalam Modul 5: langkah kecil, sahkan, kemudian teruskan. Untuk alat agent (yang boleh menjalankan arahan sendiri), langkah 1 dan 2 paling penting: luluskan pelan sebelum ia mengubah fail.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Nilai tambah</span>
+  <h2>Beri AI konteks Laravel secara automatik</h2>
+  <div class="rule"></div>
+  <p style="font-size:.7em; text-align:center"><strong>Laravel Boost</strong>: pakej rasmi Laravel yang memberi AI assistant konteks projek anda (versi pakej, dokumentasi ikut versi, struktur projek) melalui MCP (Model Context Protocol).</p>
+  <p style="font-size:.75em; text-align:center"><i class="fa-brands fa-github"></i>&nbsp; <a href="https://github.com/laravel/boost" target="_blank">github.com/laravel/boost</a></p>
+  <aside class="notes">Nilai tambah, di luar outline; tidak perlu demo. Disemak di Packagist: laravel/boost versi 2.10.4, menyokong illuminate 11, 12 dan 13. Tidak dipasang atau diuji dalam kursus ini.</aside>
+</section>
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 1 · 15 minit · berpasangan dalam meja · baki <span data-countdown>15:00</span></span>
+  <h2>Dua prompt, satu tugas</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.56em">Tugas: ujian Pest untuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">LatePenaltyCalculator</code> (versi selepas Lab 1 Modul 5).</p>
+      <ol class="steps" style="font-size:.53em">
+        <li>Orang A: hantar prompt satu baris, "tulis test untuk LatePenaltyCalculator"</li>
+        <li>Orang B: guna templat lima bahagian. Tampal kelas itu dan tulis kekangan: tarikh akhir berakhir 23:59:59, wang dua tempat perpuluhan, had RM200</li>
+        <li>Jalankan kedua-dua hasil dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan test</code></li>
+        <li>Rosakkan kod: buang <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">endOfDay()</code>. Ujian siapa yang merah?</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Bilangan ujian dan bilangan yang merah selepas <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">endOfDay()</code> dibuang, untuk kedua-dua prompt.</p>
+      <p>Siap awal? Tanya AI: "Apa kes yang anda <strong>tidak</strong> uji?" Adakah jawapannya betul?</p>
+    </div>
+  </div>
+  <aside class="notes">Branch modul-6-start ialah hasil akhir Modul 5 (Pest, factory, LatePenaltyCalculator yang sudah dibetulkan, ReceiptController untuk Lab 2). Pastikan peserta guna alat AI yang dibenarkan oleh universiti dan tidak menampal .env. Hasil dijangka: prompt satu baris jarang menguji bayaran pada hari akhir pukul 10:30, jadi tiada ujian merah bila endOfDay() dibuang. Ini bukan jaminan; bincang apa yang sebenarnya berlaku di setiap meja.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- REHAT JUMAAT 12:15 – 2:45                                  -->
+<!-- ============================================================ -->
+
+<section data-timing="9000" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mosque"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">12:15 – 2:45 petang</span>
+  <h1 style="margin:.1em 0 .2em">Rehat Jumaat</h1>
+  <p class="cover-sub">Seterusnya: AI-assisted code review</p>
+  <aside class="notes">Selepas rehat, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula dari 2:45.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 02: CODE REVIEW                                   -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-magnifying-glass"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>AI-Assisted Code Review</h2>
+  <p>Logic error, security gap, refactoring</p>
+  <aside class="notes">Tekan Shift+T di slide ini supaya pemasa jadual bermula semula pada 2:45.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Prompt semakan</span>
+  <h2>Minta bukti, bukan pendapat</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Semak kod ini sebagai senior Laravel developer.
+
+Konteks: Laravel 13, Sanctum. config/app.php timezone UTC;
+semua pengguna di Malaysia (UTC+8).
+Pelajar hanya boleh lihat bayaran sendiri; Bendahari boleh
+lihat semua. InvoicePolicy::view() sudah wujud.
+
+Cari: logic error, security gap, query berlebihan.
+
+Untuk setiap isu beri:
+1. baris
+2. kenapa ia salah, dengan contoh input
+3. cara membuktikannya (ujian atau arahan)
+4. pembaikan paling kecil
+
+Jangan ulas gaya penulisan atau nama pemboleh ubah.
+
+[tampal kod]
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li><strong>Peraturan akses</strong> dalam konteks: tanpanya AI tidak tahu Aisyah tidak boleh lihat resit Badrul</li>
+        <li><strong>Zon masa</strong>: maklumat yang tiada dalam kod tetapi mengubah makna <code>today()</code></li>
+        <li><strong>Cara membuktikan</strong>: memaksa setiap dapatan boleh disemak. Dapatan tanpa bukti ialah tekaan</li>
+        <li><strong>Jangan ulas gaya</strong>: elak 20 komen kosmetik yang menenggelamkan satu lubang keselamatan</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Pull request untuk disemak</span>
+  <h2>Resit pelajar dan laporan harian Bendahari</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/ReceiptController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
+
+final class ReceiptController extends Controller
+{
+    public function show(Payment $payment): JsonResponse
+    {
+        return response()->json([
+            'reference' => $payment->reference,
+            'student' => $payment->student->name,
+            'invoice' => $payment->invoice->number,
+            'amount' => $payment->amount,
+        ]);
+    }
+
+    public function today(): JsonResponse
+    {
+        $payments = Payment::whereDate('paid_at', today())->get();
+
+        return response()->json($payments->map(fn (Payment $p) => [
+            'reference' => $p->reference,
+            'student' => $p->student->name,
+            'amount' => $p->amount,
+        ]));
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">routes/api.php (dalam kumpulan auth:sanctum)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::get('receipts/{payment}', [ReceiptController::class, 'show']);
+Route::get('reports/payments-today', [ReceiptController::class, 'today'])
+    ->middleware('can:view-bursary-reports');
+      </code></pre>
+      <p style="font-size:.55em">Kod ini berjalan, pulangkan 200, dan nampak kemas. Ada <strong>tiga</strong> masalah sebenar.</p>
+    </div>
+  </div>
+  <aside class="notes">Jangan dedahkan tiga masalah itu sebelum Lab 2. Kod ini ada dalam branch modul-6-start sebagai ReceiptController.</aside>
+</section>
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Lab 2 · 15 minit · code review meja · baki <span data-countdown>15:00</span></span>
+  <h2>AI menyemak, meja membuktikan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.54em">
+        <li>Hantar <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ReceiptController</code> dengan prompt semakan tadi</li>
+        <li>Salin setiap dapatan AI ke satu jadual: <strong>betul</strong>, <strong>salah</strong>, atau <strong>belum pasti</strong></li>
+        <li>Untuk setiap dapatan "betul", buktikan dengan satu ujian yang <strong>merah</strong> pada kod ini</li>
+        <li>Ada masalah yang AI terlepas? Tambah ke jadual</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Jadual dapatan meja, dan sekurang-kurangnya satu ujian merah yang membuktikan satu masalah.</p>
+      <p>Petunjuk: <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Sanctum::actingAs()</code> (Modul 5), <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">$this-&gt;expectsDatabaseQueryCount()</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Carbon::setTestNow()</code>.</p>
+    </div>
+  </div>
+  <aside class="notes">Setiap meja guna satu alat AI. Bandingkan jadual antara meja: alat atau prompt yang berbeza menghasilkan dapatan berbeza, dan itulah sebabnya setiap dapatan mesti dibuktikan. Dapatan "salah" yang lazim: mendakwa SQL injection pada whereDate() (Eloquent guna parameter binding), atau mass assignment (tiada create/update dalam kod ini).</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Debrief Lab 2</span>
+  <h2>Tiga masalah, tiga bukti</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Masalah</th><th>Bukti (ujian sebenar pada kod ini)</th><th>Modul</th></tr></thead>
+    <tbody>
+      <tr><td><strong>IDOR</strong> (Insecure Direct Object Reference): <code>show()</code> tiada semakan kebenaran</td><td>Token Aisyah, resit Badrul:<br><code>200 {"reference":"FPX1","student":"Badrul","invoice":"INV0000001","amount":1100}</code></td><td>3</td></tr>
+      <tr><td><strong>N+1</strong>: <code>$p-&gt;student</code> dalam <code>map()</code></td><td>20 bayaran hari ini: <code>21 query</code>, 20 daripadanya ke jadual <code>students</code></td><td>2</td></tr>
+      <tr><td><strong>Zon masa</strong>: <code>today()</code> ialah tarikh UTC (Coordinated Universal Time)</td><td>Bayaran 22 Nov, 7:30 pagi waktu Malaysia (21 Nov 23:30 UTC). Laporan 22 Nov pukul 10 pagi: <code>count=0 []</code></td><td>4</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.53em; margin-top:.7em">Ketiga-tiganya pernah kita lihat dalam kursus ini. AI membantu <strong>mencari</strong> lebih cepat; pengetahuan Modul 1 hingga 5 membolehkan anda <strong>menilai</strong> sama ada dapatan itu betul.</div>
+  <aside class="notes">Bukti diambil daripada ujian sebenar pada Laravel 13.43 dengan SQLite dalam memori: Sanctum::actingAs untuk IDOR, DB::listen untuk mengira query, Carbon::setTestNow('2026-11-22 02:00:00') (10 pagi waktu Malaysia) untuk zon masa. Tanya meja mana yang jumpa ketiga-tiganya, dan mana yang AI mereka terlepas.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Pembaikan</span>
+  <h2>Tiga baris berubah</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/ReceiptController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="6,12|21|19,22-25">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
+
+final class ReceiptController extends Controller
+{
+    public function show(Payment $payment): JsonResponse
+    {
+        Gate::authorize('view', $payment->invoice);
+
+        return response()->json([ /* sama seperti tadi */ ]);
+    }
+
+    public function today(): JsonResponse
+    {
+        $day = now('Asia/Kuala_Lumpur');
+
+        $payments = Payment::with('student')
+            ->whereBetween('paid_at', [
+                $day->copy()->startOfDay()->utc(),
+                $day->copy()->endOfDay()->utc(),
+            ])
+            ->get();
+
+        return response()->json($payments->map(/* sama seperti tadi */));
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+IDOR:  status 403
+N+1:   20 bayaran, 2 query
+Zon:   bayaran 7:30 pagi, count=1
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li><code>Gate::authorize('view', $payment-&gt;invoice)</code>: guna semula <code>InvoicePolicy</code> Modul 3</li>
+        <li><code>with('student')</code>: 21 query jadi 2</li>
+        <li>Hari Malaysia ditukar ke julat UTC (Coordinated Universal Time). <code>-&gt;utc()</code> wajib: Laravel tidak menukar zon masa semasa membina query</li>
+      </ul>
+      <pre class="xs"><code class="language-php" data-trim>
+$this->expectsDatabaseQueryCount(2);
+// tanpa with(): Expected 2 database queries
+// on the [sqlite] connection. 6 occurred.
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Line highlight: 6 dan 12 (Gate), 21 (with), 19 dan 22-25 (julat hari Malaysia). Ujian expectsDatabaseQueryCount dijalankan dengan 5 bayaran: 2 query selepas pembaikan, 6 tanpa with(). Ini ujian yang menghalang N+1 kembali selepas refactor.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 03: BOILERPLATE                                   -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-bolt"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Accelerating Boilerplate</h2>
+  <p>Service, Repository, Test scaffold</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Artisan dahulu, AI kemudian</span>
+  <h2>Siapa menulis apa?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Kerja</th><th>Alat terbaik</th><th>Kenapa</th></tr></thead>
+    <tbody>
+      <tr><td>Fail kosong: model, migration, factory, controller, FormRequest, policy, test</td><td><code>php artisan make:...</code></td><td>Tepat untuk versi anda, percuma, sama setiap kali</td></tr>
+      <tr><td>Kod berulang ikut corak: <code>rules()</code>, <code>toArray()</code> Resource, state factory</td><td>AI, dengan satu contoh sedia ada</td><td>AI pandai meniru corak yang anda tunjuk</td></tr>
+      <tr><td>Senarai kes ujian dan scaffold Pest</td><td>AI, dengan kekangan bisnes</td><td>Laju menyenaraikan kes; anda pilih yang penting</td></tr>
+      <tr><td>Peraturan bisnes: penalti, siapa boleh bayar, had RM200</td><td><strong>Anda</strong></td><td>Hanya Bendahari dan anda tahu peraturannya</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.54em; margin-top:.7em">Contoh: <code>php artisan make:test ReceiptTest --pest</code> mencipta fail. Kemudian minta AI isikan kes, dengan <code>ReceiptController</code>, <code>InvoicePolicy</code> dan state factory Modul 5 ditampal dalam prompt.</div>
+  <aside class="notes">Arahan make: dari Modul 1 hingga 5: make:model, make:factory, make:request, make:policy, make:job, make:command, make:test. Sama seperti prinsip "palsukan dunia luar sahaja" dalam Modul 5: guna AI untuk bahagian yang membosankan, bukan bahagian yang menentukan.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Semak ujian yang dijana</span>
+  <h2>Ujian yang tidak pernah merah tidak menguji apa-apa</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">AI boleh tulis 10 ujian dalam 10 saat. Semuanya hijau. Tetapi adakah ia akan <strong>menangkap</strong> pepijat?</p>
+      <p style="font-size:.55em"><strong>Rosakkan kod dengan sengaja</strong>, satu demi satu, dan lihat ujian mana yang merah:</p>
+      <table style="font-size:.5em">
+        <thead><tr><th>Rosakkan</th><th>Ujian yang mesti merah</th></tr></thead>
+        <tbody>
+          <tr><td>Buang <code>Gate::authorize()</code></td><td>Pelajar lain dapat 403</td></tr>
+          <tr><td>Buang <code>with('student')</code></td><td><code>expectsDatabaseQueryCount(2)</code></td></tr>
+          <tr><td>Tukar <code>now('Asia/Kuala_Lumpur')</code> kepada <code>now()</code></td><td>Bayaran 7:30 pagi muncul dalam laporan</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-magnifying-glass-minus"></i>Tanda ujian AI yang lemah</h3>
+      <ul style="font-size:.95em; margin:0">
+        <li>Hanya <code>assertOk()</code>, tiada semakan isi</li>
+        <li>Nilai jangkaan disalin dari output kod, bukan dari peraturan</li>
+        <li>Mock class yang sedang diuji</li>
+        <li>Tiada kes yang sepatutnya <strong>gagal</strong>: 403, 422, 409</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Teknik ini dipanggil mutation testing apabila dibuat secara automatik; di sini kita buat dengan tangan. Ia prinsip yang sama seperti "lihat merah dahulu" dalam TDD Modul 5.</aside>
+</section>
+
+<section data-timing="1020" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 3 · 17 minit · individu, dibantu rakan semeja · baki <span data-countdown>17:00</span></span>
+  <h2>Jana ujian, kemudian cuba kalahkannya</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.53em">
+        <li>Betulkan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ReceiptController</code> seperti debrief Lab 2</li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan make:test ReceiptTest --pest</code></li>
+        <li>Guna templat lima bahagian. Minta AI isikan ujian untuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">show()</code> dan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">today()</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan test</code>. Semua mesti hijau</li>
+        <li>Rosakkan tiga perkara dalam jadual tadi, satu demi satu. Catat ujian mana yang merah</li>
+        <li>Untuk kerosakan yang tidak ditangkap: tulis ujian itu sendiri, atau minta AI dengan prompt yang lebih tepat</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Ketiga-tiga kerosakan ditangkap oleh sekurang-kurangnya satu ujian merah, dan semua hijau selepas kod dipulihkan.</p>
+      <p>Siap awal? Minta AI jana <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">RefundService</code> untuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">CardGateway</code> (interface <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Refundable</code>, Modul 1). Apa yang perlu anda semak sebelum menerimanya?</p>
+    </div>
+  </div>
+  <aside class="notes">Ketiga-tiga kerosakan telah diuji menghasilkan perbezaan yang boleh ditangkap: 403 lawan 200, 2 lawan 6 query (5 bayaran), count 1 lawan 0 untuk bayaran 21 Nov 23:30 UTC dengan Carbon::setTestNow('2026-11-22 02:00:00'). Peserta yang guna factory Modul 5 boleh guna Payment::factory() jika factory itu ditambah; jika tidak, cipta bayaran melalui $invoice-&gt;payments()-&gt;create().</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- MINUM PETANG 3:45                                          -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">3:45 – 4:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Minum petang · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: batas dan risiko AI, kemudian penutup kursus</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 04: BATAS & RISIKO                                -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-scale-balanced"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Batas &amp; Risiko AI</h2>
+  <p>Bila tidak boleh percaya, apa yang tidak boleh ditampal</p>
+  <aside class="notes">Tekan Shift+T di slide ini supaya pemasa jadual bermula semula pada 4:00.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Lima tempat AI selalu silap</span>
+  <h2>Bila jawapan AI perlu disemak dua kali</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Bidang</th><th>Contoh dalam kursus ini</th><th>Cara semak</th></tr></thead>
+    <tbody>
+      <tr><td>Versi framework</td><td>Arahan untuk <code>app/Http/Kernel.php</code>, fail yang tiada dalam Laravel 13</td><td>Nyatakan versi dalam prompt; semak <a href="https://laravel.com/docs/13.x" target="_blank">laravel.com/docs/13.x</a></td></tr>
+      <tr><td>Nama pakej</td><td><code>laravel/fpx-gateway</code>: tidak wujud</td><td>Cari di Packagist sebelum <code>composer require</code></td></tr>
+      <tr><td>Keselamatan</td><td><code>ReceiptController</code> tanpa <code>Gate::authorize()</code></td><td>Ujian dengan token pengguna lain mesti dapat 403</td></tr>
+      <tr><td>Peraturan bisnes</td><td>Penalti dikenakan pada hari akhir bayaran (Modul 5)</td><td>Dataset kes sempadan daripada Bendahari, bukan daripada AI</td></tr>
+      <tr><td>Zon masa dan nombor</td><td><code>today()</code> ikut UTC (Coordinated Universal Time); <code>920 * 0.02</code> = 18.400000000000002</td><td><code>Carbon::setTestNow()</code>, <code>toBe()</code> dengan nilai tepat</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.54em; margin-top:.7em">Corak yang sama: AI menulis kod yang <strong>munasabah</strong>. Kod yang munasabah tetapi salah lebih sukar dikesan daripada kod yang gagal dijalankan.</div>
+  <aside class="notes">Setiap baris tabel ini ialah sesuatu yang peserta sudah lihat dengan mata sendiri dalam Modul 3, 5 dan 6. Tanya meja: yang mana pernah berlaku dalam projek anda?</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · pakej</span>
+  <h2>Pakej yang AI cipta sendiri</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Prompt: "Pakej Laravel untuk integrasi FPX?" Jawapan AI kedengaran yakin:</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ composer require laravel/fpx-gateway
+
+  Could not find a matching version of package
+  laravel/fpx-gateway. Check the package spelling,
+  your version constraint and that the package is
+  available in a stability which matches your
+  minimum-stability (stable).
+      </code></pre>
+      <p style="font-size:.53em">Kali ini selamat: pakej itu tiada. Risiko sebenar ialah apabila <strong>seseorang sudah mendaftarkan nama itu</strong> dengan kod berniat jahat. Serangan ini dipanggil <em>slopsquatting</em> (mendaftar nama pakej yang sering direka AI).</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-list-check"></i>Sebelum <code>composer require</code></h3>
+      <ul style="font-size:.95em; margin:0">
+        <li>Buka <a href="https://packagist.org" target="_blank">packagist.org</a>: pakej wujud?</li>
+        <li>Siapa maintainer? Vendor <code>laravel/</code> hanya untuk pakej rasmi</li>
+        <li>Jumlah muat turun dan tarikh release terakhir</li>
+        <li>Repo GitHub wujud dan aktif</li>
+        <li>Selepas pasang: <code>composer audit</code></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Output composer di slide ini diambil daripada projek Laravel 13 sebenar. composer audit menyemak pakej yang dipasang terhadap pangkalan data kerentanan yang diketahui; ia tidak dapat mengesan pakej berniat jahat yang baru didaftarkan, sebab itu semakan Packagist tetap perlu.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Data</span>
+  <h2>Apa yang tidak boleh ditampal ke dalam prompt</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card" style="border-color:#7a2e2e">
+      <h3><i class="fa-solid fa-ban"></i>Jangan tampal</h3>
+      <ul style="font-size:.95em; margin:0">
+        <li>Isi <code>.env</code>: <code>APP_KEY</code>, kata laluan DB, kunci FPX, client secret Passport</li>
+        <li>Token Sanctum atau token pengguna</li>
+        <li>Data pelajar sebenar: nama, no. matrik, no. kad pengenalan, emel</li>
+        <li>Log production (Modul 5: log boleh mengandungi data peribadi)</li>
+        <li>Dump pangkalan data</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-check"></i>Tampal ini sebagai ganti</h3>
+      <ul style="font-size:.95em; margin:0">
+        <li><code>.env.example</code>, tanpa nilai sebenar</li>
+        <li>Data daripada factory: <code>Aisyah</code>, <code>INV0000001</code></li>
+        <li>Mesej ralat dan stack trace, selepas membuang nilai peribadi</li>
+        <li>Skema: fail migration jadual berkaitan</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn" style="font-size:.53em; margin-top:.7em">Ejen AI dalam editor boleh membaca fail dalam projek, termasuk <code>.env</code>. Semak tetapan alat anda untuk mengecualikan fail rahsia, dan ikut dasar ICT universiti tentang penggunaan alat AI.</div>
+  <aside class="notes">Jangan beri tafsiran undang-undang. Arahkan peserta kepada dasar ICT dan pegawai perlindungan data di jabatan masing-masing untuk soalan undang-undang.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Pemilikan kod</span>
+  <h2>Jika anda tidak boleh terangkan, jangan commit</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Nama anda pada commit. Apabila resit pelajar bocor pada pukul 2 pagi, anda yang perlu membaikinya, bukan AI.</p>
+      <ol class="steps" style="font-size:.53em">
+        <li>Baca setiap baris. Boleh terangkan kepada rakan semeja?</li>
+        <li><code>php artisan test</code>: hijau</li>
+        <li>Rosakkan bahagian penting: ada ujian yang merah?</li>
+        <li>Semak query, kebenaran dan zon masa sendiri</li>
+        <li>Commit message ditulis oleh anda: apa dan kenapa</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-code-pull-request"></i>Semasa code review</h3>
+      <p>Penyemak menilai kod, bukan alat yang menulisnya. Soalan sama untuk kod yang ditulis tangan atau dijana:</p>
+      <p>"Kenapa <code>-&gt;utc()</code> di sini?" Jawapan "AI yang tulis" bermakna kod itu belum sedia untuk merge.</p>
+    </div>
+  </div>
+  <aside class="notes">Lima langkah ini meringkaskan Bahagian Boilerplate (Lab 3) dan Bahagian Code Review (Lab 2). Jika jabatan ada peraturan menandakan kod yang dijana AI dalam commit, ikut peraturan itu.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Terima, semak, atau tolak?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>AI cadangkan <code>composer require utm/fpx-laravel</code></td><td class="fragment">Semak Packagist dahulu: wujud? maintainer? muat turun?</td></tr>
+      <tr><td>2</td><td>AI suruh daftar middleware dalam <code>app/Http/Kernel.php</code></td><td class="fragment">Tolak. Fail itu tiada dalam Laravel 13; tanya semula dengan versi dalam prompt</td></tr>
+      <tr><td>3</td><td>Rakan tampal 50 baris log production untuk cari punca ralat bayaran</td><td class="fragment">Tolak. Buang nama, no. matrik dan token dahulu, atau hasilkan semula dengan data factory</td></tr>
+      <tr><td>4</td><td>12 ujian dijana, semua hijau pada cubaan pertama</td><td class="fragment">Semak. Rosakkan kod dan pastikan ada yang merah</td></tr>
+      <tr><td>5</td><td>Kod AI lulus semua ujian, tetapi anda tidak faham satu baris</td><td class="fragment">Jangan commit sehingga anda faham baris itu</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan. Nama pakej dalam soalan 1 sengaja direka; jangan cari atau pasang semasa kelas.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 05: ADR                                           -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-folder-tree"></i></div>
+  <div class="big-num">BAHAGIAN 05</div>
+  <h2>Kerja Tersusun dengan ADR</h2>
+  <p>ADR (Architecture Decision Record): keputusan ditulis sebelum kod</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">ADR (Architecture Decision Record)</span>
+  <h2>Satu fail untuk satu keputusan yang mahal diubah</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">docs/adr/ untuk Sistem Bayaran Yuran Pelajar</p>
+      <pre class="sm"><code class="language-plaintext" data-trim>
+docs/adr/
+├── 0000-template.md
+├── 0001-payment-logic-in-service.md        Modul 1
+├── 0002-authorization-via-policy.md         Modul 3
+├── 0003-jobs-and-events-after-commit.md     Modul 4
+├── 0004-utc-storage-malaysia-day.md         Modul 4, 6
+└── 0005-money-as-decimal.md                 Modul 5
+      </code></pre>
+      <p style="font-size:.52em">Setiap fail: <strong>Status</strong>, <strong>Context</strong> (kenapa perlu memilih, dengan bukti), <strong>Decision</strong> (pilihan dan peraturan yang boleh disemak). Pilihan: Consequences, Revisit when.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-scale-balanced"></i>Bila tulis ADR?</h3>
+      <ul style="font-size:.95em; margin:0">
+        <li>Keputusan itu mahal untuk diterbalikkan</li>
+        <li>Seseorang akan bertanya "kenapa tidak guna X?"</li>
+        <li>Ia mengelak kesilapan yang pernah berlaku</li>
+      </ul>
+      <h3 style="margin-top:.6em"><i class="fa-solid fa-lock"></i>Peraturan</h3>
+      <ul style="font-size:.95em; margin:0">
+        <li>Nama fail <code>NNNN-slug.md</code>, nombor tidak diguna semula</li>
+        <li>Status: <code>proposed</code> → <code>accepted, tarikh</code></li>
+        <li>ADR accepted tidak ditulis semula. Keputusan berubah = ADR baru yang <em>supersede</em> (menggantikan) ADR lama</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Lima ADR ini ialah keputusan yang sudah kita buat sepanjang kursus, cuma belum ditulis. Tanya peserta: dalam projek anda, di mana keputusan seperti ini disimpan sekarang? Jawapan biasa: dalam kepala seorang senior, atau dalam mesej WhatsApp.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Contoh ADR (Architecture Decision Record)</span>
+  <h2>Pepijat zon masa, ditulis sekali untuk selamanya</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">docs/adr/0004-utc-storage-malaysia-day.md</p>
+      <pre class="xs"><code class="language-markdown" data-trim>
+# 0004 — Store times in UTC, count days in Malaysian time
+
+**Status:** accepted, 2026-11-27
+
+## Context
+
+`config/app.php` uses UTC. Every student and the Bursary are
+in Malaysia (UTC+8). The daily report built on `today()`
+missed a 7:30 am payment (Modul 6: count=0). A scheduled task
+without `timezone()` ran at 8:00 am, not midnight (Modul 4).
+
+## Decision
+
+**The app timezone stays UTC. Days, months and due dates are
+computed in Malaysian time, then converted to a UTC range.**
+
+- Start from `now('Asia/Kuala_Lumpur')`; no `today()` or
+  `whereDate()` on time columns.
+- Every scheduled task that follows local time has
+  `->timezone('Asia/Kuala_Lumpur')`.
+- Every daily report has a test at 7:30 am Malaysian time
+  using `Carbon::setTestNow()`.
+
+## Revisit when
+
+The system has to serve users outside UTC+8.
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><strong>Context</strong> menyimpan bukti: nombor sebenar dari kursus, bukan pendapat</li>
+        <li><strong>Decision</strong> ditulis sebagai peraturan yang penyemak boleh semak satu demi satu</li>
+        <li>Peraturan ketiga ialah <strong>ujian</strong>: ADR menyatakan apa, ujian (Modul 5) membuktikannya</li>
+        <li><strong>Revisit when</strong> ialah syarat yang boleh diukur, bukan "jika keperluan berubah"</li>
+      </ul>
+      <div class="callout" style="font-size:.52em; margin-top:.6em">Developer baru, atau AI, yang membaca fail ini tidak akan menulis <code>today()</code> dalam laporan lagi.</div>
+    </div>
+  </div>
+  <aside class="notes">UTC (Coordinated Universal Time) sudah dikembangkan di Bahagian Code Review. Tarikh accepted ialah hari terakhir kursus, sebagai contoh. Templat 0000-template.md mempunyai bahagian Status, Context, Decision, Consequences, Revisit when dan Not yet; dua yang terakhir hanya diisi jika ada sesuatu untuk dikatakan.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">ADR (Architecture Decision Record) sebagai konteks AI</span>
+  <h2>Bahagian "Kekangan" dalam prompt, sudah ditulis</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">Tugas baru</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Baca docs/adr/. Ikut setiap ADR berstatus accepted.
+
+Tugas: GET /api/v1/reports/payments-month untuk
+Bendahari, jumlah kutipan bulan semasa.
+
+Sebelum menulis kod, senaraikan ADR yang berkaitan
+dan bagaimana kod anda mematuhinya.
+Jika tugas ini bercanggah dengan mana-mana ADR,
+berhenti dan tanya saya.
+      </code></pre>
+      <p class="code-label">Code review</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Semak diff ini terhadap docs/adr/.
+Untuk setiap pelanggaran: nombor ADR, baris,
+dan peraturan yang dilanggar.
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li>Tanpa ADR 0004, tiada apa yang menghalang AI menulis <code>whereMonth('paid_at', now()-&gt;month)</code>: pepijat zon masa yang sama, dalam laporan baru</li>
+        <li>"Senaraikan ADR yang berkaitan" memaksa AI menunjukkan ia sudah membaca, sebelum anda membaca kodnya</li>
+        <li>Prompt semakan dengan ADR menghasilkan dapatan yang boleh dirujuk, bukan pendapat</li>
+      </ul>
+      <div class="callout" style="font-size:.52em; margin-top:.6em">Tambah satu baris dalam fail arahan projek untuk alat AI anda (contohnya <code>AGENTS.md</code> atau <code>CLAUDE.md</code>): "Keputusan seni bina ada dalam docs/adr/. Baca sebelum mengubah kod."</div>
+    </div>
+  </div>
+  <aside class="notes">Kaitkan dengan slide "Lima bahagian prompt developer" di Bahagian Prompt Engineering (11:48 pagi): Kekangan ialah bahagian paling berharga, dan ADR ialah kekangan yang ditulis sekali dan digunakan semula oleh setiap developer dan setiap prompt. Nama fail arahan bergantung pada alat; semak dokumentasi alat masing-masing.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Aliran kerja</span>
+  <h2>Kenapa, apa, bagaimana: siapa menjawab yang mana</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Langkah</th><th>Hasil</th><th>Siapa</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Tulis keputusan dalam ADR (Architecture Decision Record), status <code>proposed</code></td><td>Context + Decision</td><td>Anda dan pasukan</td></tr>
+      <tr><td>2</td><td>Pasukan setuju, status <code>accepted, tarikh</code></td><td>Kekangan untuk semua</td><td>Pasukan</td></tr>
+      <tr><td>3</td><td>Prompt merujuk <code>docs/adr/</code></td><td>Kod dan ujian dijana</td><td>AI, disemak anda</td></tr>
+      <tr><td>4</td><td>Setiap peraturan Decision ada ujian; rosakkan kod, pastikan merah</td><td>Bukti</td><td>Anda</td></tr>
+      <tr><td>5</td><td>Review diff terhadap ADR</td><td>Dapatan dengan nombor ADR</td><td>Penyemak dan AI</td></tr>
+      <tr><td>6</td><td>Keputusan berubah: ADR baru yang supersede ADR lama</td><td>Sejarah keputusan kekal</td><td>Pasukan</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em; margin-top:.7em">ADR menjawab <strong>kenapa</strong>. Ujian membuktikan <strong>apa</strong>. AI membantu dengan <strong>bagaimana</strong>.</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- RINGKASAN, PENUTUP KURSUS                                  -->
+<!-- ============================================================ -->
+
+<section data-timing="120">
+  <span class="kicker">Ringkasan</span>
+  <h2>Modul 6 dalam satu slide</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Bahagian</th><th>Yang kita lihat</th><th>Yang perlu diingat</th></tr></thead>
+    <tbody>
+      <tr><td>Prompt engineering</td><td>Prompt satu baris lawan templat lima bahagian; jawapan Laravel 10</td><td>Konteks, versi, kekangan, format, contoh</td></tr>
+      <tr><td>Code review</td><td>IDOR (Insecure Direct Object Reference) 200, 21 query, laporan kosong</td><td>Setiap dapatan perlu bukti: ujian yang merah</td></tr>
+      <tr><td>Boilerplate</td><td>Ujian dijana, kemudian kod dirosakkan dengan sengaja</td><td>Artisan untuk fail, AI untuk corak, anda untuk peraturan</td></tr>
+      <tr><td>Batas &amp; risiko</td><td><code>laravel/fpx-gateway</code> tidak wujud</td><td>Semak pakej; jangan tampal rahsia atau data pelajar</td></tr>
+      <tr><td>ADR (Architecture Decision Record)</td><td>ADR 0004: pepijat zon masa jadi peraturan dan ujian</td><td>Keputusan dalam <code>docs/adr/</code>, dirujuk dalam prompt dan review</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em; margin-top:.8em">AI mempercepat menulis. Ujian (Modul 5) dan pengetahuan anda (Modul 1 hingga 4) yang menentukan sama ada kod itu betul.</div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Penutup kursus</span>
+  <h2>Enam modul, enam soalan untuk setiap pull request</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Modul</th><th>Soalan</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Senibina Kod &amp; Corak Reka Bentuk</td><td>Controller ada logik selain terima, panggil service, balas?</td></tr>
+      <tr><td>2 · Optimasi Data &amp; Prestasi</td><td>Berapa query, dan berapa milisaat? Sudah diukur?</td></tr>
+      <tr><td>3 · Integrasi &amp; Keselamatan API</td><td>Jika saya tukar id dalam URL, boleh lihat data orang lain?</td></tr>
+      <tr><td>4 · Skalabiliti &amp; Automasi</td><td>Ada kerja berat atau panggilan luar dalam request?</td></tr>
+      <tr><td>5 · Pengujian &amp; Kualiti Sistem</td><td>Ada ujian yang merah jika kod ini rosak? Log cukup untuk menyiasat?</td></tr>
+      <tr><td>6 · Pembangunan Dipandu AI</td><td>Boleh saya terangkan setiap baris?</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.55em; margin-top:.8em">Sistem Bayaran Yuran Pelajar yang bermula dengan satu <code>PaymentService</code> pada Modul 1 kini dilindungi policy, berjalan di queue, diuji dan dipantau.</div>
+  <aside class="notes">Minta setiap meja pilih satu soalan yang paling berguna untuk projek mereka sekarang, dan kongsi dalam satu ayat.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Langkah seterusnya</span>
+  <h2>Minggu depan, dalam projek anda sendiri</h2>
+  <div class="rule"></div>
+  <ol class="steps" style="font-size:.6em">
+    <li>Pilih <strong>satu</strong> aliran kritikal (bayaran, log masuk, laporan). Tulis satu feature test untuknya</li>
+    <li>Pasang Laravel Debugbar atau Telescope di mesin anda. Cari satu N+1</li>
+    <li>Cuba tukar id dalam satu URL API dengan token pengguna lain. Dapat 403?</li>
+    <li>Pindahkan satu kerja lambat (emel, eksport) ke queue</li>
+    <li>Tulis ADR (Architecture Decision Record) pertama untuk satu keputusan yang selalu ditanya "kenapa", dan rujuk <code>docs/adr/</code> dalam prompt seterusnya</li>
+  </ol>
+  <p style="font-size:.55em; text-align:center; margin-top:1em"><i class="fa-solid fa-book"></i>&nbsp; Dokumentasi: <a href="https://laravel.com/docs/13.x" target="_blank">laravel.com/docs/13.x</a></p>
+  <aside class="notes">Galakkan peserta menyimpan projek kursus (Sistem Bayaran Yuran Pelajar) sebagai rujukan. Setiap langkah di sini ialah sesuatu yang telah dibuat dalam lab.</aside>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Tamat</span>
+  <h1 style="margin-top:.1em; font-size:1.9em">Terima kasih</h1>
+  <p class="cover-sub">Muhammad Hamizi Jaminan</p>
+  <div class="topic-chips" style="max-width:900px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-regular fa-comments"></i>Soal jawab</span>
+    <span><i class="fa-solid fa-clipboard-check"></i>Borang penilaian kursus</span>
+  </div>
+  <aside class="notes">Edarkan borang penilaian kursus. Baki masa sehingga 5:00 petang untuk soal jawab dan membantu peserta yang belum siap lab.</aside>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

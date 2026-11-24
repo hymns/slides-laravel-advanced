@@ -1,0 +1,2382 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 2 — Optimasi Data &amp; Prestasi</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-b    { fill:#2a1416; stroke:#ff6b6b; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 2 · Optimasi Data &amp; Prestasi</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- HARI 1 · PEMBUKA & BAHAGIAN 01: N+1                        -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 2 / 6</span>
+  <h1 style="margin-top:.1em">Optimasi Data &amp; Prestasi</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-magnifying-glass-chart"></i>N+1 &amp; eager loading</span>
+    <span><i class="fa-solid fa-code-branch"></i>Advanced Eloquent</span>
+    <span><i class="fa-solid fa-table-list"></i>Database indexing</span>
+    <span><i class="fa-solid fa-bolt"></i>Redis caching</span>
+    <span><i class="fa-solid fa-lock"></i>Transaksi &amp; locking</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">6 jam · 2 hari</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Teori · Live coding · Lab</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13 · MySQL 8 · Redis</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">Modul 2 bermula petang Hari 1 (selepas Modul 1) dan sambung pagi Hari 2. Semua nombor dalam modul ini (bilangan query, masa, output EXPLAIN) diukur sebenar pada Laravel 13 + MySQL 8.0 dengan 20,000 pelajar dan 200,000 invois.</aside>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu menulis query yang <strong>cekap</strong> dan mereka bentuk sistem yang <strong>laju</strong> serta <strong>stabil</strong> di bawah beban tinggi.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh <strong>optimasi response time</strong> dan <strong>elak query bottleneck</strong> dalam sistem produksi.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Kita sambung kod <strong>Sistem Bayaran Yuran Pelajar</strong> dari Modul 1: <code>InvoiceRepository</code>, <code>PaymentService</code> dan event <code>PaymentReceived</code>. Data ujian: <strong>20,000 pelajar</strong>, <strong>200,000 invois</strong>.</div>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual Modul 2</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">H1 3:20</span><h3>N+1</h3><p>Diagnosis, eager loading, agregat</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H2 8:05</span><h3>Advanced Eloquent</h3><p>Query scope, subquery, union</p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">H2 8:50</span><h3>Indexing</h3><p>EXPLAIN, composite &amp; covering index</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">H2 10:15</span><h3>Redis</h3><p>Cache query, fragment, invalidation</p></div>
+    <div class="slot" style="background:var(--good-soft)"><span class="time">H2 11:05</span><h3>Transaksi</h3><p>Rollback, locking, deadlock</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">H2 11:50</span><h3 style="color:#fff">Lab</h3><p style="color:#b9c3d3">Optimasi dashboard Bendahari</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 2: Hari 1, 3:20 – 5:00 petang · Hari 2, 8:00 pagi – 12:35 tengah hari.</p>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>N+1 Problem</h2>
+  <p>Diagnosis dan penyelesaian dengan eager loading</p>
+</section>
+
+<section data-timing="150">
+  <span class="kicker">Kes kajian</span>
+  <h2>“Dashboard Bendahari lambat”</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p style="font-size:.65em">Bendahari buka halaman <strong>invois lewat bayar</strong>: 50 invois paling lama tertunggak, dengan matrik, nama dan program pelajar.</p>
+      <ul style="font-size:.6em">
+        <li>Di laptop developer (20 rekod): laju</li>
+        <li>Di produksi (200,000 invois): perlahan, kadang-kadang timeout</li>
+        <li>Kod tiada <code>for</code> loop yang jelas memanggil DB</li>
+      </ul>
+      <div class="callout" style="font-size:.55em">Model baru dalam modul ini: <code>Programme</code> (<code>code</code>, <code>name</code>). Setiap <code>Student</code> ada <code>programme_id</code>.</div>
+    </div>
+    <svg class="info" viewBox="0 0 470 330" role="img" aria-label="Hubungan Programme, Student, Invoice, Payment">
+      <defs><marker id="m2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+      <rect class="box-d" x="0" y="20" width="200" height="70" rx="10"/><text class="t" x="100" y="52" text-anchor="middle">Programme</text><text class="t-s" x="100" y="75" text-anchor="middle">20 rekod</text>
+      <rect class="box-p" x="270" y="20" width="200" height="70" rx="10"/><text class="t" x="370" y="52" text-anchor="middle">Student</text><text class="t-s" x="370" y="75" text-anchor="middle">20,000 rekod</text>
+      <rect class="box-a" x="270" y="140" width="200" height="70" rx="10"/><text class="t" x="370" y="172" text-anchor="middle">Invoice</text><text class="t-s" x="370" y="195" text-anchor="middle">200,000 rekod</text>
+      <rect class="box-g" x="270" y="260" width="200" height="70" rx="10"/><text class="t" x="370" y="292" text-anchor="middle">Payment</text><text class="t-s" x="370" y="315" text-anchor="middle">120,000 rekod</text>
+      <path d="M200 55 L265 55" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m2a)"/><text class="t-s" x="210" y="45">1 : N</text>
+      <path d="M370 90 L370 135" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m2a)"/><text class="t-s" x="380" y="118">1 : N</text>
+      <path d="M370 210 L370 255" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m2a)"/><text class="t-s" x="380" y="238">1 : N</text>
+    </svg>
+  </div>
+  <aside class="notes">Tanya peserta: siapa pernah ada halaman yang laju di local tapi perlahan di produksi? Biasanya puncanya bukan server, tapi bilangan query yang membesar mengikut data.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Model · relationship · 1 / 2</span>
+  <h2>Programme dan Student</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Models/Programme.php <span class="muted">(baru)</span></p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Programme extends Model
+{
+    protected $fillable = ['code', 'name'];
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em"><code>belongsTo</code>: rekod ini simpan <code>xxx_id</code> (pelajar simpan <code>programme_id</code>).</div>
+      <div class="callout" style="font-size:.52em"><code>hasMany</code>: rekod lain simpan id rekod ini (invois simpan <code>student_id</code>).</div>
+    </div>
+    <div>
+      <p class="code-label">app/Models/Student.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+
+class Student extends Model
+{
+    protected $fillable = ['programme_id', 'matric', 'name', 'email'];
+
+    public function programme(): BelongsTo
+    {
+        return $this->belongsTo(Programme::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+}
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Model · relationship · 2 / 2</span>
+  <h2>Invoice dan Payment: arah sebaliknya</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Models/Invoice.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11-14">
+namespace App\Models;
+
+use App\Enums\FeeType;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+
+class Invoice extends Model
+{
+    // $fillable, $casts, payments(): sama seperti Modul 1
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Modul 1 hanya ada <code>Invoice::payments()</code>. Modul ini tambah relationship ke arah sebaliknya supaya invois boleh capai pelajar, dan bayaran boleh capai pelajar serta invois.</div>
+    </div>
+    <div>
+      <p class="code-label">app/Models/Payment.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11-19">
+namespace App\Models;
+
+use App\Enums\PaymentMethod;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Payment extends Model
+{
+    // $fillable, $casts: sama seperti Modul 1
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+}
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Kod · 1 / 3</span>
+  <h2>Method baru: <code>overdue()</code></h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Contracts/InvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="16-17">
+namespace App\Repositories\Contracts;
+
+use App\Models\{Invoice, Payment, Student};
+use Illuminate\Database\Eloquent\Collection;
+
+interface InvoiceRepository
+{
+    public function findOrFail(int $id): Invoice;
+
+    public function outstandingFor(Student $student): Collection;
+
+    public function recordPayment(Invoice $invoice, array $attributes): Payment;
+
+    /** 50 invois belum bayar yang paling lama lewat. */
+    public function overdue(): Collection;
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Repositories/Eloquent/EloquentInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10-17">
+namespace App\Repositories\Eloquent;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Database\Eloquent\Collection;
+
+final class EloquentInvoiceRepository implements InvoiceRepository
+{
+    // findOrFail(), outstandingFor(), recordPayment(): sama seperti Modul 1
+
+    public function overdue(): Collection
+    {
+        return Invoice::whereNull('paid_at')
+            ->where('due_date', '<', today())
+            ->orderBy('due_date')
+            ->limit(50)
+            ->get();
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em"><code>today()</code> ialah helper Laravel: tarikh hari ini, jam 00:00.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="210">
+  <span class="kicker">Kod · 2 / 3</span>
+  <h2>Jangan lupa decorator dari Modul 1</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Cached/CachedInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="16-19">
+namespace App\Repositories\Cached;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Database\Eloquent\Collection;
+
+final class CachedInvoiceRepository implements InvoiceRepository
+{
+    public function __construct(
+        private InvoiceRepository $inner,
+        private Cache $cache,
+    ) {}
+
+    // findOrFail(), outstandingFor(), recordPayment(): sama seperti Modul 1
+
+    public function overdue(): Collection
+    {
+        return $this->inner->overdue(); // belum cache: Bahagian 04
+    }
+}
+      </code></pre>
+      <p class="code-label">Jika method ini tertinggal: ralat sebenar</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+Fatal error: Class CachedInvoiceRepository contains 1 abstract method and must therefore be declared abstract or implement the remaining method (InvoiceRepository::overdue)
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Http/Controllers/Bursary/OverdueInvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Bursary;
+
+use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\View\View;
+
+final class OverdueInvoiceController extends Controller
+{
+    public function __construct(
+        private InvoiceRepository $invoices,
+    ) {}
+
+    public function index(): View
+    {
+        return view('bursary.overdue', [
+            'invoices' => $this->invoices->overdue(),
+        ]);
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.52em"><code>AppServiceProvider</code> Modul 1 bind <code>InvoiceRepository</code> kepada <code>CachedInvoiceRepository</code> yang membalut <code>EloquentInvoiceRepository</code>. Setiap method baru dalam interface mesti ditambah pada <strong>kedua-dua</strong> class.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="150">
+  <span class="kicker">Kod · 3 / 3</span>
+  <h2>Blade yang nampak tak bersalah</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">resources/views/bursary/overdue.blade.php</p>
+      <pre class="sm"><code class="language-php" data-trim data-line-numbers="1|4-6">
+@foreach ($invoices as $invoice)
+    &lt;tr&gt;
+        &lt;td&gt;{{ $invoice->number }}&lt;/td&gt;
+        &lt;td&gt;{{ $invoice->student->matric }}&lt;/td&gt;
+        &lt;td&gt;{{ $invoice->student->name }}&lt;/td&gt;
+        &lt;td&gt;{{ $invoice->student->programme->code }}&lt;/td&gt;
+        &lt;td&gt;{{ number_format($invoice->amount, 2) }}&lt;/td&gt;
+        &lt;td&gt;{{ $invoice->due_date->format('d/m/Y') }}&lt;/td&gt;
+    &lt;/tr&gt;
+@endforeach
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1.4em">
+        <li>Repository ambil 50 invois: <strong>1 query</strong></li>
+        <li><code>$invoice->student</code> belum dimuat, jadi Eloquent query <code>students</code> untuk <strong>setiap</strong> invois</li>
+        <li><code>->programme</code> pula query <code>programmes</code> untuk setiap pelajar</li>
+      </ol>
+      <div class="callout warn" style="font-size:.55em">Ini dipanggil <strong>lazy loading</strong>: relationship dimuat bila pertama kali disentuh. Senang ditulis, mahal bila dalam loop.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="210">
+  <span class="kicker">Ukur, jangan teka</span>
+  <h2>Berapa query sebenarnya?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="sm"><code class="language-php" data-trim>
+use Illuminate\Support\Facades\DB;
+use App\Repositories\Contracts\InvoiceRepository;
+
+DB::enableQueryLog();
+
+$invoices = app(InvoiceRepository::class)->overdue();
+foreach ($invoices as $invoice) {
+    $invoice->student->name;
+    $invoice->student->programme->code;
+}
+
+count(DB::getQueryLog());
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Output sebenar (Laravel 13, MySQL 8)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+= 101
+
+select * from `invoices` where `paid_at` is null
+  and `due_date` < ? order by `due_date` asc limit 50
+select * from `students` where `students`.`id` = ? limit 1
+select * from `programmes` where `programmes`.`id` = ? limit 1
+select * from `students` where `students`.`id` = ? limit 1
+select * from `programmes` where `programmes`.`id` = ? limit 1
+... (96 lagi)
+      </code></pre>
+      <div class="callout bad" style="font-size:.55em"><strong>1</strong> query untuk invois + <strong>50</strong> untuk pelajar + <strong>50</strong> untuk program = <strong>101</strong>. Inilah N+1: 1 query utama, kemudian N query tambahan, satu untuk setiap rekod.</div>
+    </div>
+  </div>
+  <aside class="notes">app() dalam tinker OK: ini sempadan (Modul 1, slide Service Locator). DB::enableQueryLog() rekod semua query selepas ia dipanggil; DB::getQueryLog() pulangkan senarainya.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Kenapa ia teruk</span>
+  <h2>Setiap query = satu perjalanan ke DB</h2>
+  <div class="rule"></div>
+  <table>
+    <thead><tr><th>Senario</th><th>Query</th><th>Masa diukur / anggaran</th></tr></thead>
+    <tbody>
+      <tr><td>Laptop, DB dalam mesin yang sama</td><td>101</td><td><strong>140 ms</strong> (diukur)</td></tr>
+      <tr><td>Produksi, DB di server lain (±1 ms setiap perjalanan)</td><td>101</td><td>+100 ms hanya untuk perjalanan rangkaian</td></tr>
+      <tr><td>Bendahari pilih 200 invois satu halaman</td><td>401</td><td>Bertambah selari dengan bilangan baris</td></tr>
+      <tr><td>Selepas eager loading (slide seterusnya)</td><td><strong>3</strong></td><td><strong>58 ms</strong> (diukur)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn" style="margin-top:1em; font-size:.6em">Tanda N+1: bilangan query <strong>naik bila bilangan baris naik</strong>. Query yang betul kekal tetap walaupun halaman papar 50 atau 500 baris.</div>
+</section>
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">3:45 – 4:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Minum petang · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: betulkan 101 query kepada 3</p>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Penyelesaian · eager loading</span>
+  <h2>101 query → 3 query</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">EloquentInvoiceRepository::overdue()</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function overdue(): Collection
+{
+    return Invoice::whereNull('paid_at')
+        ->where('due_date', '<', today())
+        ->orderBy('due_date')
+        ->limit(50)
+        ->get();
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">101 query, 140 ms</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">EloquentInvoiceRepository::overdue()</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="3">
+public function overdue(): Collection
+{
+    return Invoice::with('student.programme')
+        ->whereNull('paid_at')
+        ->where('due_date', '<', today())
+        ->orderBy('due_date')
+        ->limit(50)
+        ->get();
+}
+      </code></pre>
+      <p style="font-size:.55em" class="muted">3 query, 58 ms. Blade tidak berubah langsung.</p>
+    </div>
+  </div>
+  <p class="code-label" style="margin-top:.6em">3 query yang Laravel jalankan</p>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+select * from `invoices` where `paid_at` is null and `due_date` < ? order by `due_date` asc limit 50
+select * from `students` where `students`.`id` in (160, 720, 880, 1440, ... 50 id)
+select * from `programmes` where `programmes`.`id` in (1, ...)
+  </code></pre>
+  <aside class="notes">'student.programme' = muat student, kemudian programme bagi setiap student (nested). Laravel kumpul semua id dan guna satu query whereIn. Ini sebab eager loading diletak dalam repository: setiap pemanggil overdue() dapat data yang lengkap.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">N+1 kedua · dalam <code>outstandingFor()</code></span>
+  <h2>Repository dipanggil dalam loop</h2>
+  <div class="rule"></div>
+  <p style="font-size:.58em">Halaman kedua Bendahari: 50 pelajar, setiap seorang dengan <strong>bilangan</strong> dan <strong>jumlah</strong> invois tertunggak.</p>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">52 QUERY · 66 ms</span></h3>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\Student;
+use App\Repositories\Contracts\InvoiceRepository;
+
+$invoices = app(InvoiceRepository::class);
+$students = Student::with('programme')
+    ->orderBy('matric')->limit(50)->get();
+
+foreach ($students as $student) {
+    $outstanding = $invoices->outstandingFor($student);
+    $outstanding->count();
+    $outstanding->sum('amount');
+}
+// 1 students + 1 programmes + 50 outstandingFor()
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>outstandingFor()</code> sendiri tidak salah. Yang salah: memanggilnya 50 kali dan memuat setiap invois ke memori hanya untuk dikira.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">2 QUERY · 4 ms</span></h3>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\Student;
+
+$students = Student::with('programme')
+    ->withCount(['invoices as outstanding_count' =>
+        fn ($query) => $query->whereNull('paid_at')])
+    ->withSum(['invoices as outstanding_sum' =>
+        fn ($query) => $query->whereNull('paid_at')], 'amount')
+    ->orderBy('matric')->limit(50)->get();
+
+$students[6]->outstanding_count; // 9
+$students[6]->outstanding_sum;   // "5235.00"
+$students[5]->outstanding_sum;   // null: tiada tunggakan
+      </code></pre>
+      <p style="font-size:.5em" class="muted">DB yang kira (subquery <code>count</code> / <code>sum</code>). Laravel tambah atribut <code>outstanding_count</code> dan <code>outstanding_sum</code>.</p>
+    </div>
+  </div>
+  <div class="callout warn" style="font-size:.52em"><code>withSum</code> pulangkan <code>null</code>, bukan 0, bila tiada baris. Dalam Blade: <code>number_format($student->outstanding_sum ?? 0, 2)</code>.</div>
+  <aside class="notes">Nilai 9 / "5235.00" / null ialah output sebenar dalam data ujian (A23CS00007 dan A23CS00006). Dengan CachedInvoiceRepository, lawatan kedua mungkin 0 SQL, tetapi masih 50 panggilan Redis: cache menyorok N+1, tidak membetulkannya. Dalam projek, letak query ini dalam repository pelajar, ikut corak Modul 1.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Penyelesaian · variasi</span>
+  <h2>Eager loading bersyarat &amp; selepas query</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3><i class="fa-solid fa-filter"></i>Muat sebahagian sahaja</h3>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\Student;
+
+// Pelajar + 3 bayaran terkini sahaja
+$students = Student::with([
+    'programme',
+    'payments' => fn ($query) => $query
+        ->latest('paid_at')
+        ->limit(3),
+])->orderBy('matric')->limit(50)->get();
+      </code></pre>
+      <p style="font-size:.52em" class="muted">Masih 3 query. Syarat dalam closure hanya untuk relationship itu.</p>
+    </div>
+    <div>
+      <h3><i class="fa-solid fa-rotate"></i>Sudah ada koleksi? Guna <code>load()</code></h3>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Repositories\Contracts\InvoiceRepository;
+
+$invoices = app(InvoiceRepository::class)->overdue();
+
+// kemudian baru perlukan bayaran:
+$invoices->load('payments');
+
+// muat hanya jika belum dimuat:
+$invoices->loadMissing('student.programme');
+      </code></pre>
+      <p style="font-size:.52em" class="muted"><code>load()</code> = eager loading selepas <code>get()</code>. Satu query untuk semua invois, bukan satu untuk setiap invois.</p>
+    </div>
+  </div>
+  <table style="font-size:.5em; margin-top:.6em">
+    <thead><tr><th>Anda perlukan</th><th>Guna</th></tr></thead>
+    <tbody>
+      <tr><td>Data relationship untuk dipapar</td><td><code>with()</code> / <code>load()</code></td></tr>
+      <tr><td>Hanya jumlah / bilangan / purata</td><td><code>withSum()</code> / <code>withCount()</code> / <code>withAvg()</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Diuji: 3 query, pelajar A23CS00001 dapat 3 daripada 10 bayaran. Laravel (11 ke atas) jana row_number() over (partition by student_id), jadi limit(3) dikira untuk setiap pelajar, bukan 3 untuk semua. Perlukan MySQL 8+.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Pencegahan</span>
+  <h2>Gagalkan N+1 semasa development</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Providers;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    // register(): binding dari Modul 1
+
+    public function boot(): void
+    {
+        // Throw exception bila lazy loading berlaku,
+        // kecuali di produksi
+        Model::preventLazyLoading(! $this->app->isProduction());
+    }
+}
+      </code></pre>
+      <p style="font-size:.52em" class="muted"><code>boot()</code>, bukan <code>register()</code>: ini konfigurasi, bukan binding (Modul 1).</p>
+    </div>
+    <div>
+      <p class="code-label">Buka halaman tanpa <code>with()</code>: ralat sebenar</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+Illuminate\Database\LazyLoadingViolationException
+Attempted to lazy load [student] on model [App\Models\Invoice] but lazy loading is disabled.
+      </code></pre>
+      <div class="callout warn" style="font-size:.52em"><strong>Perangkap:</strong> exception ini hanya berlaku bila koleksi ada <strong>lebih daripada 1 rekod</strong>. Uji dengan 1 invois = tiada ralat, walaupun kod ada N+1. Seed sekurang-kurangnya beberapa rekod.</div>
+      <div class="callout" style="font-size:.52em">Di produksi ia dimatikan supaya pengguna tak nampak ralat. Pasang <strong>Laravel Telescope</strong> atau <strong>Debugbar</strong> untuk lihat bilangan query setiap halaman.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="600" class="lab">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Latihan meja · 10 minit · baki <span data-countdown>10:00</span></span>
+  <h2>Cari dan betulkan N+1</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.62em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-2-start</code>. Halaman <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/bursary/payments</code> papar 50 bayaran terkini dengan:</p>
+      <ul style="font-size:.6em">
+        <li>Rujukan, kaedah, jumlah</li>
+        <li>Matrik, nama dan <strong>kod program</strong> pelajar</li>
+        <li><strong>No. invois</strong> dan <strong>jenis yuran</strong></li>
+      </ul>
+      <ol class="steps" style="font-size:.6em">
+        <li>Hidupkan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">preventLazyLoading</code>, buka halaman, baca ralat</li>
+        <li>Ukur bilangan query dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DB::enableQueryLog()</code> dalam tinker</li>
+        <li>Betulkan dalam query, bukan dalam Blade</li>
+        <li>Ukur semula. Sasaran: <strong>4 query</strong></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-comments"></i>Setiap meja bentang (1 minit)</h3>
+      <p>Berapa query sebelum dan selepas?</p>
+      <p>Kenapa hasilnya 4 query, bukan 1? Setiap query untuk jadual apa?</p>
+      <p>Kalau halaman perlu <strong>jumlah bayaran setiap pelajar</strong> juga, guna <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">with()</code> atau <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">withSum()</code>?</p>
+    </div>
+  </div>
+  <aside class="notes">Kod permulaan dalam branch: Payment::latest('paid_at')->limit(50)->get(), Blade sentuh $payment->student->programme dan $payment->invoice. Diukur: 151 query. Jawapan: Payment::with(['student.programme', 'invoice'])->latest('paid_at')->limit(50)->get() = 4 query (payments, students, programmes, invoices). Jumlah bayaran setiap pelajar: withSum, sebab hanya perlukan nombor.</aside>
+</section>
+
+<section data-timing="120" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Tamat Hari 1</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Esok 8:00 pagi: sambung Modul 2</h1>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-check"></i>Ukur dengan <code>DB::enableQueryLog()</code></span>
+    <span><i class="fa-solid fa-check"></i><code>with()</code> / <code>load()</code> untuk data</span>
+    <span><i class="fa-solid fa-check"></i><code>withSum()</code> / <code>withCount()</code> untuk jumlah</span>
+    <span><i class="fa-solid fa-check"></i><code>preventLazyLoading()</code> di development</span>
+  </div>
+  <p class="cover-sub" style="margin-top:1.2em">Esok: query scope, indexing, Redis dan transaksi</p>
+  <aside class="notes">Baki masa hingga 5:00 untuk soal jawab dan isu lab. Esok pagi, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- HARI 2 · BAHAGIAN 02: ADVANCED ELOQUENT                    -->
+<!-- ============================================================ -->
+
+<section data-timing="300" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.4em">Hari 2 · 8:00 pagi · Modul 2 (sambungan)</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Ulang kaji semalam</h1>
+  <div class="card" style="max-width:900px; margin:1em auto 0; text-align:left; font-size:.62em">
+    <h3><i class="fa-solid fa-users"></i>Setiap meja jawab (3 minit)</h3>
+    <ol style="margin:0">
+      <li>Halaman papar 200 invois dengan nama pelajar. Tanpa <code>with()</code>, berapa query?</li>
+      <li>Perlukan <strong>jumlah</strong> bayaran setiap pelajar: <code>with('payments')</code> atau <code>withSum()</code>? Kenapa?</li>
+      <li>Kenapa <code>preventLazyLoading()</code> tidak hidup di produksi?</li>
+    </ol>
+  </div>
+  <aside class="notes">Tekan Shift+T di slide ini supaya jam sesi bermula semula pada 8:00. Jawapan: (1) 201 query: 1 invois + 200 pelajar. (2) withSum: hanya perlukan nombor, DB yang kira, tiada payment dimuat ke memori. (3) Supaya pengguna tidak nampak ralat; di produksi guna Telescope / log untuk kesan.</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-code-branch"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>Advanced Eloquent</h2>
+  <p>Query scope, subquery dan union</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Masalah</span>
+  <h2>Syarat yang sama, ditaip berulang kali</h2>
+  <div class="rule"></div>
+  <table style="font-size:.56em">
+    <thead><tr><th>Tempat</th><th>Syarat yang ditaip</th></tr></thead>
+    <tbody>
+      <tr><td><code>EloquentInvoiceRepository::outstandingFor()</code> (Modul 1)</td><td><code>whereNull('paid_at')</code></td></tr>
+      <tr><td><code>EloquentInvoiceRepository::overdue()</code> (semalam)</td><td><code>whereNull('paid_at')->where('due_date', '&lt;', today())</code></td></tr>
+      <tr><td><code>withCount(['invoices as outstanding_count' => ...])</code></td><td><code>whereNull('paid_at')</code></td></tr>
+      <tr><td><code>withSum(['invoices as outstanding_sum' => ...])</code></td><td><code>whereNull('paid_at')</code></td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:.8em">
+    <div class="callout warn" style="font-size:.55em"><strong>Bila peraturan berubah</strong>, contohnya invois yang dibatalkan (<code>cancelled_at</code>) tidak lagi dikira tertunggak, kita perlu cari dan ubah setiap tempat. Satu tertinggal = laporan Bendahari salah.</div>
+    <div class="callout good" style="font-size:.55em"><strong>Penyelesaian:</strong> beri syarat itu satu nama dalam model: <code>Invoice::outstanding()</code>. Ini dipanggil <strong>query scope</strong>.</div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Query scope</span>
+  <h2>Beri nama kepada syarat</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Models/Invoice.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12-16|18-23|25-29">
+namespace App\Models;
+
+use App\Enums\FeeType;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+
+class Invoice extends Model
+{
+    // $fillable, $casts, payments(), student(): seperti sebelum ini
+
+    #[Scope]
+    protected function outstanding(Builder $query): void
+    {
+        $query->whereNull('paid_at');
+    }
+
+    #[Scope]
+    protected function overdue(Builder $query): void
+    {
+        $query->outstanding()
+            ->where('due_date', '<', today());
+    }
+
+    #[Scope]
+    protected function ofType(Builder $query, FeeType $type): void
+    {
+        $query->where('type', $type);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1.2em">
+        <li><code>#[Scope]</code> tandakan method sebagai scope (Laravel 12 ke atas)</li>
+        <li>Parameter pertama sentiasa <code>Builder $query</code>: query yang sedang dibina</li>
+        <li>Scope boleh panggil scope lain: <code>overdue()</code> guna <code>outstanding()</code></li>
+        <li>Parameter tambahan selepas <code>$query</code>: <code>ofType(FeeType $type)</code></li>
+      </ol>
+      <div class="callout" style="font-size:.52em">Method <code>protected</code>, tetapi dipanggil seperti method statik: <code>Invoice::outstanding()</code>. Laravel yang menyambungkannya.</div>
+      <div class="callout" style="font-size:.5em">Kod lama mungkin guna gaya <code>scopeOutstanding($query)</code>. Hasilnya sama; projek baru guna <code>#[Scope]</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Query scope · guna</span>
+  <h2>Repository selepas scope</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Eloquent/EloquentInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12-14|17-21">
+namespace App\Repositories\Eloquent;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Database\Eloquent\Collection;
+
+final class EloquentInvoiceRepository implements InvoiceRepository
+{
+    // findOrFail(), recordPayment(): sama seperti Modul 1
+
+    public function outstandingFor(Student $student): Collection
+    {
+        return $student->invoices()->outstanding()
+            ->orderBy('due_date')->get();
+    }
+
+    public function overdue(): Collection
+    {
+        return Invoice::with('student.programme')
+            ->overdue()
+            ->orderBy('due_date')->limit(50)->get();
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">SQL yang dijana (<code>toRawSql()</code>)</p>
+      <pre class="xs"><code class="language-sql" style="white-space:pre-wrap" data-trim>
+-- $student->invoices()->outstanding()->orderBy('due_date')
+select * from `invoices` where `invoices`.`student_id` = 7 and `invoices`.`student_id` is not null and `paid_at` is null order by `due_date` asc
+      </code></pre>
+      <p class="code-label">Scope juga berfungsi dalam <code>withCount</code></p>
+      <pre class="xs"><code class="language-php" data-trim>
+$students = Student::withCount(['invoices as outstanding_count' =>
+    fn ($query) => $query->outstanding()])->get();
+      </code></pre>
+      <div class="callout good" style="font-size:.52em">Peraturan "tertunggak" kini di <strong>satu tempat</strong>. Tambah <code>whereNull('cancelled_at')</code> dalam <code>outstanding()</code>, semua query ikut.</div>
+    </div>
+  </div>
+  <aside class="notes">toRawSql() pulangkan SQL lengkap dengan nilai, berguna dalam tinker. Jangan guna untuk jalankan query; ia hanya untuk dibaca.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Query scope · rantaian</span>
+  <h2>Scope boleh disambung seperti ayat</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="sm"><code class="language-php" data-trim>
+use App\Enums\FeeType;
+use App\Models\Invoice;
+
+Invoice::overdue()
+    ->ofType(FeeType::Hostel)
+    ->orderBy('due_date')
+    ->toRawSql();
+      </code></pre>
+      <p class="code-label">Output sebenar</p>
+      <pre class="xs"><code class="language-sql" style="white-space:pre-wrap" data-trim>
+select * from `invoices` where `paid_at` is null and `due_date` < '2026-11-21 00:00:00' and `type` = 'hostel' order by `due_date` asc
+      </code></pre>
+    </div>
+    <div>
+      <table style="font-size:.52em">
+        <thead><tr><th>Letak dalam scope</th><th>Jangan letak dalam scope</th></tr></thead>
+        <tbody>
+          <tr><td>Syarat perniagaan yang ada nama: <em>tertunggak</em>, <em>lewat</em>, <em>yuran asrama</em></td><td><code>get()</code>, <code>first()</code>, <code>paginate()</code>: scope hanya bina query, tidak menjalankannya</td></tr>
+          <tr><td>Syarat yang muncul di 2 tempat atau lebih</td><td><code>orderBy()</code> / <code>limit()</code> khusus satu halaman</td></tr>
+          <tr><td>Parameter jenis enum: <code>ofType(FeeType $type)</code></td><td>Parameter string bebas yang boleh disalah taip</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.52em">Baca semula kod: <code>Invoice::overdue()->ofType(FeeType::Hostel)</code> = "invois lewat bagi yuran asrama". Kod bercakap bahasa Bendahari.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Subquery</span>
+  <h2>Bilakah dan bagaimana pelajar terakhir membayar?</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="5|6-10|11">
+use App\Enums\PaymentMethod;
+use App\Models\{Payment, Student};
+
+$students = Student::query()
+    ->withMax('payments', 'paid_at')
+    ->addSelect(['last_method' => Payment::select('method')
+        ->whereColumn('student_id', 'students.id')
+        ->latest('paid_at')
+        ->limit(1),
+    ])
+    ->withCasts(['last_method' => PaymentMethod::class])
+    ->orderBy('matric')->limit(50)->get();
+
+$students[0]->payments_max_paid_at; // "2026-11-22 00:00:00"
+$students[0]->last_method;          // PaymentMethod::Fpx
+      </code></pre>
+      <p class="code-label">SQL sebenar: 1 query</p>
+      <pre class="xs"><code class="language-sql" style="white-space:pre-wrap" data-trim>
+select `students`.*,
+  (select max(`payments`.`paid_at`) from `payments` where `students`.`id` = `payments`.`student_id`) as `payments_max_paid_at`,
+  (select `method` from `payments` where `student_id` = `students`.`id` order by `paid_at` desc limit 1) as `last_method`
+from `students` order by `matric` asc limit 50
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1.2em">
+        <li><code>withMax</code>: tarikh terakhir. Satu nilai agregat, cukup.</li>
+        <li><strong>Kaedah</strong> bayaran terakhir bukan agregat. Kita perlukan kolum lain dari baris terkini: itu kerja <strong>subquery</strong>.</li>
+        <li><code>whereColumn</code>: bandingkan dua kolum, bukan kolum dengan nilai</li>
+        <li><code>withCasts</code>: hasil subquery ialah string <code>'fpx'</code>. Tanpanya, <code>$casts</code> model tidak terpakai.</li>
+      </ol>
+      <div class="callout warn" style="font-size:.5em">Tanpa subquery: <code>with('payments')</code> muat setiap bayaran semua pelajar ke memori, semata-mata untuk ambil satu.</div>
+    </div>
+  </div>
+  <aside class="notes">Output "2026-11-22 00:00:00" dan PaymentMethod::Fpx ialah hasil sebenar bagi A23CS00001 dalam data ujian. Uji tanpa withCasts: last_method = 'fpx' (string).</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Union</span>
+  <h2>Penyata akaun: invois dan bayaran dalam satu senarai</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="4-9|11-16|18-19">
+use App\Models\{Invoice, Payment};
+use Illuminate\Support\Facades\DB;
+
+$debit = Invoice::select(
+    'number as ref',
+    DB::raw("'invois' as jenis"),
+    'amount',
+    DB::raw('date(created_at) as tarikh'),
+)->where('student_id', 2);
+
+$credit = Payment::select(
+    'reference as ref',
+    DB::raw("'bayaran' as jenis"),
+    DB::raw('-amount as amount'),
+    DB::raw('date(paid_at) as tarikh'),
+)->where('student_id', 2);
+
+$statement = $debit->unionAll($credit)
+    ->orderBy('tarikh')->get();
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Output sebenar: 6 baris terakhir, kolum ikut susunan <code>select</code></p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+ref         jenis      amount  tarikh
+INV0080001  invois    1250.00  2026-08-05
+REF80001    bayaran  -1250.00  2026-09-02
+INV0000001  invois     480.00  2026-10-24
+INV0180001  invois     480.00  2026-10-24
+REF1        bayaran   -480.00  2026-11-21
+REF180001   bayaran   -480.00  2026-11-21
+
+$statement->count();        // 20
+$statement->sum('amount');  // 0 (tiada tunggakan)
+      </code></pre>
+      <ol class="steps">
+        <li>Dua query, <strong>bilangan dan susunan kolum mesti sama</strong>. Nama kolum diambil dari query pertama.</li>
+        <li><code>DB::raw()</code> untuk nilai tetap (<code>'invois'</code>) atau ungkapan (<code>-amount</code>)</li>
+        <li><code>-amount</code> = tolak tanda nilai dalam hasil query sahaja. DB tetap simpan 480.00. Bayaran jadi negatif, jadi <code>sum('amount')</code> terus beri baki.</li>
+        <li><code>orderBy</code> selepas union: susun hasil gabungan</li>
+      </ol>
+    </div>
+  </div>
+  <aside class="notes">-amount ialah operator tolak tanda (unary minus) SQL standard: MySQL, PostgreSQL, SQLite dan SQL Server semua sokong. Diuji: MySQL pulang -480.00, SQLite pulang -480 (format berbeza, nilai sama). Alias "as amount" perlu; tanpanya nama kolum jadi "-amount". Oracle juga sokong -amount, tetapi tiada fungsi date(): guna TRUNC(created_at). Perbandingan penuh MySQL, MariaDB dan Oracle ada dalam Bahagian Indexing (slide "MariaDB dan Oracle: apa yang berbeza", 9:43 pagi). Nama kolum hasil union diambil dari query pertama.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Union · pilihan</span>
+  <h2><code>union</code> atau <code>unionAll</code>?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.56em">
+    <thead><tr><th></th><th><code>union()</code></th><th><code>unionAll()</code></th></tr></thead>
+    <tbody>
+      <tr><td>Baris sama dalam kedua-dua query</td><td>Dibuang (tinggal satu)</td><td>Dikekalkan</td></tr>
+      <tr><td>Kerja tambahan DB</td><td>Susun dan banding setiap baris untuk cari pendua</td><td>Tiada</td></tr>
+      <tr><td>Penyata pelajar 2 <strong>tanpa kolum <code>ref</code></strong> (diuji)</td><td><strong>18 baris</strong>: dua invois RM480 pada 24/10 jadi satu, dua bayaran RM480 pada 21/11 jadi satu</td><td><strong>20 baris</strong>: setiap transaksi kekal</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.5em" class="muted">Jumlah kebetulan masih 0 kerana satu debit dan satu kredit hilang. Dengan data lain, baki penyata terus salah tanpa sebarang ralat.</p>
+  <div class="cols" style="margin-top:.8em">
+    <div class="callout good" style="font-size:.55em"><strong>Lalai:</strong> guna <code>unionAll()</code>. Guna <code>union()</code> hanya bila anda memang mahu buang pendua, dan tahu kenapa.</div>
+    <div class="callout" style="font-size:.55em"><strong>Bila guna union:</strong> data serupa dari jadual berbeza (invois + bayaran, aktiviti dari dua modul). Jika data dari jadual yang sama, biasanya <code>where ... orWhere</code> sudah cukup.</div>
+  </div>
+</section>
+
+<section data-timing="600" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Latihan individu · 10 minit · baki <span data-countdown>10:00</span></span>
+  <h2>Scope dan subquery</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.62em">
+        <li>Tambah scope <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">outstanding()</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">overdue()</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ofType()</code> dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Invoice</code></li>
+        <li>Tukar <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">outstandingFor()</code> dan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">overdue()</code> dalam repository supaya guna scope</li>
+        <li>Dalam tinker, semak SQL dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">toRawSql()</code>: mesti sama seperti sebelum</li>
+        <li><strong>Cabaran:</strong> senarai 50 pelajar dengan <strong>jenis yuran</strong> invois tertunggak yang paling lama (subquery + <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">withCasts</code>)</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-hands-helping"></i>Tersekat?</h3>
+      <p>Tanya rakan semeja dahulu. Bandingkan output <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">toRawSql()</code> anda dengan rakan.</p>
+      <p>Siap awal? Bantu rakan semeja, kemudian cuba scope <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">dueBetween($from, $to)</code>.</p>
+    </div>
+  </div>
+  <aside class="notes">Jawapan cabaran: Student::addSelect(['oldest_type' => Invoice::select('type')->whereColumn('student_id', 'students.id')->outstanding()->orderBy('due_date')->limit(1)])->withCasts(['oldest_type' => FeeType::class])->limit(50)->get(). Perhatikan scope outstanding() juga boleh dipakai dalam subquery.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 03: INDEXING                                      -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-table-list"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Database Indexing</h2>
+  <p>EXPLAIN, composite index dan covering index</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Konsep</span>
+  <h2>Tanpa index, MySQL baca setiap baris</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1180 330" role="img" aria-label="Table scan berbanding index">
+    <defs><marker id="ix" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <text class="t" x="270" y="24" text-anchor="middle">Tanpa index: table scan</text>
+    <rect class="box-b" x="60" y="44" width="420" height="250" rx="10"/>
+    <text class="t-s" x="80" y="78">id 1 · paid · 2025-01-03</text>
+    <text class="t-s" x="80" y="108">id 2 · NULL · 2026-03-11</text>
+    <text class="t-s" x="80" y="138">id 3 · paid · 2025-07-20</text>
+    <text class="t-s" x="80" y="168">id 4 · NULL · 2025-02-14</text>
+    <text class="t-s" x="80" y="198">…</text>
+    <text class="t-s" x="80" y="228">id 200000 · paid · 2026-11-01</text>
+    <path d="M500 60 L500 280" stroke="#ff6b6b" stroke-width="3" marker-end="url(#ix)"/>
+    <text class="t" x="270" y="322" text-anchor="middle" style="fill:#ff6b6b">Baca 200,000 baris, kemudian susun</text>
+
+    <text class="t" x="880" y="24" text-anchor="middle">Dengan index (paid_at, due_date)</text>
+    <rect class="box-g" x="670" y="44" width="420" height="250" rx="10"/>
+    <text class="t-s" x="690" y="78">NULL · 2024-12-01 → id 8,  id 98 …</text>
+    <text class="t-s" x="690" y="108">NULL · 2024-12-02 → id 17, id 77 …</text>
+    <text class="t-s" x="690" y="138">NULL · …  (sudah tersusun)</text>
+    <text class="t-s" x="690" y="168">NULL · 2026-11-23 → …</text>
+    <text class="t-s" x="690" y="198">2025-01-01 · …</text>
+    <text class="t-s" x="690" y="228">2025-01-02 · …</text>
+    <path d="M640 70 L665 70" stroke="#4cc47f" stroke-width="3" marker-end="url(#ix)"/>
+    <text class="t" x="880" y="322" text-anchor="middle" style="fill:#4cc47f">Lompat ke NULL, baca 50 entri pertama</text>
+  </svg>
+  <p style="font-size:.55em; text-align:center; margin-top:.4em">Index = senarai berasingan yang <strong>sudah tersusun</strong> ikut kolum tertentu, seperti indeks di belakang buku: cari "Redis", terus ke muka surat 214.</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Jadual <code>invoices</code> · migration asal</span>
+  <h2>Foreign key datang dengan index</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">database/migrations/2026_01_01_000002_create_invoices_table.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11">
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('invoices', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->constrained();
+            $table->string('number')->unique();
+            $table->string('type');
+            $table->decimal('amount', 10, 2);
+            $table->date('due_date');
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamps();
+        });
+    }
+};
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">mysql&gt; SHOW INDEX FROM invoices (sebenar)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Key_name                     Column_name
+PRIMARY                      id
+invoices_number_unique       number
+invoices_student_id_foreign  student_id
+      </code></pre>
+      <ol class="steps" style="font-size:.53em">
+        <li><code>foreignId('student_id')</code>: kolum <code>student_id</code></li>
+        <li><code>->constrained()</code>: foreign key ke <code>students.id</code>. Invois tidak boleh rujuk pelajar yang tiada.</li>
+        <li>MySQL wajibkan setiap foreign key ada index. Ia cipta <code>invoices_student_id_foreign</code> secara automatik.</li>
+      </ol>
+      <div class="callout" style="font-size:.5em">Ingat index ini. Ia muncul dalam EXPLAIN seterusnya, dan ia punca perangkap rollback nanti.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">EXPLAIN · membaca pelan query</span>
+  <h2>Apa MySQL buat untuk <code>outstandingFor()</code>?</h2>
+  <div class="rule"></div>
+  <p class="code-label">mysql&gt; EXPLAIN (SQL dari <code>toRawSql()</code>, pelajar id 4327)</p>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+EXPLAIN select * from invoices where student_id = 4327 and paid_at is null order by due_date;
+
+type  key                          rows  filtered  Extra
+ref   invoices_student_id_foreign  10    50.00     Using where; Using filesort
+  </code></pre>
+  <table style="font-size:.5em; margin-top:.4em">
+    <thead><tr><th>Kolum</th><th>Maksud</th><th>Dalam output ini</th></tr></thead>
+    <tbody>
+      <tr><td><code>type</code></td><td>Cara cari baris. Terbaik → terburuk: <code>const</code>, <code>ref</code>, <code>range</code>, <code>index</code>, <code>ALL</code></td><td><code>ref</code>: guna index, bagus</td></tr>
+      <tr><td><code>key</code></td><td>Index yang dipilih. <code>NULL</code> = tiada index</td><td>Index foreign key <code>student_id</code></td></tr>
+      <tr><td><code>rows</code></td><td>Anggaran baris yang perlu dibaca</td><td>10 invois pelajar ini</td></tr>
+      <tr><td><code>filtered</code></td><td>% baris yang lulus syarat lain</td><td>Hanya ~50% belum dibayar</td></tr>
+      <tr><td><code>Extra</code></td><td><code>Using where</code>: tapis selepas baca. <code>Using filesort</code>: susun di memori</td><td>Tapis <code>paid_at</code> dan susun <code>due_date</code> sendiri</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.52em">Index yang dipilih ialah index foreign key dari migration asal (slide sebelum). Jadi query ini sudah agak baik. Yang tinggal: tapis dan susun secara manual.</div>
+  <aside class="notes">EXPLAIN tidak menjalankan query, hanya tunjuk pelan. Kolum id, select_type, table, partitions, possible_keys, key_len, ref dibuang dari slide supaya muat; tunjuk output penuh dalam terminal.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Composite index · migration</span>
+  <h2>Satu index, tiga kolum</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">database/migrations/2026_11_25_000001_add_outstanding_index_to_invoices_table.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="9-14|16-21">
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            // nama: invoices_student_id_paid_at_due_date_index
+            $table->index(['student_id', 'paid_at', 'due_date']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropIndex(['student_id', 'paid_at', 'due_date']);
+        });
+    }
+};
+      </code></pre>
+      <p class="code-label">terminal</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+php artisan make:migration add_outstanding_index_to_invoices_table
+php artisan migrate
+      </code></pre>
+    </div>
+    <div>
+      <h3 style="font-size:.7em"><i class="fa-solid fa-list-ol"></i>&nbsp;Kenapa susunan ini?</h3>
+      <ol class="steps">
+        <li><code>student_id = ?</code>: syarat sama dengan (<code>=</code>), letak dahulu</li>
+        <li><code>paid_at is null</code>: juga syarat sama dengan, letak kedua</li>
+        <li><code>order by due_date</code>: dalam kumpulan yang sama, index sudah tersusun ikut tarikh. Tiada filesort.</li>
+      </ol>
+      <div class="callout good" style="font-size:.52em"><strong>Peraturan:</strong> kolum <code>=</code> dahulu, kemudian kolum julat (<code>&lt;</code>, <code>&gt;</code>) atau <code>order by</code>.</div>
+      <div class="callout warn" style="font-size:.52em"><code>down()</code> ini ada masalah bila di-rollback. Kita lihat dua slide lagi.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Composite index · hasil</span>
+  <h2>Sebelum dan selepas</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+type  key                          rows  filtered  Extra
+ref   invoices_student_id_foreign  10    50.00     Using where; Using filesort
+      </code></pre>
+      <p class="code-label">EXPLAIN ANALYZE</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+-> Sort: invoices.due_date  (actual time=0.239 ms rows=10)
+    -> Filter: (invoices.paid_at is null)
+        -> Index lookup using invoices_student_id_foreign
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+type   key                                         rows  filtered  Extra
+range  invoices_student_id_paid_at_due_date_index  10    100.00    Using index condition
+      </code></pre>
+      <p class="code-label">EXPLAIN ANALYZE</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+-> Index range scan using invoices_student_id_paid_at_due_date_index
+   over (student_id = 4327 AND paid_at = NULL)  (actual time=0.0227 ms rows=10)
+      </code></pre>
+    </div>
+  </div>
+  <ul style="font-size:.56em; margin-top:.6em">
+    <li><code>Using filesort</code> hilang: index sudah tersusun ikut <code>due_date</code></li>
+    <li><code>filtered</code> 100%: setiap baris yang dibaca memang belum dibayar</li>
+    <li>0.24 ms → 0.02 ms. Kecil untuk 10 invois; penting bila pelajar ada 80 invois selepas 8 tahun dan query ini dipanggil setiap kali pelajar log masuk.</li>
+  </ul>
+  <aside class="notes">EXPLAIN ANALYZE (MySQL 8.0.18+) menjalankan query sebenar dan laporkan masa serta bilangan baris sebenar. Semua nombor di sini diukur pada data ujian 200,000 invois.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · rollback</span>
+  <h2><code>migrate:rollback</code> gagal</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SALAH · down() ASAL</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+public function down(): void
+{
+    Schema::table('invoices', function (Blueprint $table) {
+        $table->dropIndex(['student_id', 'paid_at', 'due_date']);
+    });
+}
+      </code></pre>
+      <p class="code-label">php artisan migrate:rollback: ralat sebenar</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+SQLSTATE[HY000]: General error: 1553 Cannot drop index 'invoices_student_id_paid_at_due_date_index': needed in a foreign key constraint
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">BETUL · down() YANG SAMA</span></h3>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="4">
+public function down(): void
+{
+    Schema::table('invoices', function (Blueprint $table) {
+        $table->index('student_id'); // foreign key perlukan index
+        $table->dropIndex(['student_id', 'paid_at', 'due_date']);
+    });
+}
+      </code></pre>
+      <p style="font-size:.52em">Rollback berjaya. Foreign key kini guna <code>invoices_student_id_index</code>.</p>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.53em"><strong>Kenapa:</strong> migration asal ada <code>foreignId('student_id')->constrained()</code>, jadi foreign key wajib ada index yang bermula dengan <code>student_id</code>. Bila composite index kita ditambah, MySQL <strong>buang <code>invoices_student_id_foreign</code></strong> secara automatik kerana composite sudah memadai. Composite itu kini satu-satunya index untuk foreign key, jadi ia tidak boleh dibuang. <strong>Tanpa foreign key, ralat ini tidak berlaku</strong> (diuji). <strong>Sentiasa uji <code>migrate:rollback</code></strong> sebelum deploy.</div>
+  <aside class="notes">Soalan biasa: "Kenapa tidak biarkan down() kosong, langkau dropIndex?" Diuji: rollback lulus, tetapi index kekal dalam DB. Bila php artisan migrate dijalankan semula, up() gagal dengan SQLSTATE[42000] 1061 Duplicate key name 'invoices_student_id_paid_at_due_date_index'. down() mesti kembalikan DB kepada keadaan sebelum up(), supaya migrate:fresh, migrate:refresh dan deploy semula selepas rollback berjaya.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Dashboard Bendahari · EXPLAIN ANALYZE</span>
+  <h2>Query <code>overdue()</code>: tiada index langsung</h2>
+  <div class="rule"></div>
+  <p class="code-label">mysql&gt; EXPLAIN ANALYZE (dibaca dari bawah ke atas)</p>
+  <pre class="xs"><code class="language-plaintext" data-trim data-line-numbers="4|3|2|1">
+-> Limit: 50 row(s)                                    (actual time=75.7 ms rows=50)
+    -> Sort: invoices.due_date, limit input to 50     (actual time=75.7 ms rows=50)
+        -> Filter: (paid_at is null and due_date < '2026-11-24')  (actual rows=80000)
+            -> Table scan on invoices                 (actual time=61.8 ms rows=200000)
+  </code></pre>
+  <ol class="steps" style="font-size:.58em">
+    <li><strong>Table scan</strong>: baca kesemua 200,000 invois</li>
+    <li><strong>Filter</strong>: 80,000 lulus syarat (belum bayar, sudah lewat)</li>
+    <li><strong>Sort</strong>: susun ikut <code>due_date</code></li>
+    <li><strong>Limit</strong>: ambil 50, buang selebihnya</li>
+  </ol>
+  <div class="callout bad" style="font-size:.55em">Baca 200,000 baris untuk papar 50. EXPLAIN biasa tunjuk <code>type ALL</code>, <code>key NULL</code>, <code>rows 199143</code>. Index <code>(student_id, paid_at, due_date)</code> yang baru dicipta <strong>tidak digunakan</strong>. Kenapa?</div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Peraturan leftmost prefix</span>
+  <h2>Index hanya membantu dari kolum paling kiri</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Buku telefon disusun ikut <strong>nama keluarga</strong>, kemudian <strong>nama</strong>. Cari "semua orang bernama Ali" tanpa tahu nama keluarga? Kena baca keseluruhan buku.</p>
+      <p style="font-size:.58em">Index <code>(student_id, paid_at, due_date)</code> disusun ikut <code>student_id</code> dahulu. Query dashboard tiada <code>student_id</code>, jadi MySQL tidak boleh guna index ini.</p>
+      <p class="code-label">EXPLAIN query dashboard: output sebenar</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+type  possible_keys  key   rows    Extra
+ALL   NULL           NULL  199143  Using where; Using filesort
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Index <code>(student_id, paid_at, due_date)</code> membantu query yang …</p>
+      <table style="font-size:.5em">
+        <thead><tr><th>WHERE / ORDER BY</th><th>Guna index?</th></tr></thead>
+        <tbody>
+          <tr><td><code>student_id = ?</code></td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> ya</td></tr>
+          <tr><td><code>student_id = ? and paid_at is null</code></td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> ya</td></tr>
+          <tr><td><code>student_id = ? and paid_at is null order by due_date</code></td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> ya, sepenuhnya</td></tr>
+          <tr><td><code>student_id = ? order by due_date</code></td><td><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn)"></i> sebahagian: filesort kekal</td></tr>
+          <tr><td><code>paid_at is null and due_date &lt; ?</code></td><td><i class="fa-solid fa-xmark" style="color:var(--bad)"></i> tidak</td></tr>
+          <tr><td><code>due_date &lt; ?</code></td><td><i class="fa-solid fa-xmark" style="color:var(--bad)"></i> tidak</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.5em">Satu index composite juga menggantikan index yang merupakan awalannya: <code>(student_id, paid_at, due_date)</code> sudah meliputi <code>(student_id)</code>. Sebab itu MySQL buang index foreign key asal.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Covering index</span>
+  <h2>Satu index untuk senarai dan ringkasan dashboard</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">database/migrations/2026_11_25_000002_add_overdue_index_to_invoices_table.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10">
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->index(['paid_at', 'due_date', 'amount']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropIndex(['paid_at', 'due_date', 'amount']);
+        });
+    }
+};
+      </code></pre>
+      <p class="code-label">Ringkasan dashboard: jumlah tertunggak</p>
+      <pre class="xs"><code class="language-sql" data-trim>
+select count(*), sum(amount) from invoices
+where paid_at is null and due_date < '2026-11-21';
+      </code></pre>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Index</th><th>Senarai 50</th><th>Ringkasan</th></tr></thead>
+        <tbody>
+          <tr><td>Tiada</td><td>75.7 ms · table scan</td><td>33 ms · table scan</td></tr>
+          <tr><td><code>(paid_at, due_date)</code></td><td>0.1 ms · index range scan</td><td>33 ms · <strong>masih</strong> table scan</td></tr>
+          <tr><td><code>(paid_at, due_date, amount)</code></td><td><strong>0.1 ms</strong> · index range scan</td><td><strong>16 ms</strong> · covering index</td></tr>
+        </tbody>
+      </table>
+      <ol class="steps" style="font-size:.54em">
+        <li>Dengan <code>(paid_at, due_date)</code>, MySQL jumpa 80,000 baris dalam index, tetapi perlu lompat ke jadual 80,000 kali untuk ambil <code>amount</code>. Ia pilih baca jadual terus.</li>
+        <li>Tambah <code>amount</code> ke dalam index: semua kolum yang diperlukan ada dalam index. Tidak perlu sentuh jadual langsung. Inilah <strong>covering index</strong>.</li>
+      </ol>
+      <p class="code-label">EXPLAIN ringkasan</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+type   key                                     Extra
+range  invoices_paid_at_due_date_amount_index  Using where; Using index
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>Using index</code> (bukan <code>Using index condition</code>) = covering.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Perangkap · EXPLAIN</span>
+  <h2>EXPLAIN biasa boleh mengelirukan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">EXPLAIN query senarai 50, selepas index ditambah</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+type  possible_keys                           key   rows    Extra
+ALL   invoices_paid_at_due_date_amount_index  NULL  199143  Using where
+      </code></pre>
+      <p class="code-label">EXPLAIN ANALYZE query yang sama</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+-> Limit: 50 row(s)            (actual time=0.0973 ms rows=50)
+    -> Index range scan using invoices_paid_at_due_date_amount_index
+       over (paid_at = NULL AND due_date < '2026-11-24')  (rows=50)
+      </code></pre>
+    </div>
+    <div>
+      <p style="font-size:.58em">EXPLAIN biasa tunjuk pelan <strong>sebelum</strong> MySQL ambil kira <code>LIMIT 50</code>. Semasa dijalankan, MySQL tukar ke index kerana hanya perlu 50 baris pertama.</p>
+      <div class="callout good" style="font-size:.55em"><strong>Amalan:</strong> guna <code>EXPLAIN</code> untuk pandangan pantas. Bila keputusan nampak pelik, atau untuk ukur sebelum/selepas, guna <code>EXPLAIN ANALYZE</code>: ia jalankan query dan tunjuk apa yang <strong>benar-benar</strong> berlaku.</div>
+      <div class="callout warn" style="font-size:.52em"><code>EXPLAIN ANALYZE</code> menjalankan query. Jangan guna pada <code>UPDATE</code>/<code>DELETE</code> di produksi.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Bukan MySQL?</span>
+  <h2>MariaDB dan Oracle: apa yang berbeza</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Dalam modul ini</th><th>MySQL 8</th><th>MariaDB 11</th><th>Oracle</th></tr></thead>
+    <tbody>
+      <tr><td><code>-amount</code> (penyata akaun)</td><td>Ya</td><td>Ya</td><td>Ya</td></tr>
+      <tr><td><code>date(created_at)</code></td><td>Ya</td><td>Ya</td><td><strong>Tiada</strong>: guna <code>TRUNC(created_at)</code></td></tr>
+      <tr><td>Ukur pelan sebenar</td><td><code>EXPLAIN ANALYZE SELECT …</code></td><td><code>ANALYZE SELECT …</code> atau <code>ANALYZE FORMAT=JSON SELECT …</code>. <code>EXPLAIN ANALYZE</code> beri ralat 1064</td><td><code>EXPLAIN PLAN FOR …</code> kemudian <code>DBMS_XPLAN.DISPLAY</code></td></tr>
+      <tr><td><code>EXPLAIN</code> query senarai 50</td><td><code>ALL</code> (mengelirukan, slide sebelum ini)</td><td>Terus <code>range</code></td><td>Tidak diuji dalam kursus ini</td></tr>
+      <tr><td>Sambungan Laravel</td><td><code>DB_CONNECTION=mysql</code></td><td><code>DB_CONNECTION=mariadb</code></td><td>Pakej <code>yajra/laravel-oci8</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.53em; margin-top:.6em"><code>where()</code>, <code>orderBy()</code> dan <code>unionAll()</code> dijana mengikut DB oleh Laravel. Yang <strong>tidak</strong> diterjemah ialah teks dalam <code>DB::raw()</code>, <code>whereRaw()</code> dan <code>selectRaw()</code>. Bila tukar DB, semak tempat-tempat ini dahulu.</div>
+  <aside class="notes">Diuji pada MariaDB 11.4 (Docker): -amount, date(), unionAll dan row_number() berfungsi; EXPLAIN ANALYZE beri ralat 1064; ANALYZE SELECT beri lajur r_rows (baris sebenar), ANALYZE FORMAT=JSON beri r_total_time_ms. Untuk Oracle, TRUNC(tarikh) membuang bahagian masa, sama seperti date() MySQL.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Kos index</span>
+  <h2>Index bukan percuma</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">Saiz sebenar, jadual <code>invoices</code> (200,000 baris)</p>
+      <table style="font-size:.52em">
+        <thead><tr><th>Index</th><th>Saiz</th></tr></thead>
+        <tbody>
+          <tr><td><code>PRIMARY</code> (data jadual)</td><td>15.5 MB</td></tr>
+          <tr><td><code>invoices_number_unique</code></td><td>5.5 MB</td></tr>
+          <tr><td><code>invoices_student_id_paid_at_due_date_index</code></td><td>6.5 MB</td></tr>
+          <tr><td><code>invoices_paid_at_due_date_amount_index</code></td><td>5.5 MB</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.52em">Dua index baru = 12 MB, hampir 80% saiz data. Setiap <code>insert</code> dan setiap <code>update paid_at</code> kini kemas kini <strong>tiga</strong> struktur, bukan satu.</p>
+    </div>
+    <div>
+      <table style="font-size:.52em">
+        <thead><tr><th>Tambah index bila</th><th>Jangan tambah bila</th></tr></thead>
+        <tbody>
+          <tr><td>Query kerap dan <code>EXPLAIN</code> tunjuk <code>ALL</code> atau <code>filesort</code> pada jadual besar</td><td>Jadual kecil (ratusan baris): table scan sudah pantas</td></tr>
+          <tr><td>Kolum dalam <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code></td><td>Kolum dengan sedikit nilai unik sahaja, cth. <code>type</code> (3 nilai)</td></tr>
+          <tr><td>Index boleh menggantikan index lain (awalan sama)</td><td>Sudah ada index dengan awalan yang sama</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.52em"><strong>Mula dari query, bukan dari jadual.</strong> Ambil query paling perlahan (Telescope / slow query log), <code>EXPLAIN</code>, kemudian baru tambah index.</div>
+    </div>
+  </div>
+  <aside class="notes">Saiz diambil dari mysql.innodb_index_stats (stat_name = 'size') selepas ANALYZE TABLE.</aside>
+</section>
+
+<section data-timing="480" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Latihan individu · 8 minit · baki <span data-countdown>8:00</span></span>
+  <h2>EXPLAIN di mesin anda</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.6em">
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan db:seed --class=LargeFeeSeeder</code> (200,000 invois, ±1 minit)</li>
+        <li>Dalam tinker, ambil SQL <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">overdue()</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">toRawSql()</code></li>
+        <li>Jalankan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">EXPLAIN ANALYZE</code> dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan db</code> (MariaDB: <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ANALYZE SELECT</code>). Catat masa.</li>
+        <li>Cipta dua migration index tadi. <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">migrate</code>, ukur semula.</li>
+        <li>Uji <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">migrate:rollback</code>: adakah ralat 1553 muncul? Betulkan.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-clipboard-list"></i>Catat dalam jadual meja</h3>
+      <p>Masa sebelum dan selepas, untuk senarai 50 dan ringkasan.</p>
+      <p>Nombor anda mungkin berbeza dari slide (mesin lain). Yang penting: <strong>table scan → index range scan</strong>.</p>
+    </div>
+  </div>
+  <aside class="notes">php artisan db buka klien mysql dengan tetapan .env. LargeFeeSeeder disediakan dalam branch modul-2-start (guna INSERT ... SELECT dengan WITH RECURSIVE supaya pantas).</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Index mana yang sesuai?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.55em">
+    <thead><tr><th>#</th><th>Query</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>where student_id = ? order by created_at desc</code></td><td class="fragment"><code>(student_id, created_at)</code></td></tr>
+      <tr><td>2</td><td><code>where type = 'hostel' and due_date &lt; ?</code></td><td class="fragment"><code>(type, due_date)</code>: <code>=</code> dahulu, julat kemudian</td></tr>
+      <tr><td>3</td><td><code>where reference = ?</code> (jadual payments)</td><td class="fragment"><code>unique('reference')</code>: cepat <em>dan</em> halang rujukan berulang</td></tr>
+      <tr><td>4</td><td><code>where due_date &lt; ?</code> sahaja, sekali sebulan</td><td class="fragment">Mungkin tiada: sekali sebulan, table scan ±70 ms boleh diterima</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- REHAT 10:00                                                -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">10:00 – 10:15 pagi</span>
+  <h1 style="margin:.1em 0 .2em">Sarapan · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: Redis caching</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 04: REDIS                                         -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-bolt"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Redis Caching</h2>
+  <p>Cache query, fragment cache dan strategi invalidation</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Bila cache berbaloi</span>
+  <h2>Index dah laju. Kenapa perlu cache?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.6em">Ringkasan dashboard kini 16 ms. Tetapi:</p>
+      <ul style="font-size:.58em">
+        <li>Contoh: 40 staf Bendahari, dashboard auto-refresh setiap 30 saat = <strong>4,800 query sejam</strong></li>
+        <li>Nilai ringkasan hanya berubah bila ada <strong>bayaran baru</strong></li>
+        <li>Musim pendaftaran: ribuan pelajar semak tunggakan serentak</li>
+      </ul>
+      <div class="callout" style="font-size:.55em"><strong>Cache</strong> = simpan hasil kerja mahal di tempat pantas (memori Redis), guna semula sehingga data berubah atau tamat tempoh.</div>
+    </div>
+    <div>
+      <table style="font-size:.52em">
+        <thead><tr><th>Sesuai di-cache</th><th>Jangan cache</th></tr></thead>
+        <tbody>
+          <tr><td>Dibaca jauh lebih kerap daripada ditulis</td><td>Berubah setiap saat (status bayaran semasa di gateway)</td></tr>
+          <tr><td>Mahal dikira: agregat, laporan, senarai berformat</td><td>Sudah pantas dan jarang dibaca</td></tr>
+          <tr><td>Boleh lewat beberapa minit tanpa mudarat (ringkasan dashboard)</td><td>Mesti tepat setiap masa: <strong>semakan "sudah dibayar?" sebelum caj bank</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Redis · persediaan</span>
+  <h2>Tukar driver, kod tidak berubah</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">.env</p>
+      <pre class="sm"><code class="language-ini" data-trim>
+CACHE_STORE=redis
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+      </code></pre>
+      <p style="font-size:.55em"><code>CachedInvoiceRepository</code> dari Modul 1 terima <code>cache()->store()</code> dalam <code>AppServiceProvider</code>: store lalai. Tukar <code>CACHE_STORE</code>, decorator kini simpan dalam Redis tanpa satu baris kod berubah.</p>
+      <div class="callout" style="font-size:.52em"><code>phpredis</code> ialah extension PHP. Jika tiada, <code>composer require predis/predis</code> dan set <code>REDIS_CLIENT=predis</code>.</div>
+    </div>
+    <div>
+      <p class="code-label">terminal: lihat kunci dalam Redis</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+$ redis-cli -n 1 --scan
+laravel-database-laravel-cache-invoices:outstanding:7
+
+$ redis-cli -n 1 ttl laravel-database-laravel-cache-invoices:outstanding:7
+(integer) 600
+      </code></pre>
+      <table style="font-size:.5em">
+        <thead><tr><th>Bahagian kunci</th><th>Datang dari</th></tr></thead>
+        <tbody>
+          <tr><td><code>laravel-database-</code></td><td>Prefix Redis, <code>config/database.php</code></td></tr>
+          <tr><td><code>laravel-cache-</code></td><td>Prefix cache, <code>config/cache.php</code></td></tr>
+          <tr><td><code>invoices:outstanding:7</code></td><td>Kunci dalam <code>CachedInvoiceRepository</code></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.5em" class="muted"><code>-n 1</code>: Laravel simpan cache dalam Redis database 1 (<code>REDIS_CACHE_DB</code>). TTL (Time To Live, baki hayat) 600 saat = 10 minit.</p>
+    </div>
+  </div>
+  <aside class="notes">Prefix diambil dari APP_NAME (Laravel → laravel). Dua aplikasi berkongsi satu Redis perlu APP_NAME atau CACHE_PREFIX berbeza supaya kunci tidak bertembung.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Cache query · 1 / 2</span>
+  <h2>Method baru: <code>overdueSummary()</code></h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Contracts/InvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="17-18">
+namespace App\Repositories\Contracts;
+
+use App\Models\{Invoice, Payment, Student};
+use Illuminate\Database\Eloquent\Collection;
+
+interface InvoiceRepository
+{
+    public function findOrFail(int $id): Invoice;
+
+    public function outstandingFor(Student $student): Collection;
+
+    public function recordPayment(Invoice $invoice, array $attributes): Payment;
+
+    public function overdue(): Collection;
+
+    /** @return array{total_count: int, total_amount: string} */
+    public function overdueSummary(): array;
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Repositories/Eloquent/EloquentInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11-17">
+namespace App\Repositories\Eloquent;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Database\Eloquent\Collection;
+
+final class EloquentInvoiceRepository implements InvoiceRepository
+{
+    // findOrFail(), outstandingFor(), recordPayment(), overdue(): seperti sebelum ini
+
+    public function overdueSummary(): array
+    {
+        return Invoice::overdue()
+            ->selectRaw('count(*) as total_count, sum(amount) as total_amount')
+            ->first()
+            ->only(['total_count', 'total_amount']);
+    }
+}
+      </code></pre>
+      <p class="code-label">Output sebenar</p>
+      <pre class="xs"><code class="language-php" data-trim>
+['total_count' => 79994, 'total_amount' => '46530410.00']
+      </code></pre>
+      <div class="callout" style="font-size:.5em">Query ini guna covering index <code>(paid_at, due_date, amount)</code> dari Bahagian 03.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Cache query · 2 / 2</span>
+  <h2>Decorator yang cache</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Repositories/Cached/CachedInvoiceRepository.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="17-24">
+namespace App\Repositories\Cached;
+
+use App\Models\{Invoice, Payment, Student};
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Database\Eloquent\Collection;
+
+final class CachedInvoiceRepository implements InvoiceRepository
+{
+    public function __construct(
+        private InvoiceRepository $inner,
+        private Cache $cache,
+    ) {}
+
+    // findOrFail(), outstandingFor(), recordPayment(), overdue(): seperti sebelum ini
+
+    public function overdueSummary(): array
+    {
+        return $this->cache->remember(
+            'invoices:overdue-summary',
+            now()->addMinutes(10),
+            fn () => $this->inner->overdueSummary(),
+        );
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Diukur: 3 panggilan berturut-turut</p>
+      <table style="font-size:.52em">
+        <thead><tr><th>Panggilan</th><th>Query SQL</th><th>Masa</th></tr></thead>
+        <tbody>
+          <tr><td>#1 (cache kosong)</td><td>1</td><td>20.6 ms</td></tr>
+          <tr><td>#2</td><td>0</td><td><strong>0.2 ms</strong></td></tr>
+          <tr><td>#3</td><td>0</td><td><strong>0.2 ms</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="code-label">Apa yang disimpan dalam Redis</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+$ redis-cli -n 1 get laravel-database-laravel-cache-invoices:overdue-summary
+a:2:{s:11:"total_count";i:79994;s:12:"total_amount";s:11:"46530410.00";}
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Laravel <code>serialize()</code> nilai sebelum simpan. Array kecil = murah. Simpan nilai yang diperlukan sahaja, bukan koleksi model yang besar.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Invalidation</span>
+  <h2>Masalah sebenar cache: data basi</h2>
+  <div class="rule"></div>
+  <p style="font-size:.58em">10:05 pagi, pelajar bayar invois RM480. Dashboard Bendahari masih papar jumlah lama sehingga cache tamat pada 10:15.</p>
+  <table style="font-size:.52em">
+    <thead><tr><th>Strategi</th><th>Cara</th><th>Kelebihan</th><th>Kelemahan</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TTL (Time To Live) sahaja</strong></td><td><code>remember(..., now()->addMinutes(10), ...)</code></td><td>Paling mudah</td><td>Basi sehingga 10 minit</td></tr>
+      <tr><td><strong>Padam bila data ditulis</strong></td><td><code>forget()</code> dalam <code>recordPayment()</code></td><td>Segar serta-merta</td><td>Mesti tahu <em>semua</em> kunci yang terjejas</td></tr>
+      <tr><td><strong>Tag</strong></td><td><code>Cache::tags(['student:7'])->flush()</code></td><td>Padam satu kumpulan kunci sekali gus</td><td>Hanya Redis / Memcached</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em"><strong>Amalan terbaik:</strong> <strong>padam bila ditulis</strong> + <strong>TTL sebagai jaring keselamatan</strong>. Jika satu <code>forget()</code> tertinggal, data paling lama basi 10 minit, bukan selama-lamanya.</div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Invalidation · padam bila ditulis</span>
+  <h2><code>recordPayment()</code> padam kunci yang terjejas</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SALAH · PADAM DALAM TRANSAKSI</span></h3>
+      <p class="code-label">CachedInvoiceRepository::recordPayment()</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function recordPayment(Invoice $invoice, array $attributes): Payment
+{
+    $payment = $this->inner->recordPayment($invoice, $attributes);
+
+    $this->cache->forget("invoices:outstanding:{$invoice->student_id}");
+    $this->cache->forget('invoices:overdue-summary');
+
+    return $payment;
+}
+      </code></pre>
+      <ol class="steps" style="font-size:.5em">
+        <li><code>PaymentService</code> panggil method ini di dalam <code>DB::transaction()</code> (Modul 1)</li>
+        <li>Cache dipadam, transaksi <strong>belum commit</strong></li>
+        <li>Request lain baca DB: masih nampak data lama, simpan semula dalam cache</li>
+        <li>Transaksi commit. Cache basi 10 minit lagi.</li>
+      </ol>
+    </div>
+    <div>
+      <h3><span class="tag good">BETUL · PADAM SELEPAS COMMIT</span></h3>
+      <p class="code-label">CachedInvoiceRepository::recordPayment()</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="5-8">
+public function recordPayment(Invoice $invoice, array $attributes): Payment
+{
+    $payment = $this->inner->recordPayment($invoice, $attributes);
+
+    DB::afterCommit(function () use ($invoice) {
+        $this->cache->forget("invoices:outstanding:{$invoice->student_id}");
+        $this->cache->forget('invoices:overdue-summary');
+    });
+
+    return $payment;
+}
+      </code></pre>
+      <p style="font-size:.5em">Tambah <code>use Illuminate\Support\Facades\DB;</code> di atas fail.</p>
+      <p class="code-label">Diuji</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+dalam transaksi:   'lama'  (belum dipadam)
+selepas commit:    NULL    (dipadam)
+selepas rollback:  'lama'  (tidak dipadam: betul, tiada bayaran)
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Konsep sama dengan ShouldDispatchAfterCommit pada event PaymentReceived dalam Modul 1. Di luar transaksi, DB::afterCommit() jalankan callback serta-merta.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Invalidation · tag</span>
+  <h2>Banyak kunci untuk seorang pelajar</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use Illuminate\Support\Facades\Cache;
+
+// beberapa kunci, semua bertag student:7
+Cache::tags(['student:7'])->put('outstanding', $outstanding, 600);
+Cache::tags(['student:7'])->put('statement', $statement, 600);
+Cache::tags(['student:7', 'dashboard'])->put('summary', $summary, 600);
+
+// pelajar 7 bayar: padam semua kunci bertag student:7
+Cache::tags(['student:7'])->flush();
+
+Cache::tags(['student:7'])->get('statement'); // null
+      </code></pre>
+      <p class="code-label">Dengan <code>CACHE_STORE=database</code> atau <code>file</code>: ralat sebenar</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+BadMethodCallException: This cache store does not support tagging.
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps">
+        <li>Tag = label pada kunci. <code>flush()</code> pada tag padam semua kunci berlabel itu.</li>
+        <li>Baca mesti guna tag yang sama: <code>Cache::tags(['student:7'])->get(...)</code>. Tanpa tag, kunci tidak dijumpai.</li>
+        <li>Sesuai bila satu peristiwa (pelajar bayar) jejaskan banyak kunci yang sukar disenaraikan satu per satu.</li>
+      </ol>
+      <div class="callout warn" style="font-size:.52em">Tag hanya untuk Redis dan Memcached. Jika projek mungkin guna driver lain (ujian, server kecil), guna <code>forget()</code> biasa.</div>
+    </div>
+  </div>
+  <aside class="notes">$outstanding, $statement, $summary di sini ialah nilai dari slide sebelum (outstandingFor, penyata union, overdueSummary).</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Fragment cache</span>
+  <h2>Cache HTML, bukan hanya data</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Bursary/OverdueInvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12|19-25">
+namespace App\Http\Controllers\Bursary;
+
+use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\View\View;
+
+final class OverdueInvoiceController extends Controller
+{
+    public function __construct(
+        private InvoiceRepository $invoices,
+        private Cache $cache,
+    ) {}
+
+    public function index(): View
+    {
+        return view('bursary.overdue', [
+            'summary'   => $this->invoices->overdueSummary(),
+            'tableHtml' => $this->cache->remember(
+                'fragment:overdue-table',
+                now()->addMinutes(5),
+                fn () => view('bursary.partials.overdue-table', [
+                    'invoices' => $this->invoices->overdue(),
+                ])->render(),
+            ),
+        ]);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">resources/views/bursary/overdue.blade.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+&lt;h2&gt;{{ number_format($summary['total_count']) }} invois lewat&lt;/h2&gt;
+
+{!! $tableHtml !!}
+      </code></pre>
+      <ol class="steps" style="font-size:.53em">
+        <li>Jadual 50 baris (Blade loop kita semalam) dipindah ke <code>partials/overdue-table.blade.php</code></li>
+        <li>Cache kosong: query + render, simpan HTML siap</li>
+        <li>Cache ada: <strong>tiada query, tiada render</strong></li>
+        <li><code>{!! !!}</code> papar HTML tanpa escape. Selamat di sini kerana HTML itu hasil Blade kita sendiri, yang sudah escape setiap <code>{{ }}</code>.</li>
+      </ol>
+      <div class="callout warn" style="font-size:.5em">Jangan cache fragment yang berbeza ikut pengguna (nama staf, butang ikut peranan) dengan kunci yang sama untuk semua orang.</div>
+    </div>
+  </div>
+  <aside class="notes">Kunci fragment:overdue-table juga perlu dipadam dalam recordPayment() jika mahu segar serta-merta. TTL 5 minit di sini ialah keputusan perniagaan: Bendahari setuju senarai lewat boleh basi 5 minit.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Cache stampede</span>
+  <h2>Bila cache tamat, semua orang serbu DB</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">10:15:00, kunci <code>invoices:overdue-summary</code> tamat. Dalam saat yang sama 40 dashboard refresh: <strong>40 query berat serentak</strong> untuk hasil yang sama. Ini dipanggil <strong>cache stampede</strong> (serbuan cache).</p>
+      <p class="code-label">CachedInvoiceRepository::overdueSummary()</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function overdueSummary(): array
+{
+    return $this->cache->flexible(
+        'invoices:overdue-summary',
+        [300, 900],
+        fn () => $this->inner->overdueSummary(),
+    );
+}
+      </code></pre>
+    </div>
+    <div>
+      <table style="font-size:.52em">
+        <thead><tr><th>Umur nilai</th><th><code>flexible(…, [300, 900], …)</code></th></tr></thead>
+        <tbody>
+          <tr><td>0 – 5 minit</td><td>Segar: pulang terus</td></tr>
+          <tr><td>5 – 15 minit</td><td>Pulang nilai lama <strong>serta-merta</strong>, kira semula di belakang selepas respons dihantar (sekali sahaja)</td></tr>
+          <tr><td>&gt; 15 minit</td><td>Kosong: kira seperti <code>remember()</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn" style="font-size:.5em"><code>flexible()</code> tiada dalam contract <code>Illuminate\Contracts\Cache\Repository</code>. Tukar import dalam <code>CachedInvoiceRepository</code> kepada <code>use Illuminate\Cache\Repository as Cache;</code>. <code>cache()->store()</code> dalam <code>AppServiceProvider</code> memang pulangkan class ini.</div>
+    </div>
+  </div>
+  <aside class="notes">Pengguna hampir tidak pernah tunggu query berat: hanya bila nilai lebih tua dari 15 minit. Sesuai untuk dashboard; tidak sesuai untuk data yang mesti tepat.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 5 minit</span>
+  <h2>Cache atau tidak? Strategi apa?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.53em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Senarai jenis yuran dan kadar (berubah sekali setahun)</td><td class="fragment">Cache lama (cth. 1 hari) + <code>forget()</code> bila admin kemas kini</td></tr>
+      <tr><td>2</td><td><code>paid_at</code> invois, disemak sebelum caj bank</td><td class="fragment"><strong>Jangan cache.</strong> Mesti tepat; baca dari DB</td></tr>
+      <tr><td>3</td><td>Laporan kutipan bulanan untuk pengurusan (berat, 8 saat)</td><td class="fragment"><code>flexible()</code> atau jadualkan pengiraan semalaman</td></tr>
+      <tr><td>4</td><td>Halaman "invois saya" pelajar, dengan 3 kunci berkaitan</td><td class="fragment">Tag <code>student:{id}</code>, <code>flush()</code> selepas commit bila pelajar bayar</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 05: TRANSAKSI                                     -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-lock"></i></div>
+  <div class="big-num">BAHAGIAN 05</div>
+  <h2>Database Transaction</h2>
+  <p>Atomicity, rollback, locking dan deadlock</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Atomicity</span>
+  <h2>Semua berjaya, atau tiada langsung</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">php artisan tinker</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="9-17|19-20">
+use App\Enums\PaymentMethod;
+use App\Models\{Invoice, Payment};
+use Illuminate\Support\Facades\DB;
+
+$invoice = Invoice::outstanding()->first();
+$before  = Payment::count();
+
+try {
+    DB::transaction(function () use ($invoice) {
+        $invoice->payments()->create([
+            'student_id' => $invoice->student_id,
+            'method' => PaymentMethod::Fpx, 'amount' => $invoice->amount,
+            'reference' => 'TEST', 'paid_at' => now(),
+        ]);
+        throw new RuntimeException('Server mati di tengah jalan');
+        $invoice->update(['paid_at' => now()]);
+    });
+} catch (RuntimeException $e) {}
+
+Payment::count() === $before;  // true
+$invoice->fresh()->paid_at;    // null
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1em">
+        <li>Payment berjaya di-insert</li>
+        <li>Exception sebelum <code>update()</code></li>
+        <li><code>DB::transaction()</code> tangkap exception, <strong>rollback</strong>, lempar semula</li>
+        <li>Payment tadi lenyap. DB kembali seperti sebelum transaksi.</li>
+      </ol>
+      <table style="font-size:.5em">
+        <thead><tr><th>Tanpa transaksi</th><th>Dengan transaksi</th></tr></thead>
+        <tbody><tr><td>Payment wujud, invois masih "belum bayar". Pelajar dibil lagi bulan depan.</td><td>Kedua-dua langkah gagal bersama. Data konsisten.</td></tr></tbody>
+      </table>
+      <div class="callout" style="font-size:.5em"><code>PaymentService::pay()</code> Modul 1 sudah guna <code>DB::transaction()</code> untuk <code>recordPayment()</code>. Ini sebabnya.</div>
+    </div>
+  </div>
+  <aside class="notes">Output true / null ialah hasil sebenar. fresh() ambil semula rekod dari DB, bukan dari objek dalam memori.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Race condition</span>
+  <h2>Pelajar klik "Bayar" dua kali</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.56em">Modul 1 janji: "Dua klik serentak boleh bayar invois yang sama dua kali." Kita uji <code>PaymentService::pay()</code> Modul 1 dengan <strong>dua proses serentak</strong> pada invois yang sama (panggilan bank disimulasi 0.6 saat).</p>
+      <p class="code-label">Output sebenar</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+klik2: bank caj RM480.00
+klik1: bank caj RM480.00
+klik2: SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock; try restarting transaction
+klik1: bayaran direkod
+
+mysql> select count(*) from payments where invoice_id = 16;
+1
+      </code></pre>
+    </div>
+    <div>
+      <div class="card bad" style="font-size:.85em">
+        <h3><i class="fa-solid fa-triangle-exclamation"></i>Hasilnya</h3>
+        <ul style="margin:0">
+          <li>Bank caj <strong>dua kali</strong>: pelajar hilang RM960</li>
+          <li>Sistem rekod <strong>satu</strong> bayaran sahaja</li>
+          <li>Klik kedua dapat ralat 500 (deadlock)</li>
+          <li>Bendahari terpaksa semak penyata bank secara manual untuk refund</li>
+        </ul>
+      </div>
+      <div class="callout" style="font-size:.52em"><code>DB::transaction()</code> tidak menghalang ini. Transaksi jamin <strong>atomicity</strong> (semua atau tiada), bukan <strong>giliran</strong> antara dua request.</div>
+    </div>
+  </div>
+  <aside class="notes">Simulasi: dua proses php dijalankan serentak (&amp;) dengan kod aliran pay() Modul 1. Hasil deadlock ini kebetulan menyelamatkan rekod DB, tetapi duit sudah ditolak dua kali.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Race condition · garis masa</span>
+  <h2>Kenapa kedua-dua klik lepas semakan</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1180 400" role="img" aria-label="Garis masa dua klik">
+    <text class="t" x="330" y="26" text-anchor="middle">Klik 1</text>
+    <text class="t" x="850" y="26" text-anchor="middle">Klik 2</text>
+    <line x1="590" y1="40" x2="590" y2="390" stroke="#2a3140" stroke-width="2" stroke-dasharray="6 6"/>
+    <rect class="box-p" x="120" y="44" width="420" height="50" rx="8"/><text class="t-s" x="330" y="75" text-anchor="middle">findOrFail(): paid_at = NULL, lulus</text>
+    <rect class="box-p" x="640" y="44" width="420" height="50" rx="8"/><text class="t-s" x="850" y="75" text-anchor="middle">findOrFail(): paid_at = NULL, lulus</text>
+    <rect class="box-b" x="120" y="110" width="420" height="50" rx="8"/><text class="t-s" x="330" y="141" text-anchor="middle">charge(): bank tolak RM480</text>
+    <rect class="box-b" x="640" y="110" width="420" height="50" rx="8"/><text class="t-s" x="850" y="141" text-anchor="middle">charge(): bank tolak RM480 lagi</text>
+    <rect class="box-d" x="120" y="176" width="420" height="50" rx="8"/><text class="t-s" x="330" y="207" text-anchor="middle">insert payment → lock S pada invois 16</text>
+    <rect class="box-d" x="640" y="176" width="420" height="50" rx="8"/><text class="t-s" x="850" y="207" text-anchor="middle">insert payment → lock S pada invois 16</text>
+    <rect class="box-a" x="120" y="242" width="420" height="50" rx="8"/><text class="t-s" x="330" y="273" text-anchor="middle">update invois → tunggu lock X (Klik 2 pegang S)</text>
+    <rect class="box-a" x="640" y="242" width="420" height="50" rx="8"/><text class="t-s" x="850" y="273" text-anchor="middle">update invois → tunggu lock X (Klik 1 pegang S)</text>
+    <rect class="box-g" x="120" y="310" width="420" height="50" rx="8"/><text class="t-s" x="330" y="341" text-anchor="middle">commit: bayaran direkod</text>
+    <rect class="box-b" x="640" y="310" width="420" height="50" rx="8"/><text class="t-s" x="850" y="341" text-anchor="middle">MySQL: deadlock, rollback Klik 2</text>
+  </svg>
+  <p style="font-size:.52em; text-align:center"><strong>Punca:</strong> semakan <code>paid_at</code> dan caj bank berlaku <strong>sebelum</strong> sebarang lock. Dua request baca keadaan yang sama, dan kedua-duanya betul pada saat itu.</p>
+  <aside class="notes">Lock S (shared) datang dari semakan foreign key: bila insert payment dengan invoice_id = 16, InnoDB kunci baris invois 16 supaya ia tidak dipadam. Lock X (exclusive) diperlukan untuk update. Dua S, kedua-duanya mahu X: saling menunggu. Disahkan dengan SHOW ENGINE INNODB STATUS.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Cubaan 1 · <code>lockForUpdate()</code></span>
+  <h2>Kunci baris invois dalam transaksi</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">PaymentService::pay(): semuanya dalam transaksi</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="4-5|9-10">
+public function pay(Student $student, PaymentData $data): Payment
+{
+    return DB::transaction(function () use ($student, $data) {
+        $invoice = Invoice::lockForUpdate()
+            ->findOrFail($data->invoiceId);
+        if ($invoice->paid_at !== null) {
+            throw InvoiceAlreadyPaidException::for($invoice);
+        }
+        $amount = $invoice->amount + $this->penalties->for($invoice, now());
+        $reference = $this->processor->charge($invoice, $data->method, $amount);
+        $payment = $this->invoices->recordPayment($invoice, [
+            'student_id' => $student->id, 'method' => $data->method,
+            'amount' => $amount, 'reference' => $reference, 'paid_at' => now(),
+        ]);
+        PaymentReceived::dispatch($payment);
+        return $payment;
+    });
+}
+      </code></pre>
+      <p class="code-label">Output sebenar: dua klik serentak</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+klik1: bayaran direkod
+klik2: InvoiceAlreadyPaidException: Invois INV0000028 sudah dibayar pada 21/11/2026 08:14.
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps">
+        <li><code>lockForUpdate()</code> = <code>SELECT ... FOR UPDATE</code>: kunci baris invois sehingga transaksi tamat</li>
+        <li>Klik kedua <strong>menunggu</strong> di baris ini, kemudian baca <code>paid_at</code> yang sudah diisi</li>
+      </ol>
+      <div class="callout warn" style="font-size:.52em"><strong>Berfungsi, tetapi:</strong> panggilan bank kini <strong>di dalam</strong> transaksi. Modul 1 sudah larang ini:
+        <ul style="margin:.3em 0 0">
+          <li>Baris invois dikunci selama bank memproses (boleh 10 saat+)</li>
+          <li>Bank berjaya tetapi commit gagal: duit ditolak, tiada rekod</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Invoice::lockForUpdate() dipanggil terus di sini supaya contoh ringkas. Jika mahu ikut corak repository, tambah findForUpdate() dalam InvoiceRepository. Kita tidak pilih cara ini, jadi tidak perlu.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Penyelesaian terbaik · atomic lock · 1 / 2</span>
+  <h2>Satu klik sahaja dalam satu masa, untuk setiap invois</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Services/PaymentService.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10|20-24">
+namespace App\Services;
+
+use App\Billing\LatePenaltyCalculator;
+use App\Data\PaymentData;
+use App\Events\PaymentReceived;
+use App\Exceptions\InvoiceAlreadyPaidException;
+use App\Models\{Payment, Student};
+use App\Payments\PaymentProcessor;
+use App\Repositories\Contracts\InvoiceRepository;
+use Illuminate\Support\Facades\{Cache, DB};
+
+final class PaymentService
+{
+    public function __construct(
+        private InvoiceRepository $invoices,
+        private LatePenaltyCalculator $penalties,
+        private PaymentProcessor $processor,
+    ) {}
+
+    public function pay(Student $student, PaymentData $data): Payment
+    {
+        return Cache::lock("invoice:{$data->invoiceId}:pay", 30)
+            ->block(10, fn () => $this->payNow($student, $data));
+    }
+
+    // payNow(): slide seterusnya
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1.2em">
+        <li><code>Cache</code> ditambah pada baris <code>use</code> facade</li>
+        <li><code>Cache::lock()</code>: kunci dalam Redis, satu nama untuk setiap invois (<code>invoice:19:pay</code>)</li>
+        <li><code>30</code>: lock dilepaskan sendiri selepas 30 saat jika proses mati</li>
+        <li><code>block(10, ...)</code>: dapat lock, jalankan callback, lepaskan lock. Jika lock sedang dipegang, tunggu sehingga 10 saat.</li>
+      </ol>
+      <div class="callout" style="font-size:.52em">Klik kedua tidak bermula selagi klik pertama belum selesai, termasuk panggilan bank. Itulah yang <code>DB::transaction()</code> tidak boleh jamin.</div>
+    </div>
+  </div>
+  <aside class="notes">Controller tidak berubah: masih panggil $this->payments->pay(...). Constructor sama seperti Modul 1.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Penyelesaian terbaik · atomic lock · 2 / 2</span>
+  <h2><code>payNow()</code> = isi <code>pay()</code> Modul 1</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Services/PaymentService.php: sambungan class</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="16">
+private function payNow(Student $student, PaymentData $data): Payment
+{
+    $invoice = $this->invoices->findOrFail($data->invoiceId);
+    if ($invoice->paid_at !== null) {
+        throw InvoiceAlreadyPaidException::for($invoice);
+    }
+    $amount = $invoice->amount + $this->penalties->for($invoice, now());
+    // panggilan ke bank: di luar transaksi DB
+    $reference = $this->processor->charge($invoice, $data->method, $amount);
+    return DB::transaction(function () use ($invoice, $student, $data, $amount, $reference) {
+        $payment = $this->invoices->recordPayment($invoice, [
+            'student_id' => $student->id, 'method' => $data->method,
+            'amount' => $amount, 'reference' => $reference, 'paid_at' => now(),
+        ]);
+        PaymentReceived::dispatch($payment);
+        return $payment;
+    }, attempts: 3);
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="margin-top:1.2em">
+        <li>Badan method ini <strong>sama</strong> dengan <code>pay()</code> Modul 1. Hanya namanya berubah dan ia kini <code>private</code>.</li>
+        <li>Semakan <code>paid_at</code> kini selamat: hanya satu proses boleh berada di sini untuk invois yang sama</li>
+        <li>Bank masih di luar transaksi (peraturan Modul 1 kekal)</li>
+        <li><code>attempts: 3</code>: baharu, diterangkan dalam slide deadlock</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Penyelesaian terbaik · hasil</span>
+  <h2>Diuji: dua klik serentak</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">Output sebenar</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+klik2: bank caj RM480.00
+klik2: bayaran direkod
+klik1: InvoiceAlreadyPaidException: Invois INV0000019 sudah dibayar pada 21/11/2026 08:11.
+
+mysql> select count(*) from payments where invoice_id = 19;
+1
+      </code></pre>
+      <ul style="font-size:.55em">
+        <li>Bank caj <strong>sekali</strong></li>
+        <li>Klik kedua tunggu, kemudian dapat <code>InvoiceAlreadyPaidException</code>: <code>render()</code> Modul 1 pulangkan 409 atau mesej di borang</li>
+        <li>Tiada deadlock, tiada ralat 500</li>
+      </ul>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th></th><th>Modul 1</th><th><code>lockForUpdate()</code></th><th><code>Cache::lock()</code></th></tr></thead>
+        <tbody>
+          <tr><td>Caj bank berganda</td><td><i class="fa-solid fa-xmark" style="color:var(--bad)"></i> berlaku</td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> dihalang</td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> dihalang</td></tr>
+          <tr><td>Bank di luar transaksi</td><td><i class="fa-solid fa-check" style="color:var(--good)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--bad)"></i></td><td><i class="fa-solid fa-check" style="color:var(--good)"></i></td></tr>
+          <tr><td>Baris DB dikunci semasa bank proses</td><td>tidak</td><td><i class="fa-solid fa-xmark" style="color:var(--bad)"></i> ya</td><td><i class="fa-solid fa-check" style="color:var(--good)"></i> tidak</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn" style="font-size:.5em">Jika lock tidak dapat dalam 10 saat, <code>block()</code> lempar <code>Illuminate\Contracts\Cache\LockTimeoutException</code> (ralat 500). Tangkap dalam <code>pay()</code> dan lempar domain exception sendiri dengan <code>render()</code>, seperti <code>InvoiceAlreadyPaidException</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Deadlock</span>
+  <h2>Ralat 1213: dua transaksi saling menunggu</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">mysql&gt; SHOW ENGINE INNODB STATUS (dipendekkan, sebenar)</p>
+      <pre class="xs"><code class="language-plaintext" style="white-space:pre-wrap" data-trim>
+*** (1) TRANSACTION: update `invoices` set `paid_at` = ... where `id` = 16
+*** (1) HOLDS THE LOCK(S): ... lock mode S
+*** (2) TRANSACTION: update `invoices` set `paid_at` = ... where `id` = 16
+*** (2) HOLDS THE LOCK(S): ... lock mode S
+*** WE ROLL BACK TRANSACTION (2)
+      </code></pre>
+      <p style="font-size:.55em">MySQL kesan kitaran menunggu, pilih satu transaksi sebagai mangsa, rollback, dan lempar ralat 1213 kepada aplikasi.</p>
+    </div>
+    <div>
+      <p class="code-label">Cuba semula secara automatik</p>
+      <pre class="xs"><code class="language-php" data-trim>
+DB::transaction(function () {
+    // kerja DB sahaja
+}, attempts: 3);
+      </code></pre>
+      <p class="code-label">Diuji: tanpa lock, dengan <code>attempts: 3</code></p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+klik2: cubaan 1
+klik1: cubaan 1
+klik1: bayaran direkod
+klik2: cubaan 2
+klik2: invois sudah dibayar, berhenti
+      </code></pre>
+      <div class="callout warn" style="font-size:.5em"><strong>Hanya cuba semula kerja DB.</strong> Jika <code>charge()</code> bank berada dalam closure, setiap cubaan = caj baru. Sebab itu bank kekal di luar transaksi.</div>
+      <div class="callout" style="font-size:.5em">Kurangkan deadlock: transaksi pendek, kunci baris dalam susunan yang sama di semua tempat.</div>
+    </div>
+  </div>
+  <aside class="notes">Dengan Cache::lock, dua pembayaran untuk invois yang sama tidak lagi bertembung. attempts: 3 dalam payNow() melindungi daripada deadlock dengan proses lain, cth. kerja batch Bendahari yang kemas kini invois yang sama.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Ringkasan alat</span>
+  <h2>Pilih alat ikut masalah</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Masalah</th><th>Alat</th><th>Contoh dalam sistem yuran</th></tr></thead>
+    <tbody>
+      <tr><td>Beberapa tulisan mesti berjaya bersama</td><td><code>DB::transaction()</code></td><td>Rekod payment + tanda invois dibayar</td></tr>
+      <tr><td>Dua request ubah baris yang sama, kerja DB sahaja</td><td><code>lockForUpdate()</code> dalam transaksi</td><td>Bendahari kemas kini amaun invois semasa pelajar lihat</td></tr>
+      <tr><td>Dua request, ada panggilan luar (bank, emel)</td><td><code>Cache::lock()->block()</code></td><td><code>PaymentService::pay()</code></td></tr>
+      <tr><td>Deadlock sekali-sekala</td><td><code>attempts: 3</code></td><td>Transaksi dalam <code>payNow()</code></td></tr>
+      <tr><td>Rekod berulang walau semua lapisan gagal</td><td>Unique index</td><td><code>unique('reference')</code> pada <code>payments</code></td></tr>
+      <tr><td>Kesan sampingan selepas data disimpan</td><td><code>ShouldDispatchAfterCommit</code>, <code>DB::afterCommit()</code></td><td>Resit emel, padam cache</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================================================ -->
+<!-- LAB, RINGKASAN, SETERUSNYA                                 -->
+<!-- ============================================================ -->
+
+<section data-timing="1800" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab · 30 minit · individu, dibantu rakan semeja · baki <span data-countdown>30:00</span></span>
+  <h2>Optimasi dashboard Bendahari</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-2-lab</code>. Ukur dahulu, ubah, ukur semula.</p>
+      <ol class="steps" style="font-size:.56em">
+        <li><strong>N+1:</strong> halaman <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/bursary/overdue</code> ≤ 3 query</li>
+        <li><strong>Scope:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">outstanding()</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">overdue()</code>; tiada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">whereNull('paid_at')</code> di luar model</li>
+        <li><strong>Index:</strong> dua migration; <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">EXPLAIN ANALYZE</code> tunjuk index range scan; <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">migrate:rollback</code> lulus</li>
+        <li><strong>Cache:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">overdueSummary()</code> dalam Redis; padam selepas commit dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">recordPayment()</code></li>
+        <li><strong>Lock:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">pay()</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Cache::lock()</code>; jalankan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan lab:double-click {invoice}</code>, mesti 1 bayaran</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Tangkap skrin atau salin output: bilangan query, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">EXPLAIN ANALYZE</code> sebelum/selepas, kunci dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">redis-cli</code>, output <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">lab:double-click</code>.</p>
+      <p>Siap awal? Tambah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">unique('reference')</code> pada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">payments</code> dan uji apa yang berlaku bila rujukan sama dimasukkan dua kali.</p>
+    </div>
+  </div>
+  <aside class="notes">lab:double-click dalam branch: jalankan dua proses yang panggil PaymentService::pay() untuk invois yang sama secara serentak, dengan gateway palsu yang tidur 0.6 saat, kemudian cetak bilangan payment untuk invois itu.</aside>
+</section>
+
+<section data-timing="600">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Code review meja · 10 minit</span>
+  <h2>Semak kod rakan semeja</h2>
+  <div class="rule"></div>
+  <table style="font-size:.55em">
+    <thead><tr><th>Soalan semakan</th><th>Cari dalam kod</th></tr></thead>
+    <tbody>
+      <tr><td>Ada relationship disentuh dalam loop tanpa <code>with()</code>?</td><td>Blade <code>@foreach</code>, <code>-&gt;student</code>, <code>-&gt;programme</code></td></tr>
+      <tr><td>Syarat perniagaan ditaip di luar scope?</td><td><code>whereNull('paid_at')</code> dalam repository / controller</td></tr>
+      <tr><td>Setiap method interface ada dalam <strong>kedua-dua</strong> repository?</td><td><code>Eloquent…</code> dan <code>Cached…</code></td></tr>
+      <tr><td>Cache dipadam <strong>selepas commit</strong>?</td><td><code>forget()</code> tanpa <code>DB::afterCommit()</code></td></tr>
+      <tr><td>Ada panggilan luar di dalam <code>DB::transaction()</code>?</td><td><code>charge()</code>, <code>Http::</code>, <code>Mail::</code> dalam closure</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.55em; margin-top:.8em; text-align:center">Setiap meja pilih <strong>satu penemuan terbaik</strong> untuk dikongsi (1 minit).</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Ringkasan</span>
+  <h2>Modul 2 dalam satu slide</h2>
+  <div class="rule"></div>
+  <table style="font-size:.53em">
+    <thead><tr><th>Topik</th><th>Diukur dalam modul ini</th><th>Ingat</th></tr></thead>
+    <tbody>
+      <tr><td>N+1</td><td>101 → 3 query · 140 → 58 ms</td><td><code>with()</code> untuk data, <code>withSum()</code> untuk nombor</td></tr>
+      <tr><td>Advanced Eloquent</td><td>4 salinan syarat → 1 scope</td><td>Scope untuk syarat bernama; <code>unionAll</code> lalai</td></tr>
+      <tr><td>Indexing</td><td>75.7 → 0.1 ms · 33 → 16 ms</td><td>Kolum <code>=</code> dahulu; leftmost prefix; uji rollback</td></tr>
+      <tr><td>Redis</td><td>20.6 → 0.2 ms</td><td>Padam selepas commit + TTL (Time To Live) sebagai jaring</td></tr>
+      <tr><td>Transaksi</td><td>2 caj bank → 1</td><td>Bank di luar transaksi, <code>Cache::lock()</code> di luar semuanya</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.56em; margin-top:.8em"><strong>Ukur dahulu.</strong> Setiap optimasi dalam modul ini bermula dengan nombor: bilangan query, <code>EXPLAIN ANALYZE</code>, masa, atau output dua proses serentak.</div>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Seterusnya</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Modul 3 — Integrasi &amp; Keselamatan API</h1>
+  <p class="cover-sub">Sistem yuran yang sama, kini dibuka kepada aplikasi mudah alih UTM dan sistem luar:</p>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-code-compare"></i>API versioning &amp; rate limiting</span>
+    <span><i class="fa-solid fa-key"></i>Sanctum &amp; Passport</span>
+    <span><i class="fa-solid fa-user-shield"></i>Policy: pelajar hanya lihat invois sendiri</span>
+    <span><i class="fa-solid fa-shield-halved"></i>Security hardening</span>
+  </div>
+  <h3 style="margin-top:1.6em"><i class="fa-regular fa-comments" style="color:var(--accent); margin-right:.4em"></i>Soalan &amp; perbincangan</h3>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

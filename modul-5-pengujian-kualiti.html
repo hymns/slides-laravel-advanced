@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 5 — Pengujian &amp; Kualiti Sistem</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-b    { fill:#2a1416; stroke:#ff6b6b; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 5 · Pengujian &amp; Kualiti Sistem</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- HARI 3 · PEMBUKA & BAHAGIAN 01: UNIT TESTING               -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 5 / 6</span>
+  <h1 style="margin-top:.1em">Pengujian &amp; Kualiti Sistem</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-flask"></i>Unit testing</span>
+    <span><i class="fa-solid fa-globe"></i>Feature testing</span>
+    <span><i class="fa-solid fa-rotate"></i>Test-driven development</span>
+    <span><i class="fa-solid fa-file-lines"></i>Log management</span>
+    <span><i class="fa-solid fa-heart-pulse"></i>Monitoring</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">4 jam</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Teori · Live coding · Lab</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13 · Pest 4</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">Modul 5 bermula Hari 3 sejurus selepas Modul 4 (kira-kira 4:04 petang), kemudian bersambung Hari 4 pada 8:00 pagi. Tekan Shift+T di slide ini. Semua output ujian, log dan health check dalam modul ini diambil daripada larian sebenar pada Laravel 13.43, Pest 4.7 dan Telescope 5.29, dengan kod yang sama seperti Modul 1 hingga 4.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu menulis <strong>ujian automatik</strong> dan memantau kesihatan sistem secara berpusat.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh deploy dengan keyakinan menggunakan automated test suite (set ujian automatik) dan memantau sistem secara proaktif.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Sejak Modul 1, aliran bayaran yuran sudah berubah empat kali: kalkulator penalti, kunci baris, policy, event selepas commit. Setiap kali, kita uji dengan <code>curl</code> satu demi satu. Hari ini kita tulis ujian yang menyemak semuanya dalam <strong>kurang dari satu saat</strong>.</div>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual Modul 5</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">H3 4:09</span><h3>Ujian pertama</h3><p>Pest, folder Unit dan Feature</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H4 8:00</span><h3>Unit testing</h3><p>Dataset, mock, <code>Http::fake()</code></p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">H4 8:55</span><h3>Feature testing</h3><p>Endpoint bayaran, factory, fake</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">H4 9:44</span><h3>TDD</h3><p>Test-Driven Development: red, green, refactor</p></div>
+    <div class="slot" style="background:var(--good-soft)"><span class="time">H4 10:30</span><h3>Log management</h3><p>Channel, JSON, request_id</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">H4 10:53</span><h3 style="color:#fff">Monitoring</h3><p style="color:#b9c3d3">Health check, Telescope, amaran</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 5: Hari 3, 4:04 – 4:28 petang; Hari 4, 8:00 – 11:36 pagi.</p>
+  <aside class="notes">Hari 3 hanya bahagian pengenalan dan ujian pertama; baki masa hingga 5:00 untuk soal jawab Modul 4. Selepas Modul 5, Modul 6 (Pembangunan Dipandu AI) bermula pada Hari 4.</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-flask"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>Unit Testing</h2>
+  <p>Uji satu class, tanpa HTTP</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Masalah</span>
+  <h2>Bagaimana anda tahu bayaran masih betul?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Modul</th><th>Perubahan pada aliran bayaran</th><th>Yang boleh rosak tanpa disedari</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>LatePenaltyCalculator</code>, <code>PaymentProcessor</code></td><td>Amaun penalti salah</td></tr>
+      <tr><td>2</td><td><code>lockForUpdate()</code> untuk klik dua kali</td><td>Invois dibayar dua kali</td></tr>
+      <tr><td>3</td><td><code>InvoicePolicy</code>, <code>StorePaymentRequest</code>, token abilities</td><td>Aisyah boleh bayar invois Badrul</td></tr>
+      <tr><td>4</td><td><code>PaymentReceived</code> selepas commit, job ke sistem kewangan</td><td>Resit tidak dihantar</td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:.8em; font-size:.55em">
+    <div class="card bad"><h3><i class="fa-solid fa-hand"></i>Hari ini</h3><p>Selepas setiap perubahan, ulang 6 senario <code>curl</code> dengan tangan. Bila tergesa-gesa, langkau.</p></div>
+    <div class="card good"><h3><i class="fa-solid fa-robot"></i>Matlamat</h3><p>Satu arahan, <code>php artisan test</code>, semak semua senario setiap kali sebelum deploy.</p></div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Dua jenis ujian</span>
+  <h2>Unit atau feature?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.53em">
+    <thead><tr><th></th><th>Unit test</th><th>Feature test</th></tr></thead>
+    <tbody>
+      <tr><td>Uji</td><td>Satu class, panggil method terus</td><td>Satu request HTTP, dari route hingga pangkalan data</td></tr>
+      <tr><td>Folder</td><td><code>tests/Unit</code></td><td><code>tests/Feature</code></td></tr>
+      <tr><td>Contoh</td><td><code>LatePenaltyCalculator</code> kira 5%</td><td><code>POST /api/v1/payments</code> pulangkan 201</td></tr>
+      <tr><td>Kelajuan</td><td>Milisaat</td><td>Lebih perlahan: migrate, factory, middleware</td></tr>
+      <tr><td>Bila gagal</td><td>Tahu tepat class mana</td><td>Tahu ciri mana rosak, perlu cari punca</td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:.7em; font-size:.53em">
+    <p><strong>Pest</strong>: rangka kerja ujian yang Laravel tawarkan semasa <code>laravel new</code>, dibina di atas <strong>PHPUnit</strong>. Contoh ujian dalam Modul 1 sudah guna Pest. <code>php artisan test</code> menjalankan kedua-duanya.</p>
+    <p><code>phpunit.xml</code> menukar persekitaran semasa ujian: <code>DB_CONNECTION=sqlite</code> dalam memori, <code>QUEUE_CONNECTION=sync</code>, <code>MAIL_MAILER=array</code>. Ingat <code>sync</code> ini; ia akan muncul semula esok.</p>
+  </div>
+  <aside class="notes">Projek sedia ada tanpa Pest: composer require pestphp/pest pestphp/pest-plugin-laravel --dev -W, kemudian ./vendor/bin/pest --init (Pest 4.7 dengan PHPUnit 12 diuji). Ujian PHPUnit lama terus berjalan bersama ujian Pest. Nilai phpunit.xml di atas ialah nilai asal Laravel 13.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Ujian pertama</span>
+  <h2>Uji kalkulator penalti dari Modul 1</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Unit/LatePenaltyCalculatorTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8|9-11|13|15|18-26">
+use App\Billing\LatePenaltyCalculator;
+use App\Enums\FeeType;
+use App\Models\Invoice;
+use Illuminate\Support\Carbon;
+
+it('tiada penalti sebelum tarikh akhir', function () {
+    $invoice = new Invoice([
+        'type' => FeeType::Semester, 'amount' => 1100, 'due_date' => '2026-12-15',
+    ]);
+
+    $penalty = (new LatePenaltyCalculator)->for($invoice, Carbon::parse('2026-12-01'));
+
+    expect($penalty)->toBe(0.0);
+});
+
+it('penalti 5% untuk yuran semester yang lewat', function () {
+    $invoice = new Invoice([
+        'type' => FeeType::Semester, 'amount' => 1100, 'due_date' => '2026-12-15',
+    ]);
+
+    $penalty = (new LatePenaltyCalculator)->for($invoice, Carbon::parse('2026-12-20'));
+
+    expect($penalty)->toBe(55.0);
+});
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan make:test LatePenaltyCalculatorTest --unit
+      </code></pre>
+      <ul style="font-size:.53em">
+        <li><code>it('...')</code>: satu ujian. Nama ditulis sebagai ayat</li>
+        <li><strong>Sedia</strong>: invois dalam memori, tidak disimpan</li>
+        <li><strong>Laksana</strong>: panggil <code>for()</code>, hantar tarikh "hari ini" sendiri. Sebab inilah Modul 1 terima <code>$today</code> sebagai argumen, bukan panggil <code>now()</code></li>
+        <li><strong>Semak</strong>: <code>expect()->toBe()</code> banding nilai <em>dan</em> jenis (<code>===</code>)</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Sedia-Laksana-Semak ialah corak Arrange-Act-Assert. Dengan Pest dipasang, make:test --unit menjana fail Pest dengan satu test('example'). Jalankan ujian ini di slide seterusnya: ia gagal.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Ralat pertama</span>
+  <h2>Kenapa <code>connection()</code> dalam unit test?</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test
+
+  FAILED  Tests\Unit\LatePenaltyCalculatorTest
+  > it tiada penalti sebelum tarikh akhir    Error
+  Call to a member function connection() on null
+
+  at vendor/laravel/framework/src/Illuminate/
+     Database/Eloquent/Model.php:2331
+
+  Tests:    2 failed (0 assertions)
+      </code></pre>
+      <p style="font-size:.5em">Folder <code>tests/Unit</code> <strong>tidak memulakan Laravel</strong>. Cast <code>'due_date' =&gt; 'date'</code> pada <code>Invoice</code> perlukan sambungan pangkalan data untuk tahu format tarikh.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">tests/Unit/LatePenaltyCalculatorTest.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use Tests\TestCase;
+
+uses(TestCase::class);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  PASS  Tests\Unit\LatePenaltyCalculatorTest
+  ✓ it tiada penalti sebelum tarikh akhir      0.08s
+  ✓ it penalti 5% untuk yuran semester yang lewat
+
+  Tests:    2 passed (2 assertions)
+  Duration: 0.16s
+      </code></pre>
+      <p style="font-size:.5em"><code>uses(TestCase::class)</code> memulakan Laravel untuk fail ini sahaja. Ia masih unit test: satu class, tiada HTTP, tiada data disimpan.</p>
+    </div>
+  </div>
+  <aside class="notes">Lihat tests/Pest.php: pest()->extend(TestCase::class)->in('Feature') bermakna hanya folder Feature memulakan Laravel secara automatik. Class tulen tanpa model (contohnya PaymentProcessor esok) tidak perlu uses(). Dua cara lain: pindahkan ujian ke tests/Feature, atau tambah 'Unit' dalam Pest.php; uses() paling jelas kerana ia di dalam fail yang memerlukannya.</aside>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Tamat Hari 3</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Esok 8:00 pagi: sambung Modul 5</h1>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-check"></i>Unit lawan feature</span>
+    <span><i class="fa-solid fa-check"></i>Pest: <code>it()</code>, <code>expect()</code></span>
+    <span><i class="fa-solid fa-check"></i><code>uses(TestCase::class)</code> bila perlu Laravel</span>
+  </div>
+  <p class="cover-sub" style="margin-top:1.2em">Esok: mock, feature test endpoint bayaran, TDD (Test-Driven Development), log dan monitoring</p>
+  <aside class="notes">Baki masa hingga 5:00 untuk soal jawab Modul 4 dan peserta yang belum siap Lab 2 Modul 4. Esok pagi, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- HARI 4 · 8:00                                              -->
+<!-- ============================================================ -->
+
+<section data-timing="180" class="cover" data-state="no-footer" data-clock="08:00">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.4em">Hari 4 · 8:00 pagi · Modul 5 (sambungan)</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Ulang kaji semalam</h1>
+  <div class="card" style="max-width:900px; margin:1em auto 0; text-align:left; font-size:.62em">
+    <h3><i class="fa-solid fa-users"></i>Setiap meja jawab (3 minit)</h3>
+    <ol style="margin:0">
+      <li>Ujian <code>POST /api/v1/payments</code> pulangkan 201: unit atau feature? Kenapa?</li>
+      <li>Kenapa ujian pertama semalam gagal dengan <code>connection() on null</code>?</li>
+      <li>Kenapa <code>LatePenaltyCalculator::for()</code> terima <code>$today</code> dan tidak panggil <code>now()</code> sendiri?</li>
+    </ol>
+  </div>
+  <aside class="notes">Tekan Shift+T di slide ini supaya jam sesi bermula semula pada 8:00. Jawapan: (1) feature, kerana melalui route, middleware, policy dan pangkalan data. (2) folder Unit tidak memulakan Laravel, dan cast tarikh pada model perlukan sambungan DB; uses(TestCase::class). (3) supaya ujian boleh tetapkan tarikh sendiri; dengan now() keputusan ujian berubah ikut hari ia dijalankan.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Dataset</span>
+  <h2>Satu ujian, banyak kes</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Unit/LatePenaltyCalculatorTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1-4|6-11|12-15">
+function invoice(FeeType $type, float $amount): Invoice
+{
+    return new Invoice(['type' => $type, 'amount' => $amount, 'due_date' => '2026-12-15']);
+}
+
+it('kira penalti ikut jenis yuran', function (FeeType $type, float $amount, float $expected) {
+    $penalty = (new LatePenaltyCalculator)
+        ->for(invoice($type, $amount), Carbon::parse('2026-12-20'));
+
+    expect($penalty)->toBe($expected);
+})->with([
+    'semester 5%'          => [FeeType::Semester, 1100, 55.0],
+    'denda perpustakaan 0' => [FeeType::LibraryFine, 30, 0.0],
+]);
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li><code>invoice()</code>: fungsi bantu dalam fail ujian, supaya setiap kes satu baris</li>
+        <li><code>-&gt;with([...])</code>: setiap baris dihantar sebagai argumen ujian</li>
+        <li>Kunci array menjadi nama kes dalam output</li>
+        <li>Kes baru = tambah satu baris, bukan satu ujian</li>
+      </ul>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  PASS  Tests\Unit\LatePenaltyCalculatorTest
+  ✓ it tiada penalti sebelum tarikh akhir
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "semester 5%"
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "denda perpustakaan 0"
+
+  Tests:    3 passed (3 assertions)
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Dalam PHPUnit, ciri yang sama ialah attribute #[DataProvider]. Semua kes di sini lulus dengan kod asal Modul 1. Dalam Lab 1, Bendahari beri lima kes lagi dan dua daripadanya gagal.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Mocking dependencies</span>
+  <h2>Mock, fake, atau objek sebenar?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.53em">
+    <thead><tr><th></th><th>Apa</th><th>Contoh dalam sistem yuran</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Objek sebenar</strong></td><td>Tiada dependency luar, cepat</td><td><code>LatePenaltyCalculator</code>: guna terus</td></tr>
+      <tr><td><strong>Mock</strong> (Mockery)</td><td>Objek palsu yang anda programkan: pulangkan apa, dan semak ia dipanggil</td><td><code>PaymentGateway</code> dalam ujian <code>PaymentProcessor</code></td></tr>
+      <tr><td><strong>Fake</strong> sendiri</td><td>Class palsu yang anda tulis, implement interface yang sama</td><td><code>FakePaymentGateway</code> dari Modul 1</td></tr>
+      <tr><td><strong>Fake</strong> Laravel</td><td>Laravel ganti servis sebenar dan rekod apa yang berlaku</td><td><code>Http::fake()</code>, <code>Queue::fake()</code>, <code>Mail::fake()</code>, <code>Event::fake()</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:.8em; font-size:.55em">Mock hanya apa yang anda <strong>tidak mahu berlaku betul-betul</strong> dalam ujian: caj bank, panggilan ke sistem kewangan, emel. Jangan mock class yang sedang diuji.</div>
+  <aside class="notes">Mockery sudah ada dalam composer.json Laravel (mockery/mockery dalam require-dev). Interface PaymentGateway dari Modul 1 (prinsip DIP) menjadikan mock mudah: PaymentProcessor tidak tahu ia menerima objek palsu.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Mockery</span>
+  <h2>Uji <code>PaymentProcessor</code> tanpa bank</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Unit/PaymentProcessorTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="9-11|13-15|17-20">
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use App\Payments\PaymentGateway;
+use App\Payments\PaymentProcessor;
+
+it('caj melalui gateway yang menyokong kaedah bayaran', function () {
+    $invoice = new Invoice(['number' => 'INV0000001']);
+
+    $card = Mockery::mock(PaymentGateway::class);
+    $card->shouldReceive('supports')->with(PaymentMethod::Fpx)->andReturnFalse();
+    $card->shouldNotReceive('charge');
+
+    $fpx = Mockery::mock(PaymentGateway::class);
+    $fpx->shouldReceive('supports')->with(PaymentMethod::Fpx)->andReturnTrue();
+    $fpx->shouldReceive('charge')->once()->with($invoice, 1100.0)->andReturn('FPX424150');
+
+    $reference = (new PaymentProcessor([$card, $fpx]))
+        ->charge($invoice, PaymentMethod::Fpx, 1100.0);
+
+    expect($reference)->toBe('FPX424150');
+});
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>Mockery::mock(PaymentGateway::class)</code>: objek palsu yang implement interface</li>
+        <li><code>shouldReceive('supports')-&gt;andReturnFalse()</code>: jawapan yang kita tetapkan</li>
+        <li><code>shouldNotReceive('charge')</code>: gateway kad <strong>tidak boleh</strong> dicaj</li>
+        <li><code>once()-&gt;with($invoice, 1100.0)</code>: FPX dicaj tepat sekali, dengan amaun ini</li>
+        <li>Tiada <code>uses(TestCase::class)</code>: invois ini tiada tarikh, jadi tidak perlu Laravel</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Mock juga menyemak</span>
+  <h2>Bila <code>charge()</code> tidak dipanggil</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Payments/PaymentProcessor.php (rosakkan sengaja)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+if ($gateway->supports($method)) {
+    return 'FPX424150';   // lupa caj bank
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  FAILED  Tests\Unit\PaymentProcessorTest
+  > it caj melalui gateway yang…  InvalidCountException
+  Method charge(object(App\Models\Invoice), 1100)
+  from Mockery_0_App_Payments_PaymentGateway
+  should be called exactly 1 times but called 0 times.
+      </code></pre>
+      <p style="font-size:.5em">Nilai pulangan betul, tetapi bank tidak pernah dicaj. Hanya <code>once()</code> yang menangkapnya.</p>
+    </div>
+    <div>
+      <p class="code-label">tests/Unit/PaymentProcessorTest.php (ujian kedua)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+it('gagal jika tiada gateway menyokong kaedah bayaran', function () {
+    $fpx = Mockery::mock(PaymentGateway::class);
+    $fpx->shouldReceive('supports')->andReturnFalse();
+
+    (new PaymentProcessor([$fpx]))
+        ->charge(new Invoice, PaymentMethod::Counter, 50.0);
+})->throws(LogicException::class, 'Kaedah bayaran tidak disokong: counter');
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  ✓ it caj melalui gateway yang menyokong kaedah bayaran
+  ✓ it gagal jika tiada gateway menyokong kaedah bayaran
+  Tests:    2 passed (5 assertions)
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Tunjuk secara langsung: ubah PaymentProcessor seperti kiri, jalankan, kemudian kembalikan. Pest menyemak jangkaan Mockery secara automatik pada akhir setiap ujian. -&gt;throws() menyemak jenis exception dan mesejnya.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Fake Laravel</span>
+  <h2><code>Http::fake()</code> untuk <code>FpxGateway</code></h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Unit/FpxGatewayTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8|10-12|15|17|19-23">
+use App\Models\Invoice;
+use App\Payments\FpxGateway;
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
+
+uses(TestCase::class);
+
+beforeEach(function () {
+    config(['services.fpx.url' => 'https://fpx.test/charge', 'services.fpx.key' => 'kunci-ujian']);
+});
+
+it('hantar nombor invois dan amaun ke FPX', function () {
+    Http::fake(['fpx.test/*' => Http::response(['reference' => 'FPX424150'])]);
+
+    $reference = (new FpxGateway)->charge(new Invoice(['number' => 'INV0040006']), 1155.0);
+
+    expect($reference)->toBe('FPX424150');
+    Http::assertSent(fn (Request $request) =>
+        $request->hasHeader('Authorization', 'Bearer kunci-ujian')
+        && $request['invoice'] === 'INV0040006'
+        && $request['amount'] === 1155.0);
+});
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>Http</code> ialah facade, jadi perlu <code>uses(TestCase::class)</code></li>
+        <li><code>beforeEach()</code>: berjalan sebelum setiap ujian dalam fail</li>
+        <li><code>Http::fake([...])</code>: tiada request sebenar keluar; URL yang sepadan terima jawapan ini</li>
+        <li><code>Http::assertSent()</code>: semak header token dan isi request</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">FpxGateway sama seperti slide Strategy dalam Modul 1. Lihat bezanya dengan mock: di sini kita guna FpxGateway sebenar dan hanya palsukan rangkaian di bawahnya.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Fake Laravel</span>
+  <h2>Bila bank pulangkan 503</h2>
+  <div class="rule"></div>
+  <p class="code-label">tests/Unit/FpxGatewayTest.php (ujian kedua)</p>
+  <pre class="xs"><code class="language-php" data-trim>
+it('gagal jika FPX pulangkan ralat', function () {
+    Http::fake(['fpx.test/*' => Http::response(['message' => 'Bank tidak tersedia'], 503)]);
+
+    (new FpxGateway)->charge(new Invoice(['number' => 'INV0040006']), 1155.0);
+})->throws(RequestException::class);
+  </code></pre>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+  ✓ it hantar nombor invois dan amaun ke FPX
+  ✓ it gagal jika FPX pulangkan ralat
+  Tests:    2 passed (3 assertions)
+  </code></pre>
+  <p style="font-size:.55em"><code>-&gt;throw()</code> dalam gateway jadikan 503 satu exception, seperti job sistem kewangan dalam Modul 4. Ujian ini memastikan tiada siapa membuang <code>-&gt;throw()</code> kelak tanpa disedari.</p>
+</section>
+
+<section data-timing="1200" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 1 · 20 minit · individu, dibantu rakan semeja · baki <span data-countdown>20:00</span></span>
+  <h2>Cari pepijat dengan ujian</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.56em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-5-start</code>. Bendahari beri lima kes. Invois yuran bertarikh akhir 15 Dis 2026.</p>
+      <table style="font-size:.5em">
+        <thead><tr><th>Jenis</th><th>Amaun</th><th>Dibayar pada</th><th>Penalti</th></tr></thead>
+        <tbody>
+          <tr><td>Semester</td><td>1,100</td><td>1 Dis</td><td>0.00</td></tr>
+          <tr><td>Semester</td><td>1,100</td><td>20 Dis</td><td>55.00</td></tr>
+          <tr><td>Asrama</td><td>920</td><td>20 Dis</td><td>18.40</td></tr>
+          <tr><td>Denda perpustakaan</td><td>30</td><td>20 Dis</td><td>0.00</td></tr>
+          <tr><td>Semester</td><td>1,100</td><td>15 Dis, 10:30 pagi</td><td>0.00</td></tr>
+        </tbody>
+      </table>
+      <ol class="steps" style="font-size:.52em; margin-top:.5em">
+        <li>Tulis kelima-lima kes dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">LatePenaltyCalculatorTest</code> (guna dataset)</li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan test</code>. Untuk setiap kes merah, terangkan puncanya kepada meja</li>
+        <li>Betulkan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">LatePenaltyCalculator</code> sehingga semua hijau</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Output dengan kes merah sebelum dibetulkan, dan output <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">5 passed</code> selepasnya.</p>
+      <p>Siap awal? Dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentProcessorTest</code>, tambah kes dua gateway yang <strong>kedua-duanya</strong> menyokong FPX. Yang mana dicaj? Tulis ujian yang membuktikannya.</p>
+    </div>
+  </div>
+  <aside class="notes">Branch modul-5-start perlu ada: Pest dipasang, factory untuk Programme/Student/Invoice/Payment (state overdue() dan paid(), UserFactory state student() dan bursary()), dan LatePenaltyCalculator asal Modul 1 (dengan dua pepijat). Jangan dedahkan jawapan; slide seterusnya ialah debrief. Siap awal: gateway pertama dalam senarai yang dicaj (foreach berhenti pada yang pertama).</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Debrief Lab 1</span>
+  <h2>Dua kes merah, dua pepijat sebenar</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+  ✓ it tiada penalti sebelum tarikh akhir
+  ✓ it kira penalti ikut jenis yuran with dataset "semester 5%"
+  ⨯ it kira penalti ikut jenis yuran with dataset "asrama 2%"
+  ✓ it kira penalti ikut jenis yuran with dataset "denda perpustakaan 0"
+  ⨯ it tiada penalti jika bayar pada hari akhir
+
+  Failed asserting that 18.400000000000002 is identical to 18.4.
+  Failed asserting that 55.0 is identical to 0.0.
+
+  Tests:    2 failed, 3 passed (5 assertions)
+  </code></pre>
+  <div class="cols" style="font-size:.53em; margin-top:.6em">
+    <div class="card bad"><h3><i class="fa-solid fa-calculator"></i>Asrama: 18.400000000000002</h3><p><code>920 * 0.02</code> dalam float tidak tepat. Resit, laporan dan jumlah kutipan akan berbeza beberapa sen.</p></div>
+    <div class="card bad"><h3><i class="fa-regular fa-calendar"></i>Hari akhir: penalti RM55</h3><p><code>due_date</code> ialah 15 Dis <strong>00:00</strong>. Bayar pukul 10:30 pagi pada hari yang sama sudah dikira "lewat".</p></div>
+  </div>
+  <aside class="notes">Kedua-dua pepijat ada dalam kod Modul 1 sejak hari pertama dan tidak dikesan oleh ujian manual dengan curl, kerana kita tidak pernah cuba 920 atau bayar pada hari akhir. Pepijat kedua: PaymentService hantar now(), jadi setiap pelajar yang bayar pada hari akhir didenda.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Pembetulan</span>
+  <h2>Semua hijau</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Billing/LatePenaltyCalculator.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11|15-19|21">
+namespace App\Billing;
+
+use App\Enums\FeeType;
+use App\Models\Invoice;
+use Carbon\CarbonInterface;
+
+final class LatePenaltyCalculator
+{
+    public function for(Invoice $invoice, CarbonInterface $today): float
+    {
+        if ($today->lte($invoice->due_date->endOfDay())) {
+            return 0.0;
+        }
+
+        $rate = match ($invoice->type) {
+            FeeType::Semester    => 0.05,
+            FeeType::Hostel      => 0.02,
+            FeeType::LibraryFine => 0.0,
+        };
+
+        return round($invoice->amount * $rate, 2);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li><code>endOfDay()</code>: hari akhir berakhir 23:59:59, bukan 00:00</li>
+        <li><code>match</code> kini pulangkan kadar sahaja; satu tempat untuk darab dan bundarkan</li>
+        <li><code>round(..., 2)</code>: wang sentiasa dua tempat perpuluhan</li>
+      </ul>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  PASS  Tests\Unit\LatePenaltyCalculatorTest
+  ✓ it tiada penalti sebelum tarikh akhir
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "semester 5%"
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "asrama 2%"
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "denda perpustakaan 0"
+  ✓ it tiada penalti jika bayar pada hari akhir
+
+  Tests:    5 passed (5 assertions)
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Ujian kini menjadi pagar: jika seseorang buang endOfDay() kelak, ujian hari akhir terus merah. Ini yang dimaksudkan "deploy dengan keyakinan".</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Apa yang perlu dipalsukan?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Ujian</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Bundarkan penalti asrama 920 kepada 18.40</td><td class="fragment">Tiada. Guna <code>LatePenaltyCalculator</code> sebenar</td></tr>
+      <tr><td>2</td><td><code>FpxGateway</code> hantar token dalam header <code>Authorization</code></td><td class="fragment"><code>Http::fake()</code> dan <code>Http::assertSent()</code></td></tr>
+      <tr><td>3</td><td><code>PaymentProcessor</code> tidak caj gateway kad untuk bayaran FPX</td><td class="fragment">Mock <code>PaymentGateway</code> dengan <code>shouldNotReceive('charge')</code></td></tr>
+      <tr><td>4</td><td>Eksport laporan (Modul 4) pulangkan 202 tanpa menjana fail</td><td class="fragment"><code>Queue::fake()</code>, kemudian <code>Queue::assertPushed(ExportCollectionReport::class)</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu. Soalan 4 ialah jambatan ke bahagian Feature Testing seterusnya.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 02: FEATURE TESTING                               -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-globe"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>Feature Testing</h2>
+  <p>Uji endpoint HTTP dengan pangkalan data sebenar</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Data ujian</span>
+  <h2>Factory: invois dalam satu baris</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">database/factories/InvoiceFactory.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="9-19|12|13">
+namespace Database\Factories;
+
+use App\Enums\FeeType;
+use App\Models\Student;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class InvoiceFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'student_id' => Student::factory(),
+            'number' => fake()->unique()->numerify('INV#######'),
+            'type' => FeeType::Semester,
+            'amount' => 1100,
+            'due_date' => now()->addWeeks(2),
+            'paid_at' => null,
+        ];
+    }
+
+    // overdue() dan paid(): slide seterusnya
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li><code>definition()</code>: nilai asal setiap invois baru</li>
+        <li><code>Student::factory()</code>: pelajar dicipta sekali jika tidak diberi</li>
+        <li><code>fake()-&gt;unique()</code>: nombor invois tidak berulang dalam satu ujian, dan ikut format <code>INV</code> + 7 digit dari Modul 3</li>
+        <li>Model perlu <code>use HasFactory</code></li>
+        <li>Jana dengan <code>php artisan make:factory InvoiceFactory</code></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Factory Programme dan Student mengikut corak yang sama (ada dalam branch modul-5-start). UserFactory student() guna closure supaya setiap pengguna dapat pelajar baru. Laravel menyediakan UserFactory; yang lain dijana dengan php artisan make:factory InvoiceFactory.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Data ujian</span>
+  <h2>State: nama untuk situasi yang kerap diuji</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">database/factories/InvoiceFactory.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function overdue(): static
+{
+    return $this->state(['due_date' => now()->subDays(10)]);
+}
+
+public function paid(): static
+{
+    return $this->state(['paid_at' => now()->subDay()]);
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">database/factories/UserFactory.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function student(): static
+{
+    return $this->state(fn () => [
+        'student_id' => Student::factory(),
+        'role' => 'student',
+    ]);
+}
+
+public function bursary(): static
+{
+    return $this->state(['role' => 'bursary']);
+}
+      </code></pre>
+    </div>
+  </div>
+  <div class="cols" style="margin-top:.3em">
+    <div>
+      <p class="code-label">Dalam ujian</p>
+      <pre class="xs"><code class="language-php" data-trim>
+$aisyah = User::factory()->student()->create();
+$invoice = Invoice::factory()
+    ->for($aisyah->student)->overdue()->create(['amount' => 920]);
+      </code></pre>
+    </div>
+    <ul style="font-size:.52em">
+      <li><code>for($aisyah-&gt;student)</code>: invois milik Aisyah, bukan pelajar baru</li>
+      <li>State boleh digabung; <code>create([...])</code> mengatasi nilai tertentu</li>
+      <li>Setiap ujian bermula dengan pangkalan data kosong: cipta hanya apa yang ujian perlukan</li>
+    </ul>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Feature test pertama</span>
+  <h2>Aisyah bayar invoisnya</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Feature/PayInvoiceTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="5-6|8|10-13|15-16">
+use App\Models\{Invoice, User};
+use Laravel\Sanctum\Sanctum;
+
+it('pelajar boleh bayar invois sendiri', function () {
+    $user = User::factory()->student()->create();
+    $invoice = Invoice::factory()->for($user->student)->create(['amount' => 1100]);
+
+    Sanctum::actingAs($user, ['payments:create']);
+
+    $this->postJson('/api/v1/payments', [
+        'invoice_id' => $invoice->id,
+        'method' => 'fpx',
+    ])->assertCreated();
+
+    $this->assertDatabaseHas('payments', ['invoice_id' => $invoice->id, 'method' => 'fpx']);
+    expect($invoice->fresh()->paid_at)->not->toBeNull();
+});
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">tests/Pest.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
+    ->in('Feature');
+      </code></pre>
+      <ul style="font-size:.53em">
+        <li><code>RefreshDatabase</code>: migrate sekali, setiap ujian dalam transaksi yang di-rollback. Data tidak bocor ke ujian lain. Buang komen baris ini dalam <code>Pest.php</code></li>
+        <li><code>Sanctum::actingAs($user, [...])</code>: log masuk dengan token yang ada abilities ini, tanpa <code>POST /tokens</code></li>
+        <li><code>postJson()</code>: request sebenar melalui route, middleware, FormRequest, policy dan <code>PaymentService</code></li>
+        <li><code>assertDatabaseHas()</code>: semak baris dalam jadual</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Jalankan ujian ini di slide seterusnya. Ia gagal dengan 500, dan sebabnya bukan dalam kod bayaran.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Perangkap · <code>QUEUE_CONNECTION=sync</code></span>
+  <h2>Ujian yang menghubungi sistem kewangan</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  FAILED  Tests\Feature\PayInvoiceTest
+  > it pelajar boleh bayar invois sendiri
+  Expected response status code [201] but received 500.
+
+The following exception occurred during the last request:
+
+GuzzleHttp\Exception\ConnectException: cURL error 7:
+Failed to connect to 127.0.0.1:8790 after 0 ms
+... for http://127.0.0.1:8790/payments
+      </code></pre>
+      <p style="font-size:.5em"><code>phpunit.xml</code> tetapkan queue <code>sync</code>, jadi <code>SyncPaymentToFinance</code> (Modul 4) berjalan <strong>serta-merta</strong> dan menghantar bayaran ujian ke <code>FINANCE_URL</code> dalam <code>.env</code>. Jika pelayan itu hidup, data palsu masuk ke sistem kewangan.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Jobs\SyncPaymentToFinance;
+use App\Listeners\SendPaymentReceipt;
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Support\Facades\Queue;
+
+// baris pertama dalam ujian
+Queue::fake();
+
+// ... postJson() seperti tadi ...
+
+Queue::assertPushed(SyncPaymentToFinance::class);
+Queue::assertPushed(CallQueuedListener::class,
+    fn ($job) => $job->class === SendPaymentReceipt::class);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  ✓ it pelajar boleh bayar invois sendiri    0.21s
+  Tests:    1 passed (5 assertions)
+      </code></pre>
+      <p style="font-size:.5em">Job direkod, tidak dijalankan. Ujian kini juga membuktikan resit dan salinan kewangan <strong>dihantar ke queue</strong>.</p>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.5em; margin-top:.4em">Jaring keselamatan: tambah <code>beforeEach(fn () =&gt; Http::preventStrayRequests());</code> dalam <code>tests/Pest.php</code>. Request yang terlepas gagal dengan <code>StrayRequestException: Attempted request to [http://127.0.0.1:8790/payments] without a matching fake.</code></div>
+  <aside class="notes">Listener ShouldQueue (SendPaymentReceipt) masuk ke queue sebagai CallQueuedListener, sebab itu semakan kedua guna $job-&gt;class. Event PaymentReceived (ShouldDispatchAfterCommit) tetap dihantar dalam RefreshDatabase kerana Laravel mengambil kira transaksi ujian. Kedua-dua output di sini dari larian sebenar.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Peraturan bisnes</span>
+  <h2>Uji apa yang <em>tidak</em> boleh berlaku</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">tests/Feature/PayInvoiceRulesTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="5-9|11-19|21-27">
+use App\Models\{Invoice, User};
+use Illuminate\Support\Facades\Queue;
+use Laravel\Sanctum\Sanctum;
+
+beforeEach(function () {
+    Queue::fake();
+    $this->aisyah = User::factory()->student()->create();
+    Sanctum::actingAs($this->aisyah, ['payments:create']);
+});
+
+it('tidak boleh bayar invois pelajar lain', function () {
+    $badrul = User::factory()->student()->create();
+    $invoice = Invoice::factory()->for($badrul->student)->create();
+
+    $this->postJson('/api/v1/payments', ['invoice_id' => $invoice->id, 'method' => 'fpx'])
+        ->assertForbidden();
+
+    $this->assertDatabaseCount('payments', 0);
+});
+
+it('menolak kaedah bayaran yang tidak wujud', function () {
+    $invoice = Invoice::factory()->for($this->aisyah->student)->create();
+
+    $this->postJson('/api/v1/payments', ['invoice_id' => $invoice->id, 'method' => 'cash'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['method']);
+});
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+  PASS  Tests\Feature\PayInvoiceRulesTest
+  ✓ it tidak boleh bayar invois pelajar lain
+  ✓ it menolak kaedah bayaran yang tidak wujud
+  ✓ it tidak boleh bayar invois yang sudah dibayar
+  ✓ it caj penalti jika invois lewat
+  ✓ it token tanpa ability payments:create ditolak
+
+  Tests:    5 passed (9 assertions)
+      </code></pre>
+      <table style="font-size:.48em">
+        <thead><tr><th>Ujian</th><th>Modul</th><th>Assert</th></tr></thead>
+        <tbody>
+          <tr><td>Invois orang lain</td><td>3 (policy)</td><td><code>assertForbidden()</code> 403</td></tr>
+          <tr><td>Kaedah <code>cash</code></td><td>3 (FormRequest)</td><td><code>assertUnprocessable()</code> 422</td></tr>
+          <tr><td>Sudah dibayar</td><td>1 (exception)</td><td><code>assertConflict()</code> 409</td></tr>
+          <tr><td>Invois lewat</td><td>1 (penalti)</td><td><code>assertJsonPath('data.amount', '1155.00')</code></td></tr>
+          <tr><td>Token <code>invoices:read</code></td><td>3 (abilities)</td><td><code>assertForbidden()</code> 403</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">Tiga ujian lain mengikut corak yang sama: Invoice::factory()-&gt;paid(), -&gt;overdue() dengan amount 1100 (1100 + 5% = 1155.00), dan Sanctum::actingAs($this-&gt;aisyah, ['invoices:read']) di dalam ujian. assertDatabaseCount membuktikan 403 tidak meninggalkan separuh bayaran.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Perangkap · SQLite lawan MySQL</span>
+  <h2>Lulus di production, gagal dalam ujian</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">tests/Feature/ShowInvoiceTest.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+$this->getJson("/api/v1/invoices/{$invoice->id}")
+    ->assertOk()
+    ->assertJsonPath('data.amount', '1100.00');
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# SQLite dalam memori (phpunit.xml)
+  Failed asserting that 1100 is identical to '1100.00'.
+
+# MySQL 8
+  ✓ it pelajar melihat amaun invois sendiri
+      </code></pre>
+      <p style="font-size:.5em">MySQL pulangkan kolum <code>decimal</code> sebagai teks <code>"1100.00"</code>; SQLite pulangkan nombor <code>1100</code>. API yang sama, JSON berbeza.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Models/Invoice.php dan Payment.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+protected $casts = [
+    // ... cast sedia ada ...
+    'amount' => 'decimal:2',
+];
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test
+  Tests:    15 passed (27 assertions)
+  Duration: 0.29s
+
+$ DB_CONNECTION=mysql DB_DATABASE=utm_test php artisan test
+  Tests:    15 passed (27 assertions)
+  Duration: 0.74s
+      </code></pre>
+      <p style="font-size:.5em">Cast menentukan bentuk JSON, bukan pangkalan data. Ujian SQLite pantas untuk setiap simpanan; jalankan juga dengan MySQL sebelum deploy.</p>
+    </div>
+  </div>
+  <aside class="notes">Pembolehubah dari baris arahan mengatasi &lt;env&gt; dalam phpunit.xml, jadi DB_CONNECTION=mysql berkesan. Pangkalan data utm_test mesti wujud dan kosong; RefreshDatabase akan migrate. Jangan sekali-kali guna pangkalan data sebenar: RefreshDatabase memadam semua jadual.</aside>
+</section>
+
+<section data-timing="1200" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 2 · 20 minit · individu, dibantu rakan semeja · baki <span data-countdown>20:00</span></span>
+  <h2>Siapa boleh lihat invois?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.56em">Tulis <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">tests/Feature/InvoiceAccessTest.php</code> untuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">GET /api/v1/invoices/{invoice}</code>. Guna <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">beforeEach()</code> untuk cipta Aisyah dan invoisnya.</p>
+      <table style="font-size:.52em">
+        <thead><tr><th>Siapa</th><th>Jangkaan</th></tr></thead>
+        <tbody>
+          <tr><td>Aisyah, token <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">invoices:read</code></td><td>200, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">data.number</code> sama</td></tr>
+          <tr><td>Pelajar lain</td><td>403</td></tr>
+          <tr><td>Bendahari (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">bursary()</code>)</td><td>200</td></tr>
+          <tr><td>Tiada token</td><td>401</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.52em; margin-top:.5em">Kemudian jalankan seluruh suite sekali dengan MySQL (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DB_CONNECTION=mysql DB_DATABASE=utm_test</code>).</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Empat ujian hijau, dan output suite penuh dengan SQLite dan MySQL.</p>
+      <p>Siap awal? Invois yang tidak wujud (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/api/v1/invoices/999</code>) mesti pulangkan 404. Kemudian terangkan kepada meja: kenapa 404 dan bukan 403?</p>
+    </div>
+  </div>
+  <aside class="notes">Jawapan rujukan diuji: Sanctum::actingAs(User::factory()-&gt;bursary()-&gt;create(), ['invoices:read']) untuk Bendahari; tanpa actingAs untuk 401 (assertUnauthorized). Siap awal: route model binding gagal cari invois sebelum policy dijalankan, jadi 404 (assertNotFound). Sediakan pangkalan data kosong utm_test pada mesin peserta.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 03: TDD                                           -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-rotate"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Test-Driven Development</h2>
+  <p>Tulis ujian dahulu, kemudian kod</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Aliran kerja TDD (Test-Driven Development)</span>
+  <h2>Merah, hijau, kemas</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1000 260" style="max-width:900px; margin:0 auto" role="img" aria-label="Kitaran TDD: tulis ujian yang gagal, tulis kod paling sedikit untuk lulus, kemudian kemaskan kod dengan ujian kekal hijau">
+    <defs><marker id="m5t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <rect x="20" y="40" width="260" height="130" rx="14" fill="#3a1717" stroke="#c0504d"/>
+    <text class="t" x="150" y="85" text-anchor="middle" style="font-size:22px; fill:#ff8a80">1 · RED</text>
+    <text class="t-s" x="150" y="115" text-anchor="middle">Tulis satu ujian.</text>
+    <text class="t-s" x="150" y="140" text-anchor="middle">Jalankan. Ia mesti gagal.</text>
+    <rect x="370" y="40" width="260" height="130" rx="14" fill="#0b2e20" stroke="#4cc47f"/>
+    <text class="t" x="500" y="85" text-anchor="middle" style="font-size:22px; fill:#9be3b7">2 · GREEN</text>
+    <text class="t-s" x="500" y="115" text-anchor="middle">Kod paling sedikit</text>
+    <text class="t-s" x="500" y="140" text-anchor="middle">supaya ujian lulus.</text>
+    <rect x="720" y="40" width="260" height="130" rx="14" fill="#13233d" stroke="#5b8def"/>
+    <text class="t" x="850" y="85" text-anchor="middle" style="font-size:22px; fill:#9cc0ff">3 · REFACTOR</text>
+    <text class="t-s" x="850" y="115" text-anchor="middle">Kemaskan kod.</text>
+    <text class="t-s" x="850" y="140" text-anchor="middle">Semua ujian kekal hijau.</text>
+    <path d="M280 105 L365 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m5t)"/>
+    <path d="M630 105 L715 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m5t)"/>
+    <path d="M850 170 C850 240, 150 240, 150 175" fill="none" stroke="#9aa5b8" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#m5t)"/>
+    <text class="t-ws" x="500" y="248" text-anchor="middle">peraturan seterusnya</text>
+  </svg>
+  <div class="callout" style="font-size:.55em; margin-top:.6em">Keperluan baru dari Bendahari: <strong>penalti lewat tidak boleh melebihi RM200</strong>, walaupun 5% daripada yuran lebih tinggi.</div>
+  <aside class="notes">Kenapa mesti lihat merah dahulu: ujian yang tidak pernah gagal mungkin tidak menguji apa-apa (contohnya salah nama class atau assert yang sentiasa benar). Satu pusingan sepatutnya beberapa minit sahaja.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">1 · Red</span>
+  <h2>Ujian dahulu, sebelum satu baris kod</h2>
+  <div class="rule"></div>
+  <p class="code-label">tests/Unit/LatePenaltyCalculatorTest.php (tambah)</p>
+  <pre class="xs"><code class="language-php" data-trim>
+it('penalti tidak melebihi RM200', function () {
+    $penalty = (new LatePenaltyCalculator)
+        ->for(invoice(FeeType::Semester, 4800), Carbon::parse('2026-12-20'));
+
+    expect($penalty)->toBe(200.0);
+});
+  </code></pre>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test --filter=RM200
+
+  FAIL  Tests\Unit\LatePenaltyCalculatorTest
+  ⨯ it penalti tidak melebihi RM200                    0.07s
+  FAILED  Tests\Unit\LatePenaltyCalculatorTest > it penalti tidak melebihi RM200
+  Failed asserting that 240.0 is identical to 200.0.
+
+  Tests:    1 failed (1 assertions)
+  </code></pre>
+  <p style="font-size:.55em">Merah untuk sebab yang <strong>betul</strong>: 5% daripada 4,800 = 240. Ujian ini kini spesifikasi yang boleh dijalankan.</p>
+  <aside class="notes">--filter menjalankan ujian yang namanya mengandungi teks itu sahaja, supaya kitaran pantas. Amaun 4,800 dipilih supaya 5% melebihi had.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">2 · Green</span>
+  <h2>Kod paling sedikit yang lulus</h2>
+  <div class="rule"></div>
+  <p class="code-label">app/Billing/LatePenaltyCalculator.php (satu baris berubah)</p>
+  <pre class="xs"><code class="language-php" data-trim>
+return min(round($invoice->amount * $rate, 2), 200.0);
+  </code></pre>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test --filter=RM200
+
+  PASS  Tests\Unit\LatePenaltyCalculatorTest
+  ✓ it penalti tidak melebihi RM200                    0.06s
+
+  Tests:    1 passed (1 assertions)
+  </code></pre>
+  <p style="font-size:.55em">Belum cantik: nombor <code>200.0</code> tanpa nama. Tidak mengapa. Lulus dahulu, kemas kemudian.</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">3 · Refactor</span>
+  <h2>Beri nama, kemudian jalankan semua</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Billing/LatePenaltyCalculator.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="3|19">
+final class LatePenaltyCalculator
+{
+    private const MAX_PENALTY = 200.0;
+
+    public function for(Invoice $invoice, CarbonInterface $today): float
+    {
+        if ($today->lte($invoice->due_date->endOfDay())) {
+            return 0.0;
+        }
+
+        $rate = match ($invoice->type) {
+            FeeType::Semester    => 0.05,
+            FeeType::Hostel      => 0.02,
+            FeeType::LibraryFine => 0.0,
+        };
+
+        return min(round($invoice->amount * $rate, 2), self::MAX_PENALTY);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan test tests/Unit/LatePenaltyCalculatorTest.php
+
+  PASS  Tests\Unit\LatePenaltyCalculatorTest
+  ✓ it tiada penalti sebelum tarikh akhir
+  ✓ it kira penalti ikut jenis yuran
+      with dataset "semester 5%"
+  ✓ ... with dataset "asrama 2%"
+  ✓ ... with dataset "denda perpustakaan 0"
+  ✓ it tiada penalti jika bayar pada hari akhir
+  ✓ it penalti tidak melebihi RM200
+
+  Tests:    6 passed (6 assertions)
+      </code></pre>
+      <ul style="font-size:.53em">
+        <li>Refactor hanya bila semua hijau</li>
+        <li>Jalankan <strong>semua</strong> ujian fail, bukan <code>--filter</code> sahaja: had baru tidak merosakkan kes lain</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Dalam kehidupan sebenar, angka 200 mungkin datang dari config('fees.max_penalty'); itu juga refactor, dan ujian sama melindunginya.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SARAPAN 10:00                                              -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">10:00 – 10:15 pagi</span>
+  <h1 style="margin:.1em 0 .2em">Sarapan · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: Lab 3, TDD (Test-Driven Development) secara berpasangan</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- LAB 3, BAHAGIAN 04: LOG MANAGEMENT                         -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 3 · 15 minit · berpasangan dalam meja · baki <span data-countdown>15:00</span></span>
+  <h2>Diskaun bayar awal, ujian dahulu</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.56em">Bendahari: yuran <strong>semester</strong> yang dibayar <strong>sekurang-kurangnya 14 hari</strong> sebelum tarikh akhir dapat diskaun <strong>2%</strong>. Jenis lain: tiada diskaun.</p>
+      <ol class="steps" style="font-size:.53em">
+        <li>Seorang menaip, seorang menyemak. Tukar peranan selepas setiap pusingan</li>
+        <li>Tulis ujian dataset untuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">EarlyPaymentDiscount::for($invoice, $today)</code> sebelum class wujud</li>
+        <li>Jalankan: merah pertama ialah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Class "App\Billing\EarlyPaymentDiscount" not found</code></li>
+        <li>Kod paling sedikit sehingga hijau, kemudian kemaskan</li>
+      </ol>
+      <p style="font-size:.52em">Kes untuk invois 1,100, tarikh akhir 15 Dis: 25 Nov → 22.00; 1 Dis 4:00 petang → 22.00; 2 Dis → 0.00; asrama 25 Nov → 0.00.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Tunjuk kepada pasangan output merah <strong>sebelum</strong> kod ditulis, dan output hijau selepasnya.</p>
+      <p>Siap awal? Bendahari tambah: diskaun tidak diberi jika invois sudah lewat bayar semester lepas. Apa ujian yang anda perlukan dahulu? Bincangkan dengan meja, jangan tulis kod.</p>
+    </div>
+  </div>
+  <aside class="notes">Jawapan rujukan diuji (4 kes lulus): $earlyEnough = $today-&gt;lte($invoice-&gt;due_date-&gt;subDays(14)-&gt;endOfDay()); jika bukan Semester atau tidak cukup awal pulangkan 0.0, jika tidak round($invoice-&gt;amount * 0.02, 2). Kes 1 Dis 4:00 petang menguji sempadan tepat 14 hari, sama seperti pepijat hari akhir dalam Lab 1.</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-file-lines"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Log Management</h2>
+  <p>Channel, structured logging, dan apa yang tidak boleh ditulis</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Asas</span>
+  <h2>Level dan channel</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">.env (nilai asal Laravel 13)</p>
+      <pre class="xs"><code class="language-ini" data-trim>
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_LEVEL=debug
+      </code></pre>
+      <p class="code-label">config/logging.php (petikan)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+'stack' => [
+    'driver' => 'stack',
+    'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+],
+'daily' => [
+    'driver' => 'daily',
+    'path' => storage_path('logs/laravel.log'),
+    'level' => env('LOG_LEVEL', 'debug'),
+    'max_files' => env('LOG_DAILY_DAYS', 14),
+],
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li><code>single</code>: satu fail yang membesar tanpa had</li>
+        <li><code>daily</code>: satu fail sehari, simpan 14 hari. Untuk pelayan: <code>LOG_STACK=daily</code></li>
+        <li><code>stack</code>: hantar ke beberapa channel serentak</li>
+      </ul>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Level</th><th>Contoh dalam sistem yuran</th></tr></thead>
+        <tbody>
+          <tr><td><code>critical</code></td><td>Job ke sistem kewangan gagal selepas 4 cubaan (<code>failed()</code>, Modul 4)</td></tr>
+          <tr><td><code>error</code></td><td>Exception yang tidak ditangkap (Laravel log sendiri)</td></tr>
+          <tr><td><code>warning</code></td><td>Amaun invois diubah (<code>InvoiceObserver</code>, Modul 4)</td></tr>
+          <tr><td><code>info</code></td><td>Bayaran diterima</td></tr>
+          <tr><td><code>debug</code></td><td>Nilai pembolehubah semasa menyiasat</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.52em; margin-top:.6em"><code>LOG_LEVEL</code> ialah had bawah: <code>LOG_LEVEL=info</code> di production membuang semua <code>debug</code>. Level lain (<code>emergency</code>, <code>alert</code>, <code>notice</code>) jarang diperlukan.</div>
+    </div>
+  </div>
+  <aside class="notes">Laravel 13 guna kunci max_files (bukan days seperti versi lama) dan pemboleh ubah LOG_DAILY_DAYS. Semua level mengikut RFC 5424; Laravel guna pustaka Monolog.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Structured logging</span>
+  <h2>Channel khas bayaran, satu baris JSON</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">config/logging.php (tambah dalam 'channels')</p>
+      <pre class="xs"><code class="language-php" data-trim>
+'payments' => [
+    'driver' => 'daily',
+    'path' => storage_path('logs/payments.log'),
+    'level' => 'info',
+    'max_files' => 90,
+    'formatter' => Monolog\Formatter\JsonFormatter::class,
+],
+      </code></pre>
+      <p class="code-label">app/Services/PaymentService.php (dalam transaksi, selepas event)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Log::channel('payments')->info('Bayaran diterima', [
+    'invoice' => $invoice->number,
+    'amount' => $payment->amount,
+    'method' => $payment->method->value,
+    'reference' => $payment->reference,
+]);
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">storage/logs/payments-2026-11-22.log</p>
+      <pre class="xs"><code class="language-json" data-trim>
+{
+  "message": "Bayaran diterima",
+  "context": {
+    "invoice": "INV0040008",
+    "amount": "1155.00",
+    "method": "fpx",
+    "reference": "SBX852654"
+  },
+  "level_name": "INFO",
+  "datetime": "2026-11-22T07:26:54.946088+00:00"
+}
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li>Satu baris JSON setiap peristiwa: boleh dicari dengan <code>jq</code> atau dihantar ke Graylog, ELK, Loki</li>
+        <li>Teks bebas (<code>"Aisyah bayar 1155"</code>) sukar ditapis; medan bernama mudah</li>
+        <li>90 hari, berasingan dari log ralat aplikasi</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Output asal ialah satu baris; di sini dipaparkan berbilang baris dan medan level, channel serta extra disembunyikan. Contoh cari: jq 'select(.context.method == "fpx")' storage/logs/payments-*.log. Graylog, ELK (Elasticsearch, Logstash, Kibana) dan Loki tidak diuji dalam kursus ini.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Context</span>
+  <h2>Satu <code>request_id</code>, dari request hingga worker</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Middleware/AssignRequestId.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="14-15|17">
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Context;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
+
+final class AssignRequestId
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        $id = (string) Str::uuid();
+        Context::add('request_id', $id);
+
+        return $next($request)->header('X-Request-Id', $id);
+    }
+}
+      </code></pre>
+      <p class="code-label">routes/api.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::prefix('v1')->middleware(AssignRequestId::class)->group(function () {
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -i -X POST .../api/v1/payments ...
+HTTP/1.1 201 Created
+X-Request-Id: 945f7b96-0e66-4665-a780-dabe67f99e54
+      </code></pre>
+      <p class="code-label">payments log: request, kemudian worker</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+"Bayaran diterima" ...
+  "extra":{"request_id":"945f7b96-0e66-4665-a780-dabe67f99e54"}
+"Disalin ke sistem kewangan" ...
+  "extra":{"request_id":"945f7b96-0e66-4665-a780-dabe67f99e54"}
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li><code>Context::add()</code>: setiap log selepas ini dapat medan tersebut, tanpa ditulis semula</li>
+        <li>Context <strong>dibawa ke job dalam queue</strong>: baris kedua ditulis oleh worker, request_id sama</li>
+        <li>Aduan pelajar beri <code>X-Request-Id</code>, anda cari satu ID untuk seluruh perjalanan</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Middleware dipasang pada kumpulan route dalam routes/api.php, jadi tidak perlu ubah bootstrap/app.php. Baris kedua datang dari SyncPaymentToFinance (Modul 4) yang ditambah Log::channel('payments')-&gt;info('Disalin ke sistem kewangan', ['reference' =&gt; ...]) selepas -&gt;throw(). Context ialah ciri Laravel 11 ke atas.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · data sensitif</span>
+  <h2>Kata laluan dalam log</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">app/Http/Controllers/Api/V1/TokenController.php · store()</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Log::info('Cubaan log masuk', $request->all());
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+local.INFO: Cubaan log masuk
+  {"email":"aisyah@graduate.utm.my",
+   "password":"rahsia123",
+   "device_name":"iPhone"}
+      </code></pre>
+      <p style="font-size:.5em">Cubaan yang <strong>gagal</strong> (422) pun ditulis. Sesiapa yang boleh baca <code>storage/logs</code>, atau sistem log berpusat, kini tahu kata laluan.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Http/Controllers/Api/V1/TokenController.php · store()</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Log::info('Cubaan log masuk', $request->only('email', 'device_name'));
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+local.INFO: Cubaan log masuk
+  {"email":"aisyah@graduate.utm.my",
+   "device_name":"iPhone"}
+      </code></pre>
+      <p style="font-size:.5em">Senaraikan medan yang <strong>dibenarkan</strong>, bukan buang yang dilarang: medan baru (contohnya nombor kad) tidak akan bocor secara tidak sengaja.</p>
+    </div>
+  </div>
+  <aside class="notes">Kedua-dua output dari request sebenar ke POST /api/v1/tokens (Modul 3). Jangan log juga: token Bearer, nombor kad, nombor IC penuh. Prinsip sama dengan broadcastWith() dalam Modul 4.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Level apa, channel mana?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Peristiwa</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Bayaran FPX berjaya</td><td class="fragment"><code>info</code>, channel <code>payments</code></td></tr>
+      <tr><td>2</td><td>Sistem kewangan masih 503 selepas 4 cubaan</td><td class="fragment"><code>critical</code> dalam <code>failed()</code>; perlu sampai ke developer atau pentadbir</td></tr>
+      <tr><td>3</td><td><code>dump($invoice)</code> semasa mencari pepijat di production</td><td class="fragment">Jangan. <code>debug</code>, dan <code>LOG_LEVEL=info</code> akan membuangnya</td></tr>
+      <tr><td>4</td><td>Pelajar mengadu bayaran 9:15 pagi tiada resit</td><td class="fragment">Minta <code>X-Request-Id</code>, cari dalam <code>payments</code> dan log worker</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan. Soalan 2 ialah jambatan ke bahagian Monitoring: log critical tidak berguna jika tiada siapa membacanya.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 05: MONITORING, LAB 4                             -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-heart-pulse"></i></div>
+  <div class="big-num">BAHAGIAN 05</div>
+  <h2>Application Monitoring</h2>
+  <p>Health check, Telescope, dan amaran</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · health check</span>
+  <h2><code>/up</code> kata "up", pelajar dapat 500</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Laravel 13 sedia ada route <code>/up</code> (didaftarkan oleh <code>health: '/up'</code> dalam <code>bootstrap/app.php</code>). Pemantau uptime biasanya panggil URL ini setiap minit.</p>
+      <p class="code-label">MySQL dihentikan (port salah dalam .env)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -H "Accept: application/json" .../up
+{"status":"up"}  200
+
+$ curl .../api/v1/invoices -H "Authorization: Bearer …"
+500
+      </code></pre>
+    </div>
+    <div>
+      <div class="card bad" style="font-size:.55em"><h3><i class="fa-solid fa-triangle-exclamation"></i>Kenapa?</h3><p><code>/up</code> hanya membuktikan PHP dan Laravel boleh bermula. Ia <strong>tidak menyentuh</strong> pangkalan data, queue atau Redis.</p></div>
+      <div class="card good" style="font-size:.55em; margin-top:.6em"><h3><i class="fa-solid fa-plug"></i>Penyelesaian</h3><p>Semasa <code>/up</code> dipanggil, Laravel menghantar event <code>DiagnosingHealth</code>. Jika mana-mana listener melontar exception, <code>/up</code> pulangkan 500. Kita tambah listener yang menyemak apa yang sistem yuran perlukan.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Dengan header Accept: application/json, /up pulangkan JSON {"status": "up"} atau {"status": "down"}; tanpanya, halaman HTML "Application up". Diuji dengan APP_DEBUG=false (seperti production).</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Health check sebenar</span>
+  <h2>Listener <code>DiagnosingHealth</code></h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Listeners/CheckCriticalServices.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12|13|15-18">
+namespace App\Listeners;
+
+use Illuminate\Foundation\Events\DiagnosingHealth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
+use RuntimeException;
+
+final class CheckCriticalServices
+{
+    public function handle(DiagnosingHealth $event): void
+    {
+        DB::select('select 1');
+
+        $waiting = Queue::size('default');
+        if ($waiting > 500) {
+            throw new RuntimeException("Queue default tersekat: {$waiting} job menunggu.");
+        }
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan event:list --event=DiagnosingHealth
+  Illuminate\Foundation\Events\DiagnosingHealth
+  ⇂ App\Listeners\CheckCriticalServices@handle
+
+# MySQL dihentikan
+{"status":"down"}  500
+
+# 501 job menunggu dalam queue default
+500
+laravel.log: Queue default tersekat: 501 job menunggu.
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li>Ditemui melalui event discovery (Modul 4), tiada pendaftaran</li>
+        <li><code>Queue::size()</code> berfungsi untuk driver database dan Redis</li>
+        <li>Mesej ralat ditulis ke log, tetapi tidak dipaparkan kepada orang awam</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Pastikan semakan ringan (milisaat): pemantau memanggilnya setiap minit. Jangan panggil API luar seperti FPX di sini; jika bank lambat, /up anda pula dianggap down. Dengan APP_DEBUG=true, exception dilontar terus dan halaman ralat Laravel dipaparkan, bukan {"status":"down"}.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Laravel Telescope</span>
+  <h2>Lihat apa yang berlaku dalam setiap request</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ composer require laravel/telescope
+$ php artisan telescope:install
+Publishing Telescope Service Provider...
+Publishing Telescope Configuration...
+Publishing Telescope Migrations...
+Telescope scaffolding installed successfully.
+$ php artisan migrate
+      </code></pre>
+      <p style="font-size:.53em">Buka <code>/telescope</code>. Setiap request, query, job, emel, event, cache dan exception direkod ke jadual <code>telescope_entries</code>.</p>
+    </div>
+    <div>
+      <p class="code-label">app/Providers/TelescopeServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+protected function gate(): void
+{
+    Gate::define('viewTelescope', function (User $user) {
+        return in_array($user->email, [
+            'pentadbir@utm.my',
+        ]);
+    });
+}
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li>Di <code>local</code>, sesiapa boleh buka. Di persekitaran lain, hanya pengguna yang lulus gate ini</li>
+        <li>Telescope merekod payload request: data pelajar ada di situ. Untuk production, <code>TELESCOPE_ENABLED=false</code> atau hadkan kepada staging</li>
+        <li>Jadual membesar cepat: jadualkan <code>telescope:prune</code> (Modul 4)</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Diuji: Telescope 5.29. telescope:install mendaftarkan App\Providers\TelescopeServiceProvider dalam bootstrap/providers.php secara automatik. Jika anda pasang dengan --dev, dokumentasi Telescope (Local Only Installation) menerangkan langkah tambahan supaya production tidak rosak selepas composer install --no-dev; tidak diuji dalam kursus ini. LogWatcher dalam config/telescope.php hanya merekod level error ke atas secara asal.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Telescope · satu bayaran</span>
+  <h2>27 query untuk satu bayaran?</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <img src="assets/m5-telescope-request.png" alt="Butiran request POST /api/v1/payments dalam Telescope: status 201, 72 ms, 27 query dengan 14 berulang" style="width:100%; border-radius:8px">
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Query</th><th>Bil.</th><th>Dari mana</th></tr></thead>
+        <tbody>
+          <tr><td>Jadual <code>cache</code></td><td>16</td><td><code>throttle:api</code> dan <code>throttle:payments</code> (Modul 3), kerana <code>CACHE_STORE=database</code></td></tr>
+          <tr><td><code>insert into jobs</code></td><td>3</td><td>Event broadcast, resit, salinan kewangan (Modul 4)</td></tr>
+          <tr><td><code>invoices</code></td><td>3</td><td><code>authorize()</code>, peraturan <code>exists</code>, repository</td></tr>
+          <tr><td>Lain-lain</td><td>5</td><td>Token, pengguna, pelajar, simpan bayaran, kemas kini invois</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.52em; margin-top:.6em">Lebih separuh query ialah had kadar. Tukar <code>CACHE_STORE=redis</code> (Modul 2) dan 16 query itu keluar dari MySQL. Telescope tunjuk <strong>di mana</strong> masa pergi; ujian memastikan pembaikan tidak merosakkan apa-apa.</div>
+    </div>
+  </div>
+  <aside class="notes">Tangkapan skrin sebenar dari Telescope selepas satu POST /api/v1/payments. Pecahan query diambil dari jadual telescope_entries untuk request yang sama (27 = 16 + 3 + 3 + 5). Bahagian Time dan Hostname dipotong dari gambar.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Alerting (overview)</span>
+  <h2>Siapa yang diberitahu, dan bila?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Isyarat</th><th>Sumber</th><th>Ke mana</th></tr></thead>
+    <tbody>
+      <tr><td>Sistem down</td><td><code>/up</code> pulangkan 500 atau tiada jawapan</td><td>Pemantau uptime luaran, contohnya Uptime Kuma (<code>uptime.kuma.pet</code>), emel atau Telegram</td></tr>
+      <tr><td>Job gagal habis cubaan</td><td><code>Log::critical()</code> dalam <code>failed()</code></td><td>Channel <code>slack</code>: <code>LOG_STACK=daily,slack</code> dan <code>LOG_SLACK_WEBHOOK_URL</code></td></tr>
+      <tr><td>Exception baru, query perlahan</td><td>Aplikasi sendiri</td><td>Laravel Pulse (<code>pulse.laravel.com</code>) atau Laravel Nightwatch (<code>nightwatch.laravel.com</code>)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn" style="font-size:.53em; margin-top:.8em">Dalam <code>config/logging.php</code>, channel <code>slack</code> guna <code>'level' =&gt; env('LOG_LEVEL', 'critical')</code>. Dengan <code>LOG_LEVEL=debug</code>, <strong>setiap</strong> log masuk ke Slack. Tetapkan <code>'level' =&gt; 'critical'</code> secara terus untuk channel ini.</div>
+  <aside class="notes">Overview sahaja; tiada alat amaran diuji dalam kursus ini. Nilai level channel slack dibaca daripada config/logging.php asal Laravel 13. Amaran yang terlalu kerap akan diabaikan: hantar hanya apa yang perlu tindakan manusia.</aside>
+</section>
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 4 · 15 minit · individu, dibantu rakan semeja · baki <span data-countdown>15:00</span></span>
+  <h2>Jejak satu bayaran, pantau satu sistem</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.53em">
+        <li>Tambah channel <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">payments</code> (JSON) dan log <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Bayaran diterima</code> dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PaymentService</code></li>
+        <li>Tambah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">AssignRequestId</code> pada kumpulan route <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">v1</code></li>
+        <li>Bayar satu invois dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">curl -i</code>, jalankan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">queue:work --stop-when-empty</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">grep</code> nilai <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">X-Request-Id</code> dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">storage/logs</code></li>
+        <li>Tambah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">CheckCriticalServices</code>. Tukar <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DB_PORT</code> kepada port salah, panggil <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/up</code>, kemudian pulihkan</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Hasil <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">grep</code> dengan sekurang-kurangnya dua baris yang berkongsi request_id yang sama, dan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">{"status":"down"}</code> semasa DB dihentikan.</p>
+      <p>Siap awal? Jalankan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan test</code> semula. Semua masih hijau? Lihat <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">storage/logs/payments-*.log</code>: apa yang ujian tulis di situ, dan bagaimana anda mahu menghalangnya?</p>
+    </div>
+  </div>
+  <aside class="notes">Jika curl tidak sampai selepas tukar DB_PORT: php artisan serve memulakan semula pelayan setiap kali .env berubah; tunggu 2 saat. Uji /up dengan APP_DEBUG=false supaya dapat {"status":"down"}. Siap awal: ujian feature yang membayar invois menulis "Bayaran diterima" dengan channel "testing" ke fail log sebenar. Satu cara: tambah &lt;env name="LOG_PAYMENTS_PATH" ...&gt; dalam phpunit.xml dan guna env() untuk path channel; atau Log::spy() dalam ujian. Bincang, tidak perlu siap.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- NILAI TAMBAH, RINGKASAN, SETERUSNYA                        -->
+<!-- ============================================================ -->
+
+<section data-timing="60">
+  <span class="kicker">Nilai tambah</span>
+  <h2>Jalankan ujian setiap kali kod dihantar</h2>
+  <div class="rule"></div>
+  <p style="font-size:.7em; text-align:center">Continuous integration (CI): pelayan menjalankan <code>php artisan test</code> pada setiap push, dan menghalang merge jika merah.</p>
+  <p style="font-size:.75em; text-align:center"><i class="fa-brands fa-github"></i>&nbsp; GitHub Actions: <a href="https://docs.github.com/actions" target="_blank">docs.github.com/actions</a><br><i class="fa-brands fa-gitlab"></i>&nbsp; GitLab CI/CD: <a href="https://docs.gitlab.com/ci/" target="_blank">docs.gitlab.com/ci</a></p>
+  <aside class="notes">Nilai tambah, di luar outline; tidak perlu demo. Tidak diuji dalam kursus ini. Ingatkan: gunakan pangkalan data ujian sendiri dalam CI, bukan pangkalan data sebenar.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Ringkasan</span>
+  <h2>Modul 5 dalam satu slide</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Bahagian</th><th>Yang kita jumpa (diukur)</th><th>Yang perlu diingat</th></tr></thead>
+    <tbody>
+      <tr><td>Unit testing</td><td>Dua pepijat Modul 1: 18.400000000000002 dan penalti pada hari akhir</td><td>Dataset untuk kes sempadan; <code>uses(TestCase::class)</code> bila perlu Laravel</td></tr>
+      <tr><td>Mock &amp; fake</td><td><code>once()</code> tangkap bank yang tidak dicaj</td><td>Palsukan dunia luar sahaja</td></tr>
+      <tr><td>Feature testing</td><td>Ujian menghubungi sistem kewangan; SQLite <code>1100</code> lawan MySQL <code>"1100.00"</code></td><td><code>Queue::fake()</code>, <code>preventStrayRequests()</code>, cast <code>decimal:2</code></td></tr>
+      <tr><td>TDD (Test-Driven Development)</td><td>Had RM200: merah 240.0, hijau, kemas</td><td>Lihat merah dahulu</td></tr>
+      <tr><td>Log</td><td>Kata laluan dalam log; request_id sampai ke worker</td><td>Channel JSON, <code>Context</code>, <code>only()</code></td></tr>
+      <tr><td>Monitoring</td><td><code>/up</code> "up" semasa DB mati; 16 daripada 27 query dari had kadar</td><td><code>DiagnosingHealth</code>, Telescope di luar production</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em; margin-top:.8em"><strong>25 ujian, kurang dari satu saat.</strong> Setiap perubahan pada aliran bayaran kini disemak oleh <code>php artisan test</code>, bukan oleh ingatan anda.</div>
+  <aside class="notes">25 ujian = jumlah ujian dalam projek rujukan selepas semua lab (diukur: 25 passed, 39 assertions, 0.50 s dengan SQLite).</aside>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Seterusnya</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Modul 6 — Pembangunan Dipandu AI</h1>
+  <p class="cover-sub">AI boleh menulis kod dan ujian dalam beberapa saat. Bagaimana anda tahu ia betul? Ujian yang anda tulis hari ini ialah jawapannya.</p>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-comment-dots"></i>Prompt engineering</span>
+    <span><i class="fa-solid fa-magnifying-glass"></i>AI-assisted code review</span>
+    <span><i class="fa-solid fa-bolt"></i>Boilerplate</span>
+    <span><i class="fa-solid fa-scale-balanced"></i>Batas &amp; risiko</span>
+  </div>
+  <h3 style="margin-top:1.6em"><i class="fa-regular fa-comments" style="color:var(--accent); margin-right:.4em"></i>Soalan &amp; perbincangan</h3>
+  <aside class="notes">Modul 6 bermula sejurus selepas ini pada Hari 4.</aside>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

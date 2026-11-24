@@ -1,0 +1,2713 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 3 — Integrasi &amp; Keselamatan API</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-b    { fill:#2a1416; stroke:#ff6b6b; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 3 · Integrasi &amp; Keselamatan API</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- HARI 2 · PEMBUKA & BAHAGIAN 01: API ARCHITECTURE           -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 3 / 6</span>
+  <h1 style="margin-top:.1em">Integrasi &amp; Keselamatan API</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-sitemap"></i>API architecture</span>
+    <span><i class="fa-solid fa-key"></i>Laravel Sanctum</span>
+    <span><i class="fa-solid fa-building-columns"></i>Laravel Passport</span>
+    <span><i class="fa-solid fa-user-shield"></i>Policies &amp; Gates</span>
+    <span><i class="fa-solid fa-shield-halved"></i>Security hardening</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">6 jam · 2 hari</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Teori · Live coding · Lab</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13 · Sanctum 4 · Passport 13</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">Modul 3 bermula Hari 2 sejurus selepas Modul 2 (kira-kira 12:36 tengah hari). Tekan Shift+T di slide ini supaya jam sesi bermula dari sini. Semua output HTTP dalam modul ini (status, JSON, mesej ralat) diambil daripada request sebenar dengan curl pada Laravel 13, Sanctum 4.5 dan Passport 13.12.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu membina API yang <strong>selamat</strong>, <strong>scalable</strong>, dan siap untuk persekitaran <strong>enterprise</strong>.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh melindungi endpoint dengan token, mengawal siapa boleh buat apa, dan menutup lima lubang keselamatan yang paling biasa.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Sistem Bayaran Yuran Pelajar yang sama kini dibuka kepada <strong>aplikasi mudah alih pelajar</strong>, <strong>portal Bendahari</strong> dan <strong>sistem kewangan universiti</strong>. Kod Modul 1 dan 2 (<code>PaymentService</code>, <code>StorePaymentRequest</code>, scope <code>outstanding()</code>) diguna semula.</div>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual Modul 3</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">H2 12:40</span><h3>API architecture</h3><p>RESTful, API Resource, versioning</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H2 2:19</span><h3>Sanctum</h3><p>Token, abilities, log masuk portal, rate limiting</p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">H2 4:05</span><h3>Policies &amp; Gates</h3><p>Pelajar hanya lihat invois sendiri</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">H3 8:05</span><h3>Passport</h3><p>Client credentials, personal access token</p></div>
+    <div class="slot" style="background:var(--good-soft)"><span class="time">H3 9:10</span><h3>Security hardening</h3><p>SQL injection, skrip jahat, mass assignment</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">H3 10:15</span><h3 style="color:#fff">Lab</h3><p style="color:#b9c3d3">Kukuhkan API yuran</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 3: Hari 2, 12:36 tengah hari – 5:00 petang · Hari 3, 8:00 pagi – 11:05 pagi.</p>
+  <aside class="notes">Bahagian Sanctum juga merangkumi rate limiting, kerana had dikira mengikut pengguna yang log masuk. CSRF (Cross-Site Request Forgery) disebut dahulu semasa Sanctum SPA dan diulang dalam Bahagian Security Hardening (Hari 3, 9:10 pagi).</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-sitemap"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>API Architecture</h2>
+  <p>RESTful best practices, API Resource dan versioning</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Kes kajian</span>
+  <h2>Tiga pelanggan, satu API</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 330" style="max-width:980px; margin:0 auto" role="img" aria-label="Tiga jenis pelanggan memanggil API yuran">
+    <defs><marker id="m3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <rect class="box-p" x="0" y="10" width="330" height="90" rx="10"/>
+    <text class="t" x="165" y="45" text-anchor="middle">Aplikasi mudah alih pelajar</text>
+    <text class="t-s" x="165" y="75" text-anchor="middle">lihat invois, bayar yuran</text>
+    <rect class="box-a" x="0" y="120" width="330" height="90" rx="10"/>
+    <text class="t" x="165" y="152" text-anchor="middle">Portal Bendahari</text>
+    <text class="t-s" x="165" y="182" text-anchor="middle">Single Page Application (SPA)</text>
+    <rect class="box-g" x="0" y="230" width="330" height="90" rx="10"/>
+    <text class="t" x="165" y="265" text-anchor="middle">Sistem kewangan universiti</text>
+    <text class="t-s" x="165" y="295" text-anchor="middle">tarik bayaran harian, tiada manusia</text>
+    <rect class="box-d" x="560" y="105" width="240" height="120" rx="10"/>
+    <text class="t" x="680" y="155" text-anchor="middle">Laravel API</text>
+    <text class="t-s" x="680" y="185" text-anchor="middle">/api/v1/…</text>
+    <rect class="box" x="900" y="125" width="200" height="80" rx="10"/>
+    <text class="t" x="1000" y="172" text-anchor="middle">MySQL</text>
+    <path d="M330 55 L555 140" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3a)"/>
+    <path d="M330 165 L555 165" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3a)"/>
+    <path d="M330 275 L555 190" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3a)"/>
+    <path d="M800 165 L895 165" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3a)"/>
+    <text class="t-s" x="440" y="80" text-anchor="middle">token Sanctum</text>
+    <text class="t-s" x="440" y="155" text-anchor="middle">cookie sesi</text>
+    <text class="t-s" x="440" y="262" text-anchor="middle">Passport</text>
+  </svg>
+  <div class="cols" style="margin-top:.4em; font-size:.55em">
+    <p>Setiap pelanggan berbeza cara <strong>log masuk</strong>, tetapi semua memanggil endpoint yang sama dan mesti dapat format JSON yang sama.</p>
+    <p>Soalan modul ini: <strong>siapa</strong> yang memanggil, <strong>apa</strong> yang dia boleh buat, dan <strong>berapa kerap</strong>.</p>
+  </div>
+  <aside class="notes">Pemetaan ini menjadi rangka seluruh modul: token Sanctum (Bahagian Laravel Sanctum, 2:19 petang), cookie sesi untuk portal (Bahagian Laravel Sanctum, 3:04 petang), Passport client credentials (Bahagian Laravel Passport, Hari 3 8:05 pagi).</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">RESTful best practices</span>
+  <h2>Kata nama dalam URL, kata kerja dalam method</h2>
+  <div class="rule"></div>
+  <p style="font-size:.58em">REST (Representational State Transfer): setiap URL ialah satu <strong>resource</strong> (benda), dan method HTTP ialah <strong>tindakan</strong> ke atasnya.</p>
+  <table style="font-size:.52em">
+    <thead><tr><th>Tindakan</th><th>RESTful</th><th>Elakkan</th></tr></thead>
+    <tbody>
+      <tr><td>Senarai invois saya</td><td><code>GET /api/v1/invoices</code></td><td><code>GET /api/getMyInvoices</code></td></tr>
+      <tr><td>Satu invois</td><td><code>GET /api/v1/invoices/7</code></td><td><code>GET /api/invoice?id=7&amp;action=view</code></td></tr>
+      <tr><td>Bayar invois</td><td><code>POST /api/v1/payments</code></td><td><code>GET /api/invoices/7/pay</code></td></tr>
+      <tr><td>Log keluar (padam token)</td><td><code>DELETE /api/v1/tokens/current</code></td><td><code>POST /api/logout?token=…</code></td></tr>
+    </tbody>
+  </table>
+  <ol class="steps" style="font-size:.52em">
+    <li>Kata nama jamak: <code>invoices</code>, <code>payments</code>. Huruf kecil, tiada kata kerja.</li>
+    <li><code>GET</code> <strong>tidak pernah</strong> mengubah data. Pelayar, proxy dan crawler boleh mengulang <code>GET</code> sendiri.</li>
+    <li>Token dalam header <code>Authorization</code>, bukan dalam URL: URL tercatat dalam log pelayan dan sejarah pelayar.</li>
+  </ol>
+  <aside class="notes">Tanya: "Bayar" ialah kata kerja. Jadi resource apa yang dicipta bila pelajar membayar? Jawapan: satu Payment baru, oleh itu POST /payments.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">RESTful best practices</span>
+  <h2>Status code yang akan kita lihat dalam modul ini</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Kod</th><th>Maksud</th><th>Contoh dalam sistem yuran</th></tr></thead>
+    <tbody>
+      <tr><td><code>200</code> / <code>201</code> / <code>204</code></td><td>Berjaya / dicipta / berjaya tanpa kandungan</td><td>Lihat invois / bayaran direkod / log keluar</td></tr>
+      <tr><td><code>401</code></td><td>Siapa anda? (tiada token, token salah)</td><td>Aplikasi panggil tanpa header <code>Authorization</code></td></tr>
+      <tr><td><code>403</code></td><td>Kami kenal anda, tetapi tidak dibenarkan</td><td>Pelajar A buka invois pelajar B</td></tr>
+      <tr><td><code>404</code></td><td>Resource tiada</td><td><code>/invoices/999999</code></td></tr>
+      <tr><td><code>409</code></td><td>Bercanggah dengan keadaan semasa</td><td><code>InvoiceAlreadyPaidException</code> dari Modul 1</td></tr>
+      <tr><td><code>419</code></td><td>Token CSRF (Cross-Site Request Forgery) tiada atau salah</td><td>Portal Bendahari hantar <code>POST</code> tanpa token</td></tr>
+      <tr><td><code>422</code></td><td>Input gagal validasi</td><td><code>method=bitcoin</code></td></tr>
+      <tr><td><code>429</code></td><td>Terlalu banyak request</td><td>Lebih 3 bayaran seminit</td></tr>
+      <tr><td><code>500</code></td><td>Pepijat di pelayan. <strong>Tidak sepatutnya</strong> berlaku kerana input pengguna</td><td>Kita akan jumpa dua kali hari ini, dan betulkan</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">419 ialah kod khas Laravel, bukan standard HTTP. Tekankan beza 401 dan 403: 401 = belum kenal, 403 = kenal tetapi tidak dibenarkan.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Persediaan</span>
+  <h2>php artisan install:api</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="sm"><code class="language-bash" data-trim>
+php artisan install:api
+php artisan migrate
+      </code></pre>
+      <p style="font-size:.55em">Command ini:</p>
+      <ul style="font-size:.53em">
+        <li>Pasang pakej <code>laravel/sanctum</code> (v4.5)</li>
+        <li>Cipta <code>routes/api.php</code> dan <code>config/sanctum.php</code></li>
+        <li>Cipta migration jadual <code>personal_access_tokens</code></li>
+        <li>Daftar fail route API, dengan prefix <code>/api</code>, dalam konfigurasi aplikasi. Kita <strong>tidak</strong> sunting fail itu dengan tangan</li>
+      </ul>
+    </div>
+    <div>
+      <p class="code-label">routes/api.php (asal)</p>
+      <pre class="sm"><code class="language-php" data-trim>
+&lt;?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Command yang sama juga menetapkan: request ke <code>api/*</code> sentiasa dapat ralat dalam bentuk <strong>JSON</strong>, bukan halaman HTML. Kita padam route <code>/user</code> ini dan tulis route sendiri.</div>
+    </div>
+  </div>
+  <aside class="notes">Jika peserta jalankan install:api pada projek sedia ada, command akan tanya sama ada mahu jalankan migration. Jawab ya. Mesej "Please add the [Laravel\Sanctum\HasApiTokens] trait to your User model" akan muncul; kita buat langkah itu dalam Bahagian Laravel Sanctum (2:19 petang).</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Apa yang salah dengan reka bentuk ini?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.53em">
+    <thead><tr><th>#</th><th>Reka bentuk</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>GET /api/v1/invoices/7/pay</code></td><td class="fragment">Ubah data melalui <code>GET</code>. Guna <code>POST /api/v1/payments</code></td></tr>
+      <tr><td>2</td><td><code>POST /api/v1/getStudentInvoices</code></td><td class="fragment">Kata kerja dalam URL, dan cuma membaca. Guna <code>GET /api/v1/invoices</code></td></tr>
+      <tr><td>3</td><td>Status <code>200</code> dengan badan <code>{"error": "Invois tiada"}</code></td><td class="fragment">Aplikasi anggap berjaya. Pulangkan <code>404</code></td></tr>
+      <tr><td>4</td><td><code>GET /api/v1/invoices?token=1|rA3I…</code></td><td class="fragment">Token tercatat dalam log. Hantar dalam header <code>Authorization: Bearer …</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<section data-timing="3600" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-utensils"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">1:00 – 2:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Makan tengah hari</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>60:00</p>
+  <p class="cover-sub">Seterusnya: API Resource dan versioning</p>
+  <aside class="notes">Selepas makan, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula dari situ.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">API Resource</span>
+  <h2>Jangan pulangkan model terus</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Resources/InvoiceResource.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+final class InvoiceResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'         => $this->id,
+            'number'     => $this->number,
+            'type'       => $this->type,
+            'amount'     => $this->amount,
+            'due_date'   => $this->due_date->toDateString(),
+            'paid_at'    => $this->paid_at?->toIso8601String(),
+            'is_overdue' => $this->paid_at === null
+                && $this->due_date->isPast(),
+        ];
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Output: <code>new InvoiceResource($invoice)</code></p>
+      <pre class="xs"><code class="language-json" data-trim>
+{"data":{"id":7,"number":"INV0000007","type":"hostel",
+ "amount":"480.00","due_date":"2026-11-17","paid_at":null,
+ "is_overdue":true}}
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li><strong>Kontrak:</strong> tambah kolum baru dalam DB tidak terus bocor ke aplikasi mudah alih</li>
+        <li><strong>Format tetap:</strong> tarikh sebagai string, <code>type</code> enum <code>FeeType</code> keluar sebagai nilainya (<code>hostel</code>)</li>
+        <li><strong>Medan terbitan:</strong> <code>is_overdue</code> dikira sekali di pelayan, bukan dalam setiap aplikasi</li>
+      </ul>
+      <div class="callout" style="font-size:.5em">Cipta dengan <code>php artisan make:resource InvoiceResource</code>. <code>$this</code> dalam resource merujuk kepada model <code>Invoice</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Route v1</span>
+  <h2>Controller API pertama</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/InvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceResource;
+use App\Models\Invoice;
+
+final class InvoiceController extends Controller
+{
+    public function show(Invoice $invoice): InvoiceResource
+    {
+        return new InvoiceResource($invoice);
+    }
+}
+      </code></pre>
+      <p class="code-label">routes/api.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+&lt;?php
+
+use App\Http\Controllers\Api\V1\InvoiceController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function () {
+    Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
+});
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Terminal</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+curl -i -H "Accept: application/json" \
+  http://127.0.0.1:8000/api/v1/invoices/7
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+HTTP/1.1 200 OK
+{"data":{"id":7,"number":"INV0000007","type":"hostel",
+ "amount":"480.00","due_date":"2026-11-17","paid_at":null,
+ "is_overdue":true}}
+      </code></pre>
+      <div class="callout warn" style="font-size:.53em"><strong>Berfungsi, tetapi bahaya.</strong> Tiada log masuk: sesiapa di internet boleh tukar <code>7</code> kepada <code>8</code>, <code>9</code>, … dan baca invois semua pelajar. Kita tutup dalam Bahagian Laravel Sanctum.</div>
+      <p style="font-size:.5em" class="muted">Namespace <code>Api\V1</code> dan prefix <code>v1</code>: sebabnya di slide seterusnya.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Versioning</span>
+  <h2>Bila perlu versi baru?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Perubahan</th><th>Versi baru?</th></tr></thead>
+        <tbody>
+          <tr><td>Tambah medan baru (<code>programme_code</code>)</td><td>Tidak. Aplikasi lama abaikan medan yang tidak dikenali</td></tr>
+          <tr><td>Tambah endpoint baru</td><td>Tidak</td></tr>
+          <tr><td>Tukar <code>amount</code> dari <code>"480.00"</code> kepada objek <code>{sen, currency}</code></td><td><strong>Ya</strong>: aplikasi lama crash</td></tr>
+          <tr><td>Ganti <code>is_overdue</code> dengan <code>status</code></td><td><strong>Ya</strong>: medan lama hilang</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li>Aplikasi mudah alih yang sudah dipasang <strong>tidak dikemas kini serentak</strong>. Ada pelajar guna versi lama berbulan-bulan</li>
+        <li>Pilihan kita: versi dalam URL, <code>/api/v1</code> dan <code>/api/v2</code>. Mudah dilihat dalam log dan mudah diuji dengan curl</li>
+        <li>Pilihan lain: versi dalam header <code>Accept</code>. Lebih "tulen", tetapi lebih sukar dinyahpepijat</li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Kekalkan <code>v1</code> sehingga log menunjukkan tiada lagi panggilan ke <code>v1</code>, kemudian umumkan tarikh tutup.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Versioning · v1 dan v2 serentak · 1 / 2</span>
+  <h2>Class berasingan untuk v2</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Resources/V2/InvoiceResource.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Resources\V2;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+final class InvoiceResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'number' => $this->number,
+            'type' => $this->type,
+            'amount' => ['sen' => (int) round($this->amount * 100), 'currency' => 'MYR'],
+            'due_date' => $this->due_date->toDateString(),
+            'status' => $this->paid_at ? 'paid'
+                : ($this->due_date->isPast() ? 'overdue' : 'outstanding'),
+        ];
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V2/InvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V2;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\V2\InvoiceResource;
+use App\Models\Invoice;
+
+final class InvoiceController extends Controller
+{
+    public function show(Invoice $invoice): InvoiceResource
+    {
+        return new InvoiceResource($invoice);
+    }
+}
+      </code></pre>
+      <div class="callout" style="font-size:.5em">Namespace <code>V2</code> untuk kedua-dua class. Fail v1 tidak disentuh langsung, jadi aplikasi lama tidak terjejas.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Versioning · v1 dan v2 serentak · 2 / 2</span>
+  <h2>Model yang sama, dua bentuk JSON</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">routes/api.php: tambahan (baris <code>use</code> di bahagian atas fail)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Http\Controllers\Api\V2\InvoiceController as V2InvoiceController;
+
+Route::prefix('v2')->group(function () {
+    Route::get('invoices/{invoice}', [V2InvoiceController::class, 'show']);
+});
+      </code></pre>
+      <div class="callout" style="font-size:.52em">Versi hanya di lapisan HTTP (controller, resource). Model, scope dan <code>PaymentService</code> dikongsi: pepijat dibaiki sekali untuk kedua-dua versi.</div>
+    </div>
+    <div>
+      <p class="code-label">Invois yang sama, dua versi</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+GET /api/v1/invoices/7
+{"data":{"id":7,"number":"INV0000007","type":"hostel",
+ "amount":"480.00","due_date":"2026-11-17","paid_at":null,
+ "is_overdue":true}}
+
+GET /api/v2/invoices/7
+{"data":{"id":7,"number":"INV0000007","type":"hostel",
+ "amount":{"sen":48000,"currency":"MYR"},
+ "due_date":"2026-11-17","status":"overdue"}}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Alias "as V2InvoiceController" perlu kerana dua class bernama InvoiceController diimport dalam fail route yang sama. Kenapa sen? Wang dalam integer elak ralat pembundaran nombor perpuluhan dalam JavaScript.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 02: LARAVEL SANCTUM                               -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-key"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>Laravel Sanctum</h2>
+  <p>Token-based auth, token abilities, SPA (Single Page Application) auth dan rate limiting</p>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Pilih alat</span>
+  <h2>Sanctum atau Passport?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th></th><th>Sanctum</th><th>Passport</th></tr></thead>
+    <tbody>
+      <tr><td>Untuk</td><td>Aplikasi <strong>milik sendiri</strong>: app mudah alih UTM, portal Bendahari</td><td>Aplikasi <strong>pihak lain</strong> dan sistem ke sistem, ikut piawai OAuth (Open Authorization) 2.0</td></tr>
+      <tr><td>Token</td><td>Rentetan rawak; hash disimpan dalam <code>personal_access_tokens</code></td><td>JWT (JSON Web Token) bertandatangan kunci RSA</td></tr>
+      <tr><td>Log masuk pelayar</td><td>Cookie sesi biasa (mod SPA, Single Page Application)</td><td>Tiada mod khas</td></tr>
+      <tr><td>Persediaan</td><td>1 command, 1 trait</td><td>Kunci, jadual <code>oauth_*</code>, client</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.55em; margin-top:.8em">Keputusan kita: <strong>Sanctum</strong> untuk pelajar dan Bendahari. <strong>Passport</strong> hanya untuk sistem kewangan universiti (Bahagian Laravel Passport, Hari 3 8:05 pagi).</div>
+  <aside class="notes">Jika soalan timbul: boleh guna Passport sahaja untuk semua? Boleh, tetapi lebih banyak bahagian bergerak (kunci, client, refresh token) untuk aplikasi sendiri yang tidak perlukannya.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Struktur DB</span>
+  <h2>Pengguna, pelajar dan peranan</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">database/migrations/2026_11_26_000001_add_role_to_users_table.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10">
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('student');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
+    }
+};
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>users</code> = siapa yang log masuk. <code>students</code> = rekod akademik dari Modul 1</li>
+        <li><code>student_id</code> sudah ada sejak Modul 1, <strong>nullable</strong>: staf Bendahari ialah pengguna, tetapi bukan pelajar</li>
+        <li>Baru dalam Modul 3: <code>role</code>, sama ada <code>student</code> atau <code>bursary</code></li>
+        <li><code>down()</code> padam <code>role</code> sahaja, jadi <code>migrate:rollback</code> tidak menyentuh <code>student_id</code></li>
+      </ul>
+      <p class="code-label">Data ujian</p>
+      <table style="font-size:.48em">
+        <thead><tr><th>id</th><th>name</th><th>student_id</th><th>role</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Aisyah</td><td>1</td><td>student</td></tr>
+          <tr><td>2</td><td>Badrul</td><td>2</td><td>student</td></tr>
+          <tr><td>3</td><td>Puan Siti</td><td>NULL</td><td>bursary</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">Kolum student_id dicipta dalam migration 2026_01_01_000004_add_student_id_to_users_table pada branch modul-1-start, jadi peserta sudah ada data pelajar yang dipautkan ke pengguna. Migration ini hanya menambah role. Tunjukkan baris Puan Siti: student_id NULL, role bursary.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Model</span>
+  <h2>User dengan HasApiTokens</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Models/User.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="14|11-12|22-30">
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected function casts(): array
+    {
+        return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function isBursary(): bool
+    {
+        return $this->role === 'bursary';
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>HasApiTokens</code> beri method <code>createToken()</code>, <code>tokens()</code> dan <code>currentAccessToken()</code></li>
+        <li><code>#[Fillable]</code> dan <code>#[Hidden]</code> ialah <strong>attribute PHP</strong> (PHP 8.0+): label pada class, bukan komen. Semasa model dicipta, Laravel baca label itu melalui Reflection dan <strong>gabungkan</strong> senarainya ke dalam <code>$fillable</code> dan <code>$hidden</code>. Hasilnya sama seperti <code>protected $fillable = [...]</code>; nama yang sepadan hanya konvensyen Laravel</li>
+        <li><code>role</code> <strong>sengaja tiada</strong> dalam senarai fillable. Sebabnya dalam Bahagian Security Hardening (Hari 3)</li>
+      </ul>
+      <div class="callout warn" style="font-size:.52em">Tanpa trait: <code>install:api</code> sudah beri amaran <em>"Please add the [Laravel\Sanctum\HasApiTokens] trait to your User model"</em>.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Token-based auth</span>
+  <h2>Endpoint log masuk untuk aplikasi mudah alih</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/TokenController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="20-22|24-26|27">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
+final class TokenController extends Controller
+{
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+            'device_name' => ['required', 'string', 'max:100'],
+        ]);
+        $user = User::where('email', $data['email'])->first();
+
+        if (! $user || ! Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages(['email' => 'Emel atau kata laluan salah.']);
+        }
+        $abilities = $user->isBursary()
+            ? ['invoices:read', 'reports:read']
+            : ['invoices:read', 'payments:create'];
+        $token = $user->createToken($data['device_name'], $abilities, now()->addDays(30));
+
+        return response()->json(['token' => $token->plainTextToken, 'abilities' => $abilities], 201);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:.52em">
+        <li>Mesej sama untuk emel tiada <strong>dan</strong> kata laluan salah: penyerang tidak boleh teka emel mana yang wujud</li>
+        <li><strong>Abilities</strong> = senarai perkara yang token ini dibenarkan. Pelajar boleh bayar; Bendahari boleh baca laporan</li>
+        <li>Tamat tempoh 30 hari. Telefon hilang? Token mati sendiri</li>
+        <li><code>plainTextToken</code> hanya wujud <strong>sekali</strong>, dalam response ini</li>
+      </ol>
+      <div class="callout" style="font-size:.52em">Kenapa <code>tokens</code>, bukan <code>login</code>? Log masuk = <strong>cipta</strong> token, jadi <code>POST /api/v1/tokens</code>. Log keluar = <strong>padam</strong> token, jadi <code>DELETE /api/v1/tokens/current</code>. Portal Bendahari pula guna <code>POST /login</code>, yang mencipta sesi cookie, bukan token.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Lindungi route</span>
+  <h2>auth:sanctum</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">routes/api.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8|10-13">
+&lt;?php
+
+use App\Http\Controllers\Api\V1\{InvoiceController, TokenController};
+use App\Http\Controllers\Api\V2\InvoiceController as V2InvoiceController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function () {
+    Route::post('tokens', [TokenController::class, 'store']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('invoices', [InvoiceController::class, 'index']);
+        Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
+    });
+});
+
+Route::prefix('v2')->middleware('auth:sanctum')->group(function () {
+    Route::get('invoices/{invoice}', [V2InvoiceController::class, 'show']);
+});
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/InvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12-17">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceResource;
+use App\Models\Invoice;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+final class InvoiceController extends Controller
+{
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        $invoices = Invoice::where('student_id', $request->user()->student_id)
+            ->outstanding()
+            ->orderBy('due_date')
+            ->paginate(10);
+
+        return InvoiceResource::collection($invoices);
+    }
+
+    public function show(Invoice $invoice): InvoiceResource
+    {
+        return new InvoiceResource($invoice);
+    }
+}
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>outstanding()</code> ialah scope dari Bahagian Advanced Eloquent, Modul 2. <code>$request->user()</code> = pemilik token.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Cuba dengan curl</span>
+  <h2>Log masuk, kemudian guna token</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -H "Accept: application/json" -X POST http://127.0.0.1:8000/api/v1/tokens \
+    -d email=aisyah@graduate.utm.my -d password=rahsia123 -d device_name="iPhone Aisyah"
+201  {"token":"1|rA3IBkLnM776kc1vDAI1HUDcqu2YNvHEZ0HQNQOe76836627","abilities":["invoices:read","payments:create"]}
+
+$ curl ... -d password=salah ...
+422  {"message":"Emel atau kata laluan salah.","errors":{"email":["Emel atau kata laluan salah."]}}
+
+$ curl -H "Accept: application/json" http://127.0.0.1:8000/api/v1/invoices
+401  {"message":"Unauthenticated."}
+
+$ curl -H "Accept: application/json" -H "Authorization: Bearer 1|rA3I…" http://127.0.0.1:8000/api/v1/invoices
+200  {"data":[{"id":1406,"number":"INV0001406","type":"library_fine","amount":"15.00",
+       "due_date":"2025-01-07","paid_at":null,"is_overdue":true}, ...],
+      "links":{"first":"…?page=1","last":"…?page=1","prev":null,"next":null},
+      "meta":{"current_page":1,"from":1,"last_page":1,"per_page":10,"to":4,"total":4, ...}}
+  </code></pre>
+  <div class="cols" style="font-size:.52em; margin-top:.4em">
+    <p><code>paginate()</code> + <code>InvoiceResource::collection()</code> menghasilkan <code>links</code> dan <code>meta</code> secara automatik. Aplikasi mudah alih guna <code>links.next</code> untuk muat halaman seterusnya.</p>
+    <p>Format header: <code>Authorization: Bearer &lt;token&gt;</code>. Bahagian sebelum <code>|</code> ialah id rekod token.</p>
+  </div>
+  <aside class="notes">Status code ditulis di hadapan setiap baris untuk ringkas; dalam terminal sebenar guna curl -i untuk lihat baris status. Demo langsung: minta peserta salin token sendiri ke dalam header.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Perangkap · header Accept</span>
+  <h2>Lupa satu header, dapat 500</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -i http://127.0.0.1:8000/api/v1/invoices
+HTTP/1.1 500 Internal Server Error
+
+storage/logs/laravel.log:
+Symfony\Component\Routing\Exception\RouteNotFoundException:
+Route [login] not defined.
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li>Pembangun aplikasi mudah alih <strong>lupa</strong> header <code>Accept: application/json</code></li>
+        <li>Middleware <code>auth</code> anggap ini pelayar, cuba redirect ke halaman <code>login</code>. API kita tiada route bernama <code>login</code></li>
+        <li>Hasil: 500 untuk kesilapan pengguna, dan log penuh ralat palsu</li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="15-17">
+namespace App\Providers;
+
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Http\Request;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        // binding repository dari Modul 1 dan 2
+    }
+
+    public function boot(): void
+    {
+        Authenticate::redirectUsing(
+            fn (Request $request) => $request->is('api/*') ? null : '/login'
+        );
+    }
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -i http://127.0.0.1:8000/api/v1/invoices
+HTTP/1.1 401 Unauthorized
+{"message":"Unauthenticated."}
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>null</code> = jangan redirect, jadi Laravel pulangkan 401 JSON. Halaman web (bukan <code>api/*</code>) tetap redirect ke <code>/login</code> (diuji: 302).</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Di sebalik tabir</span>
+  <h2>Apa yang disimpan, dan cara log keluar</h2>
+  <div class="rule"></div>
+  <p class="code-label">select id, tokenable_id, name, abilities, token, expires_at from personal_access_tokens;</p>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+id  tokenable_id  name           abilities                             token (64 aksara)      expires_at
+1   1             iPhone Aisyah  ["invoices:read","payments:create"]   9c3c341c7d11876b7942…  2026-12-22 03:50:59
+2   3             PC Bendahari   ["invoices:read","reports:read"]      6eb223ec1396ec185ae1…  2026-12-22 03:51:00
+  </code></pre>
+  <div class="cols">
+    <div>
+      <ul style="font-size:.53em">
+        <li>Kolum <code>token</code> = <strong>hash SHA-256</strong>, bukan token asal. Jika DB bocor, penyerang tidak dapat guna token</li>
+        <li>Oleh itu token tidak boleh "dilihat semula". Hilang? Log masuk dan cipta yang baru</li>
+        <li><code>last_used_at</code> dikemas kini setiap request: senaraikan peranti aktif untuk pelajar</li>
+      </ul>
+    </div>
+    <div>
+      <p class="code-label">Log keluar: tambah method dalam <code>TokenController</code></p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function destroy(Request $request): JsonResponse
+{
+    $request->user()->currentAccessToken()->delete();
+
+    return response()->json(null, 204);
+}
+
+// routes/api.php, dalam kumpulan auth:sanctum v1:
+Route::delete('tokens/current', [TokenController::class, 'destroy']);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -X DELETE -H "Authorization: Bearer 1|rA3I…" \
+    -H "Accept: application/json" .../api/v1/tokens/current
+204
+
+$ curl -H "Authorization: Bearer 1|rA3I…" \
+    -H "Accept: application/json" .../api/v1/invoices
+401  {"message":"Unauthenticated."}
+      </code></pre>
+      <p style="font-size:.5em">Padam token yang sedang dipakai sahaja; peranti lain kekal. Semua peranti: <code>$request->user()->tokens()->delete()</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Bayar melalui API</span>
+  <h2>PaymentController dari Modul 1, kini dalam v1</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/PaymentController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V1;
+
+use App\Data\PaymentData;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePaymentRequest;
+use App\Http\Resources\PaymentResource;
+use App\Services\PaymentService;
+use Illuminate\Http\JsonResponse;
+
+final class PaymentController extends Controller
+{
+    public function __construct(
+        private PaymentService $service,
+    ) {}
+
+    public function store(StorePaymentRequest $request): JsonResponse
+    {
+        $payment = $this->service->pay(
+            $request->user()->student,
+            PaymentData::fromRequest($request),
+        );
+
+        return PaymentResource::make($payment)
+            ->response()
+            ->setStatusCode(201);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Http/Resources/PaymentResource.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+final class PaymentResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'invoice_id' => $this->invoice_id,
+            'method' => $this->method,
+            'amount' => $this->amount,
+            'reference' => $this->reference,
+            'paid_at' => $this->paid_at->toIso8601String(),
+        ];
+    }
+}
+      </code></pre>
+      <p class="code-label">POST /api/v1/payments · invoice_id=406, method=fpx</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+201  {"data":{"id":2050,"invoice_id":406,"method":"fpx","amount":"480.00",
+      "reference":"FPX520204","paid_at":"2026-11-22T03:40:37+00:00"}}
+(ulang)
+409  {"message":"Invois INV0000406 sudah dibayar pada 22\/11\/2026 03:40."}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Controller ini sama seperti slide "Satu service, tiga pintu masuk" dalam Modul 1, cuma namespace kini App\Http\Controllers\Api\V1. PaymentService, StorePaymentRequest dan PaymentData tidak berubah. 409 datang daripada render() dalam InvoiceAlreadyPaidException (Modul 1).</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Token abilities</span>
+  <h2>Token Bendahari tidak boleh membayar</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">routes/api.php: kumpulan v1</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1-2,9-14">
+use App\Http\Controllers\Api\V1\{InvoiceController, PaymentController, TokenController};
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+
+Route::prefix('v1')->group(function () {
+    Route::post('tokens', [TokenController::class, 'store']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::delete('tokens/current', [TokenController::class, 'destroy']);
+        Route::get('invoices', [InvoiceController::class, 'index'])
+            ->middleware(CheckAbilities::class.':invoices:read');
+        Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])
+            ->middleware(CheckAbilities::class.':invoices:read');
+        Route::post('payments', [PaymentController::class, 'store'])
+            ->middleware(CheckAbilities::class.':payments:create');
+    });
+});
+      </code></pre>
+      <p class="code-label">Token Puan Siti: <code>["invoices:read","reports:read"]</code></p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+POST /api/v1/payments  invoice_id=7, method=fpx
+403  {"message":"Invalid ability provided."}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.52em">
+        <li><code>CheckAbilities</code>: token mesti ada <strong>semua</strong> ability yang disenaraikan</li>
+        <li><code>CheckForAnyAbility</code>: cukup <strong>salah satu</strong></li>
+        <li>Dalam kod: <code>$request->user()->tokenCan('payments:create')</code></li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Gunanya: token yang dicuri dari PC Bendahari tidak boleh digunakan untuk membuat bayaran. Had kerosakan = senarai ability.</div>
+      <div class="callout warn" style="font-size:.52em">Ability menjawab <strong>"token ini boleh buat jenis kerja apa"</strong>. Ia tidak menjawab "invois <strong>mana</strong>". Itu kerja policy, Bahagian Policies &amp; Gates (4:05 petang).</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">SPA (Single Page Application) auth</span>
+  <h2>Portal Bendahari: cookie, bukan token</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 300" style="max-width:960px; margin:0 auto" role="img" aria-label="Aliran log masuk SPA dengan Sanctum">
+    <defs><marker id="m3s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <rect class="box-a" x="0" y="20" width="260" height="260" rx="12"/>
+    <text class="t" x="130" y="60" text-anchor="middle">Pelayar</text>
+    <text class="t-s" x="130" y="88" text-anchor="middle">bendahari.utm.my</text>
+    <rect class="box-d" x="840" y="20" width="260" height="260" rx="12"/>
+    <text class="t" x="970" y="60" text-anchor="middle">Laravel</text>
+    <text class="t-s" x="970" y="88" text-anchor="middle">api.utm.my</text>
+    <path d="M260 120 L835 120" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3s)"/>
+    <text class="t-w" x="550" y="110" text-anchor="middle">1 · GET /sanctum/csrf-cookie</text>
+    <text class="t-s" x="550" y="140" text-anchor="middle">balas cookie XSRF-TOKEN</text>
+    <path d="M260 190 L835 190" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3s)"/>
+    <text class="t-w" x="550" y="180" text-anchor="middle">2 · POST /login + header X-XSRF-TOKEN</text>
+    <text class="t-s" x="550" y="210" text-anchor="middle">balas cookie sesi (HttpOnly)</text>
+    <path d="M260 255 L835 255" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3s)"/>
+    <text class="t-w" x="550" y="245" text-anchor="middle">3 · GET /api/v1/… dengan cookie + Referer</text>
+  </svg>
+  <div class="cols" style="font-size:.52em; margin-top:.3em">
+    <p>Kenapa tidak simpan token dalam <code>localStorage</code>? Skrip jahat dalam halaman boleh membacanya. Cookie <strong>HttpOnly</strong> tidak boleh dibaca JavaScript langsung.</p>
+    <p>Harga cookie: pelayar menghantarnya secara automatik, jadi perlu perlindungan CSRF (Cross-Site Request Forgery). Itu tugas <code>XSRF-TOKEN</code> di langkah 1 dan 2.</p>
+  </div>
+  <aside class="notes">SPA (Single Page Application) bermaksud aplikasi JavaScript (Vue, React) yang dimuat sekali dan memanggil API. Axios menghantar header X-XSRF-TOKEN secara automatik dari cookie XSRF-TOKEN jika withCredentials dan withXSRFToken dihidupkan. Skrip jahat dalam halaman = XSS, dibincang dalam Bahagian Security Hardening (Hari 3).</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">SPA (Single Page Application) auth · konfigurasi</span>
+  <h2>Tiga perubahan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">1 · .env</p>
+      <pre class="xs"><code class="language-ini" data-trim>
+SANCTUM_STATEFUL_DOMAINS=bendahari.utm.my
+SESSION_DOMAIN=.utm.my
+      </code></pre>
+      <p style="font-size:.5em">Hanya request dari domain dalam senarai ini dilayan dengan cookie sesi. Domain lain mesti guna token.</p>
+      <p class="code-label">2 · routes/web.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+&lt;?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Auth, Route};
+
+Route::post('/login', function (Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+    if (! Auth::attempt($credentials)) {
+        return response()->json(['message' => 'Emel atau kata laluan salah.'], 422);
+    }
+    $request->session()->regenerate();
+
+    return response()->json(['message' => 'ok']);
+});
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">3 · routes/api.php: kumpulan auth v1</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1,3">
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->group(function () {
+        // route yang sama seperti sebelum ini
+    });
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li><code>EnsureFrontendRequestsAreStateful</code> hidupkan sesi, cookie dan semakan CSRF (Cross-Site Request Forgery) <strong>hanya</strong> untuk request dari domain stateful</li>
+        <li><code>auth:sanctum</code> semak token dahulu; jika tiada, semak sesi</li>
+        <li><code>session()->regenerate()</code> tukar id sesi selepas log masuk, supaya id lama yang mungkin dicuri tidak berguna</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Dokumentasi Laravel menambah middleware ini secara global melalui statefulApi() dalam fail bootstrap. Kita letak pada kumpulan route supaya tiada fail bootstrap disunting; kesannya sama untuk route dalam kumpulan ini.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">SPA (Single Page Application) auth · diuji</span>
+  <h2>Apa yang berlaku pada setiap request</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>#</th><th>Request</th><th>Hasil</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>POST /login</code> tanpa CSRF token</td><td><code>419</code> <code>CSRF token mismatch.</code></td></tr>
+      <tr><td>2</td><td><code>GET /sanctum/csrf-cookie</code></td><td><code>204</code> + cookie <code>XSRF-TOKEN</code></td></tr>
+      <tr><td>3</td><td><code>POST /login</code> + <code>X-XSRF-TOKEN</code></td><td><code>200</code> <code>{"message":"ok"}</code> + cookie sesi</td></tr>
+      <tr><td>4</td><td><code>GET /api/v1/invoices</code> + cookie + <code>Referer</code> domain stateful</td><td><code>200</code></td></tr>
+      <tr><td>5</td><td>Cookie yang sama, <strong>tanpa</strong> <code>Referer</code></td><td><code>401</code></td></tr>
+      <tr><td>6</td><td>Cookie yang sama, <code>Referer: https://jahat.example</code></td><td><code>401</code></td></tr>
+      <tr><td>7</td><td><code>POST /api/v1/payments</code> + cookie, tanpa <code>X-XSRF-TOKEN</code></td><td><code>419</code></td></tr>
+      <tr><td>8</td><td><code>POST /api/v1/payments</code> + cookie + <code>X-XSRF-TOKEN</code></td><td><code>201</code></td></tr>
+      <tr><td>9</td><td><code>POST /api/v1/tokens</code> (aplikasi mudah alih, tiada cookie)</td><td><code>201</code>: CSRF (Cross-Site Request Forgery) tidak terlibat</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.52em; margin-top:.5em">Baris 5 dan 6: cookie sahaja tidak cukup. Laman lain yang cuba guna cookie Bendahari ditolak. Baris 9: request dengan token tidak perlu CSRF, kerana pelayar tidak menghantar token secara automatik.</div>
+  <aside class="notes">Semua baris diuji dengan curl ke pelayan ujian (domain stateful = alamat pelayan itu). Baris 8 menggunakan akaun pelajar Aisyah melalui log masuk SPA.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Rate limiting · 1 / 3</span>
+  <h2>Had ikut pengguna, bukan sahaja IP</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="20-28">
+namespace App\Providers;
+
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        // binding repository dari Modul 1 dan 2
+    }
+
+    public function boot(): void
+    {
+        Authenticate::redirectUsing(
+            fn (Request $request) => $request->is('api/*') ? null : '/login'
+        );
+        RateLimiter::for('api', fn (Request $request) =>
+            Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
+        RateLimiter::for('login', fn (Request $request) =>
+            Limit::perMinute(5)->by($request->input('email').'|'.$request->ip()));
+        RateLimiter::for('payments', fn (Request $request) =>
+            Limit::perMinute(3)->by($request->user()->id));
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li><code>by()</code> = kunci kaunter. Pelajar di WiFi kampus berkongsi satu IP awam, jadi <code>api</code> dan <code>payments</code> dikira ikut <strong>id pengguna</strong></li>
+        <li><code>login</code> dikira ikut <code>email|ip</code>: teka kata laluan satu akaun disekat tanpa menyekat seluruh kampus</li>
+        <li>Kaunter disimpan dalam cache (Redis dari Modul 2). Tiada stor berasingan perlu dipasang</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Rate limiting · simulasi</span>
+  <h2>Satu WiFi kampus, dua cara mengira</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 360" style="max-width:1000px; margin:0 auto" role="img" aria-label="Simulasi had 60 request seminit: dikira ikut IP berbanding ikut pengguna">
+    <defs><marker id="m3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <text class="t-h" x="0" y="24">KIRA IKUT IP · by($request-&gt;ip())</text>
+    <rect class="box-p" x="0" y="60" width="140" height="58" rx="10"/>
+    <text class="t" x="70" y="86" text-anchor="middle" style="font-size:17px">Aisyah</text>
+    <text class="t-s" x="70" y="107" text-anchor="middle">25 request</text>
+    <rect class="box-p" x="0" y="140" width="140" height="58" rx="10"/>
+    <text class="t" x="70" y="166" text-anchor="middle" style="font-size:17px">Badrul</text>
+    <text class="t-s" x="70" y="187" text-anchor="middle">25 request</text>
+    <rect class="box-p" x="0" y="220" width="140" height="58" rx="10"/>
+    <text class="t" x="70" y="246" text-anchor="middle" style="font-size:17px">Chong</text>
+    <text class="t-s" x="70" y="267" text-anchor="middle">25 request</text>
+    <path d="M140 89 L195 150" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <path d="M140 169 L195 169" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <path d="M140 249 L195 190" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <rect class="box-d" x="200" y="125" width="140" height="88" rx="10"/>
+    <text class="t" x="270" y="155" text-anchor="middle" style="font-size:17px">WiFi kampus</text>
+    <text class="t-s" x="270" y="178" text-anchor="middle">satu IP awam</text>
+    <text class="t-s" x="270" y="200" text-anchor="middle">203.0.113.10</text>
+    <path d="M340 169 L375 169" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <rect class="box-b" x="380" y="115" width="150" height="108" rx="10"/>
+    <text class="t-s" x="455" y="142" text-anchor="middle">1 kaunter</text>
+    <text class="t-s" x="455" y="164" text-anchor="middle">203.0.113.10</text>
+    <text class="t-w" x="455" y="200" text-anchor="middle">75 / 60</text>
+    <text class="t-w" x="265" y="315" text-anchor="middle" style="fill:#ff6b6b">Request ke-61 hingga 75: 429</text>
+    <text class="t-ws" x="265" y="340" text-anchor="middle">untuk sesiapa yang kebetulan terakhir</text>
+
+    <line x1="552" y1="10" x2="552" y2="350" stroke="#2a3140" stroke-width="2"/>
+
+    <g class="fragment">
+    <text class="t-h" x="575" y="24">KIRA IKUT PENGGUNA · by($request-&gt;user()-&gt;id)</text>
+    <rect class="box-p" x="575" y="60" width="140" height="58" rx="10"/>
+    <text class="t" x="645" y="86" text-anchor="middle" style="font-size:17px">Aisyah</text>
+    <text class="t-s" x="645" y="107" text-anchor="middle">25 request</text>
+    <rect class="box-p" x="575" y="140" width="140" height="58" rx="10"/>
+    <text class="t" x="645" y="166" text-anchor="middle" style="font-size:17px">Badrul</text>
+    <text class="t-s" x="645" y="187" text-anchor="middle">25 request</text>
+    <rect class="box-p" x="575" y="220" width="140" height="58" rx="10"/>
+    <text class="t" x="645" y="246" text-anchor="middle" style="font-size:17px">Chong</text>
+    <text class="t-s" x="645" y="267" text-anchor="middle">25 request</text>
+    <path d="M715 89 L855 89" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <path d="M715 169 L855 169" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <path d="M715 249 L855 249" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3r)"/>
+    <text class="t-s" x="790" y="130" text-anchor="middle">IP yang sama</text>
+    <rect class="box-g" x="860" y="60" width="200" height="58" rx="10"/>
+    <text class="t-s" x="960" y="84" text-anchor="middle">kaunter user 1</text>
+    <text class="t-w" x="960" y="108" text-anchor="middle">25 / 60</text>
+    <rect class="box-g" x="860" y="140" width="200" height="58" rx="10"/>
+    <text class="t-s" x="960" y="164" text-anchor="middle">kaunter user 2</text>
+    <text class="t-w" x="960" y="188" text-anchor="middle">25 / 60</text>
+    <rect class="box-g" x="860" y="220" width="200" height="58" rx="10"/>
+    <text class="t-s" x="960" y="244" text-anchor="middle">kaunter user 3</text>
+    <text class="t-w" x="960" y="268" text-anchor="middle">25 / 60</text>
+    <text class="t-w" x="840" y="315" text-anchor="middle" style="fill:#4cc47f">Semua 75 request: 200</text>
+    <text class="t-ws" x="840" y="340" text-anchor="middle">pengguna yang menyalah guna hanya menyekat dirinya</text>
+    </g>
+  </svg>
+  <p style="font-size:.5em; text-align:center" class="muted">Simulasi: 3 pelajar di WiFi kampus yang sama, setiap seorang 25 request dalam seminit. Had <code>api</code> = 60 seminit.</p>
+  <aside class="notes">Tekan anak panah untuk dedahkan panel kanan. Ini simulasi untuk menerangkan konsep, bukan output yang diukur; output sebenar ada dua slide lagi (Rate limiting · 3 / 3). Sebelum log masuk (request ke POST /api/v1/tokens), tiada id pengguna: sebab itu limiter api guna $request->user()?->id ?: $request->ip(), dan limiter login guna email|ip.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Rate limiting · 2 / 3</span>
+  <h2>routes/api.php lengkap setakat ini</h2>
+  <div class="rule"></div>
+      <pre class="sm"><code class="language-php" data-trim data-line-numbers="9,11,19,22">
+&lt;?php
+
+use App\Http\Controllers\Api\V1\{InvoiceController, PaymentController, TokenController};
+use App\Http\Controllers\Api\V2\InvoiceController as V2InvoiceController;
+use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Middleware\{CheckAbilities, EnsureFrontendRequestsAreStateful};
+
+Route::prefix('v1')->group(function () {
+    Route::post('tokens', [TokenController::class, 'store'])->middleware('throttle:login');
+
+    Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum', 'throttle:api'])
+        ->group(function () {
+            Route::delete('tokens/current', [TokenController::class, 'destroy']);
+            Route::get('invoices', [InvoiceController::class, 'index'])
+                ->middleware(CheckAbilities::class.':invoices:read');
+            Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])
+                ->middleware(CheckAbilities::class.':invoices:read');
+            Route::post('payments', [PaymentController::class, 'store'])
+                ->middleware([CheckAbilities::class.':payments:create', 'throttle:payments']);
+        });
+});
+
+Route::prefix('v2')->middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    Route::get('invoices/{invoice}', [V2InvoiceController::class, 'show']);
+});
+      </code></pre>
+  <p style="font-size:.52em"><code>throttle:login</code> pada log masuk, <code>throttle:api</code> pada seluruh kumpulan, dan <code>throttle:payments</code> tambahan pada bayaran. Nama selepas <code>throttle:</code> = nama dalam <code>RateLimiter::for()</code>.</p>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Rate limiting · 3 / 3</span>
+  <h2>Apa yang aplikasi nampak</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">4 bayaran berturut-turut (had 3 seminit)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+HTTP/1.1 201 Created            X-RateLimit-Remaining: 2
+HTTP/1.1 201 Created            X-RateLimit-Remaining: 1
+HTTP/1.1 201 Created            X-RateLimit-Remaining: 0
+HTTP/1.1 429 Too Many Requests  X-RateLimit-Remaining: 0
+                                Retry-After: 59
+{"message":"Too Many Attempts."}
+      </code></pre>
+      <p class="code-label">6 cubaan log masuk salah (had 5 seminit)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+422 422 422 422 422 429
+      </code></pre>
+    </div>
+    <div>
+      <p style="font-size:.53em">Aplikasi mudah alih baca <code>Retry-After</code> dan papar "cuba lagi dalam 59 saat". Route dengan <code>throttle:api</code> dapat <code>X-RateLimit-Limit: 60</code> pada setiap response.</p>
+      <div class="callout warn" style="font-size:.52em">Kaunter mengira <strong>semua</strong> request, termasuk yang gagal dengan 403 atau 422. Semasa ujian kami, 3 cubaan gagal menghabiskan had bayaran. Pilih had yang cukup longgar untuk pengguna jujur yang tersilap.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Sanctum: apa jawapannya?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Kenapa DB simpan hash token, bukan token asal?</td><td class="fragment">Jika DB bocor, hash tidak boleh dipakai sebagai token</td></tr>
+      <tr><td>2</td><td>Token Puan Siti cuba <code>POST /api/v1/payments</code>. Kod?</td><td class="fragment"><code>403</code> <code>Invalid ability provided.</code></td></tr>
+      <tr><td>3</td><td>Had log masuk ikut IP sahaja. Apa jadi semasa pendaftaran?</td><td class="fragment">Seluruh kampus (satu IP) disekat selepas 5 cubaan. Guna <code>email|ip</code></td></tr>
+      <tr><td>4</td><td>Kenapa portal Bendahari tidak simpan token dalam <code>localStorage</code>?</td><td class="fragment">Skrip jahat boleh membacanya. Cookie HttpOnly tidak boleh</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 1 · 15 minit · individu, dibantu rakan semeja · baki <span data-countdown>15:00</span></span>
+  <h2>Aplikasi mudah alih boleh log masuk</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-3-start</code>. Sanctum sudah dipasang (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">install:api</code>).</p>
+      <ol class="steps" style="font-size:.55em">
+        <li>Migration <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">role</code> (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">student_id</code> sudah ada); <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">HasApiTokens</code> pada <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">User</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">POST /api/v1/tokens</code> pulangkan token dengan abilities ikut peranan</li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">GET /api/v1/invoices</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">auth:sanctum</code> dan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">CheckAbilities</code></li>
+        <li>Tanpa header <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Accept</code>: mesti <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">401</code>, bukan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">500</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">throttle:login</code>: cubaan ke-6 dapat <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">429</code></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Output curl untuk: log masuk (201), senarai invois dengan token (200), tanpa token dan tanpa <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Accept</code> (401), cubaan ke-6 (429).</p>
+      <p>Siap awal? Tambah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">GET /api/v1/tokens</code> yang senaraikan peranti aktif pengguna (<code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">name</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">last_used_at</code>) dari <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">$request->user()->tokens</code>.</p>
+    </div>
+  </div>
+  <aside class="notes">Branch modul-3-start: kod akhir Modul 2, Sanctum dipasang, PaymentService dan StorePaymentRequest dari Modul 1, seeder Aisyah / Badrul / Puan Siti dengan kata laluan rahsia123.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- MINUM PETANG 3:45                                          -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">3:45 – 4:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Minum petang · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: satu perangkap Sanctum, kemudian Policies &amp; Gates</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 03: POLICIES & GATES, TAMAT HARI 2                -->
+<!-- ============================================================ -->
+
+<section data-timing="300">
+  <span class="kicker">Perangkap · SPA (Single Page Application) dan abilities</span>
+  <h2>Puan Siti cuba membayar melalui portal</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Puan Siti log masuk ke portal Bendahari (cookie sesi, <strong>tiada token</strong>), kemudian:</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+POST /api/v1/payments   invoice_id=7, method=fpx
+500  {"message":"Attempt to read property \"id\" on null"}
+      </code></pre>
+      <p class="code-label">app/Http/Requests/StorePaymentRequest.php (Modul 1)</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="5">
+public function authorize(): bool
+{
+    // pelajar hanya boleh bayar invois sendiri
+    return Invoice::whereKey($this->integer('invoice_id'))
+        ->where('student_id', $this->user()->student->id)
+        ->exists();
+}
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:.52em">
+        <li>Token Puan Siti tiada <code>payments:create</code>, tetapi dia guna <strong>cookie</strong>, bukan token</li>
+        <li>Untuk log masuk sesi, Sanctum beri <code>TransientToken</code>. Method <code>can()</code>nya sentiasa pulangkan <code>true</code>, jadi <code>CheckAbilities</code> <strong>lulus</strong></li>
+        <li><code>authorize()</code> Modul 1 anggap semua pengguna ialah pelajar. Puan Siti tiada <code>student</code>, jadi <code>null->id</code></li>
+      </ol>
+      <div class="callout warn" style="font-size:.52em"><strong>Abilities hanya menghadkan token.</strong> Peraturan "siapa boleh buat apa pada rekod mana" mesti disemak untuk <strong>setiap pengguna</strong>, tanpa mengira cara log masuk. Itulah policy.</div>
+    </div>
+  </div>
+  <aside class="notes">Diuji: log masuk SPA sebagai siti@utm.my, POST /api/v1/payments dengan cookie dan X-XSRF-TOKEN. Mesej dalam log: Attempt to read property "id" on null. Kita betulkan dalam Bahagian Policies &amp; Gates beberapa slide lagi (slide "StorePaymentRequest guna policy").</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-user-shield"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Policies &amp; Gates</h2>
+  <p>Fine-grained access control: pelajar hanya lihat invois sendiri</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Masalah</span>
+  <h2>Token sah, ability sah, rekod orang lain</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Aisyah (pelajar 7) log masuk dengan token sendiri, kemudian tukar nombor dalam URL:</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+GET /api/v1/invoices/7
+Authorization: Bearer 1|rA3I…   (token Aisyah, ability invoices:read)
+
+200  {"data":{"id":7,"number":"INV0000007","type":"hostel",
+      "amount":"480.00","due_date":"2026-11-17","paid_at":null,
+      "is_overdue":true}}
+      </code></pre>
+      <pre class="xs"><code class="language-sql" data-trim>
+select student_id from invoices where id = 7;
+-- 2  (Badrul)
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>auth:sanctum</code>: lulus, token sah</li>
+        <li><code>CheckAbilities</code>: lulus, token ada <code>invoices:read</code></li>
+        <li><code>InvoiceController::show()</code>: tiada semakan pemilik</li>
+      </ul>
+      <div class="callout warn" style="font-size:.53em">Ini <strong>IDOR (Insecure Direct Object Reference)</strong>: id rekod dalam URL dipercayai tanpa semakan pemilik. Antara kelemahan API yang paling kerap dilaporkan.</div>
+      <p style="font-size:.52em">Skrip 10 baris boleh mencuba <code>/invoices/1</code> hingga <code>/invoices/2000</code> dan mengumpul data kewangan semua pelajar.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Policy</span>
+  <h2>Satu class, semua peraturan invois</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-bash" data-trim>
+php artisan make:policy InvoicePolicy --model=Invoice
+      </code></pre>
+      <p class="code-label">app/Policies/InvoicePolicy.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Policies;
+
+use App\Models\Invoice;
+use App\Models\User;
+
+final class InvoicePolicy
+{
+    public function view(User $user, Invoice $invoice): bool
+    {
+        return $user->isBursary()
+            || $user->student_id === $invoice->student_id;
+    }
+
+    public function pay(User $user, Invoice $invoice): bool
+    {
+        return $user->student_id === $invoice->student_id;
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li>Nama method = nama tindakan: <code>view</code>, <code>pay</code></li>
+        <li>Parameter pertama sentiasa pengguna yang log masuk; Laravel isi sendiri</li>
+        <li><strong>Tiada pendaftaran:</strong> Laravel cari <code>App\Policies\InvoicePolicy</code> untuk model <code>App\Models\Invoice</code> mengikut nama</li>
+        <li><code>pay()</code>: Bendahari <strong>tidak</strong> membayar bagi pihak pelajar. <code>null === 8</code> ialah <code>false</code></li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Peraturan berubah ("penaja boleh lihat invois pelajar tajaannya")? Ubah satu fail ini sahaja, bukan setiap controller.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Policy · simulasi</span>
+  <h2>Perjalanan satu request ke policy</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 340" style="max-width:1000px; margin:0 auto" role="img" aria-label="Aliran request dari route, middleware, route model binding, controller ke InvoicePolicy">
+    <defs><marker id="m3p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <text class="t-h" x="0" y="24">AISYAH (PELAJAR 7) → GET /api/v1/invoices/7 (MILIK BADRUL, PELAJAR 8)</text>
+    <rect class="box-p" x="0" y="50" width="165" height="110" rx="10"/>
+    <text class="t" x="82.5" y="80" text-anchor="middle" style="font-size:17px">Request</text>
+    <text class="t-s" x="82.5" y="106" text-anchor="middle">GET /invoices/7</text>
+    <text class="t-s" x="82.5" y="130" text-anchor="middle">token Aisyah</text>
+    <rect class="box-d" x="195" y="50" width="195" height="110" rx="10"/>
+    <text class="t" x="292.5" y="80" text-anchor="middle" style="font-size:17px">Middleware route</text>
+    <text class="t-s" x="292.5" y="106" text-anchor="middle">auth:sanctum ✓</text>
+    <text class="t-s" x="292.5" y="130" text-anchor="middle">CheckAbilities ✓</text>
+    <rect class="box-d" x="420" y="50" width="190" height="110" rx="10"/>
+    <text class="t" x="515" y="80" text-anchor="middle" style="font-size:16px">Route model binding</text>
+    <text class="t-s" x="515" y="106" text-anchor="middle">{invoice} = 7</text>
+    <text class="t-s" x="515" y="130" text-anchor="middle">student_id = 2</text>
+    <rect class="box-a" x="640" y="50" width="200" height="110" rx="10"/>
+    <text class="t" x="740" y="80" text-anchor="middle" style="font-size:17px">Controller show()</text>
+    <text class="t-s" x="740" y="106" text-anchor="middle">Gate::authorize(</text>
+    <text class="t-s" x="740" y="130" text-anchor="middle">'view', $invoice)</text>
+    <rect class="box-i" x="870" y="50" width="230" height="110" rx="10"/>
+    <text class="t" x="985" y="80" text-anchor="middle" style="font-size:16px">InvoicePolicy::view()</text>
+    <text class="t-s" x="985" y="106" text-anchor="middle">isBursary(): false</text>
+    <text class="t-s" x="985" y="130" text-anchor="middle">7 === 8: false</text>
+    <path d="M165 105 L190 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3p)"/>
+    <path d="M390 105 L415 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3p)"/>
+    <path d="M610 105 L635 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3p)"/>
+    <path d="M840 105 L865 105" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3p)"/>
+    <text class="t-s" x="292" y="190" text-anchor="middle" style="fill:#ff6b6b">tiada token: 401</text>
+    <text class="t-s" x="292" y="212" text-anchor="middle" style="fill:#ff6b6b">tiada ability: 403</text>
+    <text class="t-s" x="515" y="190" text-anchor="middle" style="fill:#ff6b6b">id tiada: 404</text>
+    <text class="t-s" x="515" y="212" text-anchor="middle">(sebelum policy)</text>
+    <text class="t-i" x="755" y="40" text-anchor="middle">Laravel cari InvoicePolicy ikut nama model</text>
+    <path d="M985 160 L985 245" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#m3p)"/>
+    <text class="t-ws" x="997" y="208">false</text>
+    <path d="M900 160 L780 245" stroke="#4cc47f" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#m3p)"/>
+    <text class="t-ws" x="800" y="208">true</text>
+    <rect class="box-g" x="620" y="250" width="230" height="80" rx="10"/>
+    <text class="t" x="735" y="282" text-anchor="middle" style="font-size:17px">200</text>
+    <text class="t-s" x="735" y="308" text-anchor="middle">new InvoiceResource($invoice)</text>
+    <rect class="box-b" x="870" y="250" width="230" height="80" rx="10"/>
+    <text class="t" x="985" y="282" text-anchor="middle" style="font-size:17px">403</text>
+    <text class="t-s" x="985" y="308" text-anchor="middle">This action is unauthorized.</text>
+  </svg>
+  <table style="font-size:.48em; margin-top:.3em">
+    <thead><tr><th>Request</th><th>Dalam <code>view()</code></th><th>Hasil (diuji)</th></tr></thead>
+    <tbody>
+      <tr class="fragment"><td>Aisyah → invois 7</td><td><code>isBursary()</code> false, <code>7 === 8</code> false</td><td><code>403</code></td></tr>
+      <tr class="fragment"><td>Aisyah → invois 6 (miliknya)</td><td><code>7 === 7</code> true</td><td><code>200</code></td></tr>
+      <tr class="fragment"><td>Puan Siti → invois 7</td><td><code>isBursary()</code> true, tidak perlu semak seterusnya</td><td><code>200</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Ikut anak panah dari kiri ke kanan. Setiap lapisan boleh berhenti awal: middleware (401/403 ability), route model binding (404 jika invois tiada), kemudian baru policy. Kod Gate::authorize() dalam controller ditunjukkan pada slide seterusnya. Baris jadual didedahkan satu demi satu; ketiga-tiga hasil diuji dengan curl. || ialah short-circuit: bila isBursary() true, perbandingan student_id tidak dijalankan.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Guna policy · controller</span>
+  <h2>Gate::authorize() dalam show()</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/InvoiceController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8,16">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceResource;
+use App\Models\Invoice;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Gate;
+
+final class InvoiceController extends Controller
+{
+    // index() seperti slide "auth:sanctum" (Hari 2, 2:35 petang)
+
+    public function show(Invoice $invoice): InvoiceResource
+    {
+        Gate::authorize('view', $invoice);
+
+        return new InvoiceResource($invoice);
+    }
+}
+      </code></pre>
+      <p style="font-size:.5em" class="muted">Tambah baris <code>Gate::authorize('view', $invoice);</code> yang sama dalam <code>Api\V2\InvoiceController::show()</code>.</p>
+    </div>
+    <div>
+      <p class="code-label">Request yang sama seperti tadi</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Aisyah → GET /api/v1/invoices/7     (milik Badrul)
+403  {"message":"This action is unauthorized."}
+
+Aisyah → GET /api/v1/invoices/6     (milik sendiri)
+200  {"data":{"id":6,"number":"INV0000006", ...}}
+
+Puan Siti → GET /api/v1/invoices/7
+200
+
+Aisyah → GET /api/v1/invoices/999999
+404  {"message":"No query results for model
+      [App\\Models\\Invoice] 999999"}
+      </code></pre>
+      <div class="callout" style="font-size:.5em"><code>index()</code> tidak perlu policy: query sudah ditapis dengan <code>student_id</code> pengguna sendiri.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Guna policy · FormRequest</span>
+  <h2>StorePaymentRequest guna policy</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">app/Http/Requests/StorePaymentRequest.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Requests;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+final class StorePaymentRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        // pelajar hanya boleh bayar invois sendiri
+        return Invoice::whereKey($this->integer('invoice_id'))
+            ->where('student_id', $this->user()->student->id)
+            ->exists();
+    }
+
+    // rules() tidak berubah
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Puan Siti (portal) → 500 Attempt to read property "id" on null
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Http/Requests/StorePaymentRequest.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Requests;
+
+use App\Enums\PaymentMethod;
+use App\Models\Invoice;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+final class StorePaymentRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        $invoice = Invoice::find($this->integer('invoice_id'));
+
+        return $invoice !== null
+            && $this->user()->can('pay', $invoice);
+    }
+
+    // rules() tidak berubah
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Puan Siti (portal)        → 403 This action is unauthorized.
+Aisyah, invois Badrul (7) → 403 This action is unauthorized.
+Aisyah, invoice_id 999999 → 403 This action is unauthorized.
+Aisyah, invois sendiri    → 201
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Peraturan "pelajar bayar invois sendiri" kini tinggal di satu tempat (InvoicePolicy::pay). id yang tiada juga dapat 403, bukan 404: penyerang tidak dapat tahu sama ada invois itu wujud. rules() kekal seperti Modul 1 (invoice_id required/integer/exists, method Rule::enum).</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">FormRequest · dari mana nilai ini?</span>
+  <h2><code>$this</code> dalam FormRequest = request semasa</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Dalam <code>authorize()</code></th><th>Datang dari</th><th>Contoh</th></tr></thead>
+    <tbody>
+      <tr><td><code>$this->integer('invoice_id')</code></td><td><strong>Badan request</strong> (borang atau JSON), ditukar kepada <code>int</code></td><td><code>curl -d invoice_id=7 -d method=fpx</code></td></tr>
+      <tr><td><code>$this->user()</code></td><td>Pengguna yang dikenal pasti oleh <code>auth:sanctum</code>, <strong>sebelum</strong> FormRequest berjalan</td><td>Pemilik token <code>1|rA3I…</code> (Aisyah), atau sesi portal (Puan Siti)</td></tr>
+      <tr><td><code>$this->route('invoice')</code></td><td>Parameter dalam <strong>URL</strong>, jika route ada <code>{invoice}</code></td><td>Tidak dipakai di sini: route kita <code>POST /api/v1/payments</code> tiada <code>{invoice}</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn" style="font-size:.56em; margin-top:.5em"><strong>Peraturan mudah:</strong> nilai dalam <strong>URL</strong> → <code>route()</code>. Nilai yang <strong>dihantar</strong> (borang, JSON, <code>?x=</code>) → <code>input()</code> / <code>integer()</code>. Web atau API tidak mengubah peraturan ini.
+<pre style="margin:.5em 0 0; box-shadow:none; font-size:1.3em; width:100%"><code class="language-plaintext" data-trim>
+POST /api/v1/payments   -d invoice_id=7   →  $this->integer('invoice_id')
+POST /invoices/7/pay                      →  $this->route('invoice')
+</code></pre></div>
+  <aside class="notes">Urutan dalam route payments: auth:sanctum (tetapkan user) → CheckAbilities → throttle → Laravel cipta StorePaymentRequest → authorize() → rules() → baru PaymentController::store(). Jika authorize() pulangkan false: 403 dan rules() tidak dijalankan. $this->integer() pulangkan 0 jika medan tiada; Invoice::find(0) = null, jadi 403. Kenapa $this boleh panggil integer() dan user(): StorePaymentRequest extends FormRequest, yang extends Request, jadi method sama seperti $request-> dalam controller.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 2 minit</span>
+  <h2>URL atau input?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>#</th><th>Request</th><th>Kod dalam FormRequest</th><th>Jawapan (diuji)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>POST /api/v1/payments -d invoice_id=7</code></td><td><code>$this->integer('invoice_id')</code></td><td class="fragment"><code>7</code>: input</td></tr>
+      <tr><td>2</td><td><code>POST /invoices/7/pay</code></td><td><code>$this->integer('invoice')</code></td><td class="fragment"><code>0</code>: 7 ada dalam URL, bukan input. Guna <code>route('invoice')</code></td></tr>
+      <tr><td>3</td><td><code>POST /api/v1/payments?invoice_id=9</code></td><td><code>$this->integer('invoice_id')</code></td><td class="fragment"><code>9</code>: query string juga input</td></tr>
+      <tr><td>4</td><td><code>POST /invoices/7/pay -d invoice=5</code></td><td><code>$this->invoice</code></td><td class="fragment"><code>"5"</code>, bukan 7! Input menang. <code>route('invoice')</code> tetap <code>"7"</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout fragment" style="font-size:.52em; margin-top:.5em">Soalan 4 ialah sebab untuk <strong>tidak</strong> guna <code>$this->invoice</code>: pengguna boleh hantar medan dengan nama yang sama dan menggantikan nilai dari URL. Sentiasa sebut sumbernya: <code>route()</code> atau <code>input()</code>.</div>
+  <aside class="notes">Setiap meja tulis jawapan dahulu, kemudian tekan anak panah untuk dedahkan. Semua jawapan diuji pada Laravel 13. $this->invoice (magic property) cari dalam input dahulu, kemudian baru route: kod Laravel ialah Arr::get($this->all(), $key, fn () => $this->route($key)). Route /invoices/{invoice}/pay hanya contoh untuk kuiz; ia tiada dalam sistem kita. Tanpa route model binding, route('invoice') ialah string "7"; dengan binding (seperti show() kita), ia objek Invoice.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Gate</span>
+  <h2>Tindakan yang tiada rekod khusus</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php: tambahan</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+
+// dalam boot(), selepas RateLimiter::for(...)
+Gate::define('view-bursary-reports', fn (User $user) => $user->isBursary());
+      </code></pre>
+      <p class="code-label">routes/api.php: dalam kumpulan v1</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\Payment;
+
+Route::get('reports/collections', fn () => [
+    'date' => today()->toDateString(),
+    'total' => Payment::whereDate('paid_at', today())->sum('amount'),
+])->middleware(['auth:sanctum', 'can:view-bursary-reports']);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Aisyah    → 403  {"message":"This action is unauthorized."}
+Puan Siti → 200  {"date":"2026-11-22","total":"5990.00"}
+      </code></pre>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th></th><th>Gate</th><th>Policy</th></tr></thead>
+        <tbody>
+          <tr><td>Soalan</td><td>Boleh buat <strong>tindakan</strong> ini?</td><td>Boleh buat tindakan ini pada <strong>rekod ini</strong>?</td></tr>
+          <tr><td>Contoh</td><td>Lihat laporan kutipan</td><td>Lihat invois 7</td></tr>
+          <tr><td>Tempat</td><td>Closure dalam <code>AppServiceProvider</code></td><td>Class dalam <code>app/Policies</code></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.52em">Cara memanggil sama untuk kedua-dua:</p>
+      <ul style="font-size:.5em">
+        <li>Middleware: <code>can:view-bursary-reports</code></li>
+        <li>Kod: <code>Gate::allows('view-bursary-reports')</code>, <code>$user->can('pay', $invoice)</code></li>
+        <li>Blade: <code>@can('view', $invoice) … @endcan</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Ringkasan lapisan</span>
+  <h2>Setiap lapisan menjawab satu soalan</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Lapisan</th><th>Soalan</th><th>Alat</th><th>Gagal</th></tr></thead>
+    <tbody>
+      <tr><td>Authentication</td><td>Siapa anda?</td><td><code>auth:sanctum</code></td><td><code>401</code> Unauthenticated.</td></tr>
+      <tr><td>Rate limiting</td><td>Terlalu kerap?</td><td><code>throttle:payments</code></td><td><code>429</code> Too Many Attempts.</td></tr>
+      <tr><td>Token ability</td><td>Token ini boleh buat jenis kerja ini?</td><td><code>CheckAbilities</code></td><td><code>403</code> Invalid ability provided.</td></tr>
+      <tr><td>Gate</td><td>Pengguna ini boleh buat tindakan ini?</td><td><code>can:view-bursary-reports</code></td><td><code>403</code> This action is unauthorized.</td></tr>
+      <tr><td>Policy</td><td>…pada <strong>rekod ini</strong>?</td><td><code>Gate::authorize('view', $invoice)</code></td><td><code>403</code> This action is unauthorized.</td></tr>
+      <tr><td>Validation</td><td>Input sah?</td><td><code>rules()</code></td><td><code>422</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.53em; margin-top:.6em">Jangan gantikan satu lapisan dengan yang lain. Ability tanpa policy = IDOR (Insecure Direct Object Reference). Policy tanpa ability = token Bendahari yang dicuri boleh buat apa sahaja yang Bendahari boleh.</div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Lapisan mana yang menghalang?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Aisyah tukar URL ke <code>/api/v1/invoices/8</code></td><td class="fragment">Policy <code>view</code> → <code>403</code></td></tr>
+      <tr><td>2</td><td>Token telefon Aisyah dicuri. Pencuri cuba lihat invois Badrul</td><td class="fragment">Policy juga: token membawa identiti Aisyah, bukan "semua pelajar"</td></tr>
+      <tr><td>3</td><td>Halaman "senarai pelajar tertunggak" untuk Bendahari: Gate atau Policy?</td><td class="fragment">Gate (tiada satu rekod khusus)</td></tr>
+      <tr><td>4</td><td>Kenapa <code>authorize()</code> lama dapat <code>500</code> untuk Puan Siti?</td><td class="fragment">Anggap setiap pengguna ada <code>student</code>; <code>null->id</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Dokumentasi API</span>
+  <h2>Perlu dokumentasi API? Guna Scribe</h2>
+  <div class="rule"></div>
+  <p style="font-size:.7em; text-align:center">Scribe jana dokumentasi API terus daripada kod Laravel.</p>
+  <p style="font-size:.8em; text-align:center"><i class="fa-solid fa-link"></i>&nbsp; <a href="https://scribe.knuckles.wtf/laravel" target="_blank">scribe.knuckles.wtf/laravel</a></p>
+  <aside class="notes">Nilai tambah, di luar outline; tidak perlu demo. Diuji dengan Scribe 5.11 pada Laravel 13: composer require --dev knuckleswtf/scribe, kemudian php artisan scribe:generate, dan dokumentasi ada di /docs.</aside>
+</section>
+
+<section data-timing="120" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Tamat Hari 2</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Esok 8:00 pagi: sambung Modul 3</h1>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-check"></i>API Resource + <code>/api/v1</code>, <code>/api/v2</code></span>
+    <span><i class="fa-solid fa-check"></i>Token Sanctum dengan abilities</span>
+    <span><i class="fa-solid fa-check"></i>Portal Bendahari: cookie + <code>X-XSRF-TOKEN</code></span>
+    <span><i class="fa-solid fa-check"></i><code>throttle</code> ikut pengguna</span>
+    <span><i class="fa-solid fa-check"></i><code>InvoicePolicy</code>: invois sendiri sahaja</span>
+  </div>
+  <p class="cover-sub" style="margin-top:1.2em">Esok: Passport untuk sistem kewangan, dan security hardening</p>
+  <aside class="notes">Baki masa hingga 5:00 untuk soal jawab dan peserta yang belum siap Lab 1. Esok pagi, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- HARI 3 · BAHAGIAN 04: LARAVEL PASSPORT                     -->
+<!-- ============================================================ -->
+
+<section data-timing="300" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.4em">Hari 3 · 8:00 pagi · Modul 3 (sambungan)</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Ulang kaji semalam</h1>
+  <div class="card" style="max-width:900px; margin:1em auto 0; text-align:left; font-size:.62em">
+    <h3><i class="fa-solid fa-users"></i>Setiap meja jawab (3 minit)</h3>
+    <ol style="margin:0">
+      <li>Beza <code>401</code> dan <code>403</code>? Beri satu contoh setiap satu dalam sistem yuran.</li>
+      <li>Token Aisyah ada <code>invoices:read</code>. Kenapa dia masih tidak boleh baca invois Badrul?</li>
+      <li>Kenapa log masuk portal Bendahari tidak perlu token, tetapi perlu <code>X-XSRF-TOKEN</code>?</li>
+    </ol>
+  </div>
+  <aside class="notes">Tekan Shift+T di slide ini supaya jam sesi bermula semula pada 8:00. Jawapan: (1) 401 = belum dikenali (tiada token); 403 = dikenali tetapi tidak dibenarkan (Aisyah buka invois Badrul). (2) InvoicePolicy::view semak student_id pemilik; ability hanya jenis kerja. (3) Pelayar hantar cookie sesi secara automatik, jadi perlu bukti request datang dari halaman kita sendiri (CSRF).</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-building-columns"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Laravel Passport</h2>
+  <p>OAuth (Open Authorization) 2.0 flow, client credentials dan personal access token</p>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">OAuth 2.0</span>
+  <h2>Empat peranan, beberapa "grant"</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">OAuth (Open Authorization) 2.0 ialah piawai untuk memberi aplikasi akses <strong>terhad</strong> kepada API tanpa memberi kata laluan.</p>
+      <table style="font-size:.5em">
+        <thead><tr><th>Peranan</th><th>Dalam sistem yuran</th></tr></thead>
+        <tbody>
+          <tr><td>Resource owner</td><td>Pelajar (pemilik data invois)</td></tr>
+          <tr><td>Client</td><td>Aplikasi yang mahu akses: sistem kewangan, aplikasi penaja</td></tr>
+          <tr><td>Authorization server</td><td>Laravel + Passport: <code>/oauth/authorize</code>, <code>/oauth/token</code></td></tr>
+          <tr><td>Resource server</td><td>Laravel API kita: <code>/api/v1/…</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Grant</th><th>Bila</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Client credentials</strong></td><td>Sistem ke sistem, <strong>tiada manusia</strong>. Sistem kewangan tarik bayaran harian</td></tr>
+          <tr><td><strong>Authorization code</strong> + PKCE (Proof Key for Code Exchange)</td><td>Aplikasi pihak lain bertindak <strong>bagi pihak pelajar</strong>, dengan izin pelajar</td></tr>
+          <tr><td>Personal access token</td><td>Pengguna cipta token sendiri untuk skrip</td></tr>
+          <tr><td>Device code</td><td>Peranti tanpa papan kekunci (kios, TV)</td></tr>
+          <tr><td>Refresh token</td><td>Tukar token yang hampir tamat dengan yang baru</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:.5em"><strong>Scope</strong> dalam Passport = <strong>ability</strong> dalam Sanctum: senarai kerja yang token dibenarkan.</div>
+    </div>
+  </div>
+  <aside class="notes">Grant "password" (aplikasi hantar kata laluan pengguna terus) tidak lagi disyorkan oleh piawai OAuth semasa dan tidak dibincang di sini.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">OAuth (Open Authorization) 2.0 flow · authorization code</span>
+  <h2>Aplikasi penaja minta izin pelajar</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 340" style="max-width:980px; margin:0 auto" role="img" aria-label="Aliran authorization code dengan PKCE">
+    <defs><marker id="m3o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker>
+          <marker id="m3og" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4cc47f"/></marker></defs>
+    <rect class="box-a" x="0" y="10" width="200" height="320" rx="12"/>
+    <text class="t" x="100" y="45" text-anchor="middle">Aplikasi penaja</text>
+    <rect class="box-p" x="450" y="10" width="200" height="200" rx="12"/>
+    <text class="t" x="550" y="45" text-anchor="middle">Pelajar</text>
+    <text class="t-s" x="550" y="68" text-anchor="middle">(pelayar)</text>
+    <rect class="box-d" x="900" y="10" width="200" height="320" rx="12"/>
+    <text class="t" x="1000" y="45" text-anchor="middle">Laravel</text>
+    <text class="t-s" x="1000" y="68" text-anchor="middle">+ Passport</text>
+    <path d="M200 100 L445 100" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3o)"/>
+    <text class="t-ws" x="325" y="90" text-anchor="middle">1 · redirect</text>
+    <path d="M650 100 L895 100" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3o)"/>
+    <text class="t-ws" x="775" y="90" text-anchor="middle">/oauth/authorize</text>
+    <text class="t-s" x="775" y="122" text-anchor="middle">scope, code_challenge</text>
+    <path d="M895 150 L655 150" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3o)"/>
+    <text class="t-ws" x="775" y="172" text-anchor="middle">2 · log masuk + Benarkan</text>
+    <path d="M445 190 L205 190" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3o)"/>
+    <text class="t-ws" x="325" y="180" text-anchor="middle">3 · ?code=…</text>
+    <path d="M200 260 L895 260" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m3o)"/>
+    <text class="t-ws" x="550" y="250" text-anchor="middle">4 · POST /oauth/token   code + code_verifier</text>
+    <path d="M895 310 L205 310" stroke="#4cc47f" stroke-width="2.5" marker-end="url(#m3og)"/>
+    <text class="t-ws" x="550" y="300" text-anchor="middle">access_token + refresh_token</text>
+  </svg>
+  <ul style="font-size:.5em; margin-top:.3em">
+    <li>Kata laluan pelajar <strong>hanya</strong> ditaip di laman UTM, tidak pernah sampai ke aplikasi penaja</li>
+    <li>PKCE (Proof Key for Code Exchange): aplikasi hantar <code>code_challenge</code> (hash) di langkah 1 dan rahsia asal <code>code_verifier</code> di langkah 4. <code>code</code> yang dicuri di langkah 3 tidak berguna tanpa rahsia itu</li>
+  </ul>
+  <aside class="notes">Route /oauth/authorize dan /oauth/token didaftar sendiri oleh Passport (disahkan dengan php artisan route:list --path=oauth). Aliran ini perlukan halaman log masuk web, skrin "Benarkan" dan trait Passport pada User; kita tidak bina dalam kursus ini. Yang kita bina dan uji ialah client credentials.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Pemasangan</span>
+  <h2>composer require laravel/passport</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-bash" data-trim>
+composer require laravel/passport      # v13.12
+php artisan passport:install
+      </code></pre>
+      <p class="code-label">Output (dipendekkan)</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+2026_11_22_033359_create_oauth_auth_codes_table ...... DONE
+2026_11_22_033400_create_oauth_access_tokens_table ... DONE
+2026_11_22_033401_create_oauth_refresh_tokens_table .. DONE
+2026_11_22_033402_create_oauth_clients_table ......... DONE
+2026_11_22_033403_create_oauth_device_codes_table .... DONE
+
+INFO  New client created successfully.
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li>Lima jadual <code>oauth_*</code> untuk client, token, kod dan refresh token</li>
+        <li>Kunci RSA: <code>storage/oauth-private.key</code> dan <code>storage/oauth-public.key</code>. Kunci peribadi menandatangani setiap token</li>
+        <li>Satu client "Laravel" jenis <code>personal_access</code></li>
+        <li>Route <code>/oauth/*</code> didaftar secara automatik</li>
+      </ul>
+      <div class="callout warn" style="font-size:.52em">Fail kunci <strong>tidak</strong> masuk Git. Di pelayan produksi, letak kandungannya dalam <code>PASSPORT_PRIVATE_KEY</code> dan <code>PASSPORT_PUBLIC_KEY</code> (<code>config/passport.php</code> membacanya). Kunci bocor = sesiapa boleh cipta token sah.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Personal access token · perangkap</span>
+  <h2>Sanctum dan Passport pada model yang sama?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.55em">Cuba guna kedua-dua trait pada <code>User</code>:</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use HasApiTokens, PassportTokens, HasFactory, Notifiable;
+// PassportTokens = Laravel\Passport\HasApiTokens
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Symfony\Component\ErrorHandler\Error\FatalError
+Trait method Laravel\Passport\HasApiTokens::tokens has not been
+applied as App\Models\User::tokens, because of collision with
+Laravel\Sanctum\HasApiTokens::tokens
+      </code></pre>
+      <div class="callout" style="font-size:.52em"><strong>Keputusan:</strong> <code>User</code> kekal dengan Sanctum. Client credentials tidak melibatkan pengguna, jadi Passport tidak perlukan trait pada <code>User</code> langsung.</div>
+    </div>
+    <div>
+      <p style="font-size:.53em">Jika satu hari seluruh sistem berpindah ke Passport, personal access token Passport perlukan tiga perkara (diuji):</p>
+      <ol class="steps" style="font-size:.5em">
+        <li><code>User</code> guna <code>Laravel\Passport\HasApiTokens</code> dan <code>implements OAuthenticatable</code></li>
+        <li>Guard <code>'api' =&gt; ['driver' =&gt; 'passport', 'provider' =&gt; 'users']</code> dalam <code>config/auth.php</code>. Tanpanya: <em>LogicException: Unable to determine authentication provider for this model from configuration.</em></li>
+        <li><code>$user->createToken('Skrip laporan', ['payments:read'])->accessToken</code>: JWT (JSON Web Token) 1,047 aksara, tamat 1 tahun</li>
+      </ol>
+      <p style="font-size:.5em" class="muted">Untuk aplikasi sendiri, token Sanctum (Bahagian Laravel Sanctum, Hari 2) sudah memadai.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Client credentials · 1 / 3</span>
+  <h2>Daftar sistem kewangan sebagai client</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-bash" data-trim>
+php artisan passport:client --client --name="Sistem Kewangan UTM"
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Client ID ........ 01a20152-f186-7be3-a551-535c7ab7eb59
+Client Secret .... mlRQs7IJ4QDHr2qZEz8UaqNnW8zoGGOtGOg7rCv2
+
+WARN  The client secret will not be shown again, so don't lose it!
+      </code></pre>
+      <p style="font-size:.5em">Secret disimpan sebagai hash (<code>$2y$12$…</code>) dalam <code>oauth_clients</code>. Hantar kepada pasukan sistem kewangan melalui saluran selamat, bukan emel biasa.</p>
+    </div>
+    <div>
+      <p class="code-label">routes/api.php: dalam kumpulan v1, di luar <code>auth:sanctum</code></p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Http\Controllers\Api\V1\PartnerPaymentController;
+use Laravel\Passport\Http\Middleware\EnsureClientIsResourceOwner;
+
+Route::get('partner/payments', [PartnerPaymentController::class, 'index'])
+    ->middleware(EnsureClientIsResourceOwner::using('payments:read'));
+      </code></pre>
+      <p style="font-size:.53em"><code>EnsureClientIsResourceOwner</code>: token mesti dari client credentials <strong>dan</strong> ada scope <code>payments:read</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Client credentials · 2 / 3</span>
+  <h2>Scope dan tempoh token</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Providers/AppServiceProvider.php (lengkap)</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="27-28">
+namespace App\Providers;
+
+use App\Models\User;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+
+class AppServiceProvider extends ServiceProvider
+{
+    // register(): binding repository dari Modul 1 dan 2, tidak berubah
+
+    public function boot(): void
+    {
+        Authenticate::redirectUsing(
+            fn (Request $request) => $request->is('api/*') ? null : '/login'
+        );
+        RateLimiter::for('api', fn (Request $request) =>
+            Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
+        RateLimiter::for('login', fn (Request $request) =>
+            Limit::perMinute(5)->by($request->input('email').'|'.$request->ip()));
+        RateLimiter::for('payments', fn (Request $request) =>
+            Limit::perMinute(3)->by($request->user()->id));
+        Gate::define('view-bursary-reports', fn (User $user) => $user->isBursary());
+        Passport::tokensCan(['payments:read' => 'Baca senarai bayaran harian']);
+        Passport::tokensExpireIn(now()->addHour());
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>tokensCan()</code>: senarai scope yang wujud, dengan penerangan. Client yang minta scope lain ditolak</li>
+        <li><code>tokensExpireIn()</code>: token client tamat selepas 1 jam. Sistem kewangan minta token baru setiap kali berjalan</li>
+        <li>Selebihnya sama seperti Hari 2: <code>redirectUsing</code>, tiga <code>RateLimiter</code>, satu <code>Gate</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Client credentials · 3 / 3</span>
+  <h2>Endpoint untuk sistem kewangan</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/PartnerPaymentController.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+final class PartnerPaymentController extends Controller
+{
+    public function index(Request $request): JsonResponse
+    {
+        $data = $request->validate(['date' => ['required', 'date_format:Y-m-d']]);
+
+        $payments = Payment::whereDate('paid_at', $data['date'])
+            ->get(['reference', 'method', 'amount', 'paid_at']);
+
+        return response()->json([
+            'date' => $data['date'],
+            'count' => $payments->count(),
+            'total' => $payments->sum('amount'),
+            'data' => $payments,
+        ]);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li>Tiada <code>$request->user()</code>: tiada pengguna. Yang memanggil ialah <strong>client</strong></li>
+        <li><code>get([...])</code> pilih kolum sahaja: sistem kewangan tidak perlu <code>student_id</code></li>
+        <li><code>date_format:Y-m-d</code>: input lain ditolak dengan <code>422</code> sebelum menyentuh DB</li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Ingat Bahagian Indexing Modul 2 (Hari 2, 8:52 pagi): <code>whereDate()</code> pada <code>paid_at</code> dipanggil setiap malam. Semak dengan <code>EXPLAIN</code> jika jadual <code>payments</code> besar.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Client credentials · diuji</span>
+  <h2>Minta token, panggil API</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -X POST http://127.0.0.1:8000/oauth/token \
+    -d grant_type=client_credentials -d client_id=01a20152-… -d client_secret=mlRQ… -d scope=payments:read
+200  {"token_type":"Bearer","expires_in":3600,"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQi…"}
+
+$ curl -H "Authorization: Bearer eyJ0eXAi…" "http://127.0.0.1:8000/api/v1/partner/payments?date=2026-11-21"
+200  {"date":"2026-11-21","count":3,"total":1440,"data":[{"reference":"REF1","method":"card",
+      "amount":"480.00","paid_at":"2026-11-21T00:00:00.000000Z"}, ...]}
+  </code></pre>
+  <div class="cols">
+    <div>
+      <p class="code-label">Bahagian tengah JWT, selepas base64 decode</p>
+      <pre class="xs"><code class="language-json" data-trim>
+{"aud":"01a20152-f186-7be3-a551-535c7ab7eb59",
+ "jti":"3dee513eb10e8d63…","iat":1795318550.60823,
+ "nbf":1795318550.608231,"exp":1826854550.600977,
+ "sub":"01a20152-f186-7be3-a551-535c7ab7eb59",
+ "scopes":["payments:read"]}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.52em">
+        <li>JWT (JSON Web Token): tiga bahagian dipisah titik. Kandungan <strong>boleh dibaca sesiapa</strong>, tetapi tidak boleh diubah tanpa kunci peribadi</li>
+        <li><code>sub</code> = id client, bukan pengguna</li>
+        <li><code>expires_in: 3600</code> datang dari <code>tokensExpireIn(now()->addHour())</code>. Tanpanya: 31,536,000 saat (1 tahun)</li>
+      </ul>
+      <div class="callout warn" style="font-size:.5em">Jangan letak data sulit dalam scope atau claim JWT: ia hanya dikodkan, bukan disulitkan.</div>
+    </div>
+  </div>
+  <aside class="notes">Payload JWT di sebelah kiri diambil daripada token pertama sebelum tokensExpireIn ditambah, sebab itu exp - iat = 1 tahun. Token selepas tokensExpireIn: expires_in 3600.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Client credentials · bila gagal</span>
+  <h2>Empat kesilapan biasa</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Hasil sebenar</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Secret salah</td><td><code>401</code> <code>{"error":"invalid_client","error_description":"Client authentication failed"}</code></td></tr>
+      <tr><td>2</td><td>Token diminta tanpa <code>scope=payments:read</code></td><td><code>403</code> <code>Invalid scope(s) provided.</code></td></tr>
+      <tr><td>3</td><td>Token Sanctum Puan Siti ke <code>/partner/payments</code></td><td><code>401</code> <code>Unauthenticated.</code></td></tr>
+      <tr><td>4</td><td>Token Passport ke <code>/api/v1/invoices</code> (Sanctum)</td><td><code>401</code> <code>Unauthenticated.</code></td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:.6em">
+    <div class="callout" style="font-size:.52em">Baris 3 dan 4: dua sistem token yang berasingan. Token satu sistem tidak diterima oleh sistem yang lain. Inilah yang kita mahu.</div>
+    <div class="callout warn" style="font-size:.52em">Baris 2: client yang sama boleh minta token <strong>tanpa</strong> scope. Sebab itu semakan scope mesti di <strong>route</strong>, bukan bergantung pada client "berkelakuan baik".</div>
+  </div>
+</section>
+
+<section data-timing="900" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 2 · 15 minit · berpasangan dalam meja · baki <span data-countdown>15:00</span></span>
+  <h2>Sistem kewangan tarik bayaran harian</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Sambung branch Lab 1. Seorang jadi "pasukan API", seorang jadi "sistem kewangan" yang hanya ada curl.</p>
+      <ol class="steps" style="font-size:.55em">
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">composer require laravel/passport</code>, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">passport:install</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Passport::tokensCan()</code> dan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">tokensExpireIn()</code> dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">AppServiceProvider</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">PartnerPaymentController</code> + route dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">EnsureClientIsResourceOwner::using('payments:read')</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">passport:client --client</code>; beri id dan secret kepada rakan</li>
+        <li>Rakan minta token dan panggil <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/api/v1/partner/payments?date=…</code></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Output curl rakan: token (200), data bayaran (200), token tanpa scope (403), secret salah (401).</p>
+      <p>Siap awal? Tambah scope kedua <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">invoices:read</code> dan endpoint <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">/api/v1/partner/outstanding</code> yang pulangkan jumlah tunggakan guna scope <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">outstanding()</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Sanctum atau Passport? Grant apa?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Aplikasi mudah alih UTM sendiri</td><td class="fragment">Sanctum, token dengan abilities</td></tr>
+      <tr><td>2</td><td>Sistem kewangan tarik data setiap malam</td><td class="fragment">Passport, client credentials</td></tr>
+      <tr><td>3</td><td>Aplikasi yayasan penaja mahu status yuran pelajar, dengan izin pelajar</td><td class="fragment">Passport, authorization code + PKCE (Proof Key for Code Exchange)</td></tr>
+      <tr><td>4</td><td>Skrip Python Puan Siti untuk muat turun laporan</td><td class="fragment">Sanctum, token dengan ability <code>reports:read</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Passport + akaun UTM</span>
+  <h2>Passport boleh guna username &amp; kata laluan AD</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 385" style="max-width:980px; margin:0 auto" role="img" aria-label="Aliran: pengguna log masuk ke Laravel, Laravel semak dengan AD, Passport keluarkan token, aplikasi panggil API">
+    <defs><marker id="m3ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <rect class="box-p" x="0" y="40" width="220" height="90" rx="10"/>
+    <text class="t" x="110" y="78" text-anchor="middle" style="font-size:18px">Pengguna</text>
+    <text class="t-s" x="110" y="104" text-anchor="middle">aplikasi mudah alih</text>
+    <rect class="box-d" x="400" y="40" width="260" height="90" rx="10"/>
+    <text class="t" x="530" y="78" text-anchor="middle" style="font-size:18px">Laravel</text>
+    <text class="t-s" x="530" y="104" text-anchor="middle">halaman log masuk</text>
+    <rect class="box-i" x="860" y="40" width="240" height="90" rx="10"/>
+    <text class="t" x="980" y="78" text-anchor="middle" style="font-size:18px">AD UTM</text>
+    <text class="t-s" x="980" y="104" text-anchor="middle">Active Directory</text>
+    <rect class="box-a" x="400" y="240" width="260" height="90" rx="10"/>
+    <text class="t" x="530" y="278" text-anchor="middle" style="font-size:18px">Passport</text>
+    <text class="t-s" x="530" y="304" text-anchor="middle">keluarkan access token</text>
+    <rect class="box-g" x="860" y="240" width="240" height="90" rx="10"/>
+    <text class="t" x="980" y="278" text-anchor="middle" style="font-size:18px">API</text>
+    <text class="t-s" x="980" y="304" text-anchor="middle">/api/v1/invoices …</text>
+
+    <path d="M220 72 L395 72" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="308" y="60" text-anchor="middle" style="font-size:13px">1 · username + kata laluan</text>
+    <path d="M660 72 L855 72" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="758" y="60" text-anchor="middle">2 · semak</text>
+    <path d="M860 108 L665 108" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="758" y="130" text-anchor="middle" style="fill:#4cc47f">3 · sah ✓</text>
+    <path d="M530 130 L530 235" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="542" y="190">4 · pengguna dikenal pasti</text>
+    <path d="M400 285 L110 285 L110 135" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="255" y="275" text-anchor="middle">5 · access token</text>
+    <path d="M50 130 L50 365 L980 365 L980 335" stroke="#9aa5b8" stroke-width="2.5" fill="none" marker-end="url(#m3ad)"/>
+    <text class="t-ws" x="520" y="355" text-anchor="middle">6 · panggil API dengan Bearer token</text>
+  </svg>
+  <div class="callout" style="font-size:.52em; margin-top:.4em">AD menjawab <strong>siapa pengguna ini</strong> (langkah 2–3). Passport kekal mengeluarkan token, dan route, scope serta kod API tidak berubah.</div>
+  <aside class="notes">Nilai tambah, di luar outline; tidak perlu demo dan belum diuji dengan AD sebenar. Untuk sambung Laravel ke AD, pakej yang biasa digunakan ialah LdapRecord-Laravel (ldaprecord.com/docs/laravel/v3); ia menyemak melalui LDAP dan menyimpan pengguna dalam jadual users. Ini untuk grant yang ada pengguna (authorization code). Grant client credentials (sistem kewangan) tiada pengguna, jadi AD tidak terlibat. Jika UTM guna Microsoft Entra ID (login Microsoft 365), Entra sendiri boleh keluarkan token, dan pilihan lain ialah Socialite dengan provider Microsoft.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 05: SECURITY HARDENING                            -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-shield-halved"></i></div>
+  <div class="big-num">BAHAGIAN 05</div>
+  <h2>Security Hardening</h2>
+  <p>SQL injection, skrip jahat, CSRF (Cross-Site Request Forgery), mass assignment dan input sanitization</p>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">SQL injection · serangan</span>
+  <h2>Carian invois untuk Bendahari</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/InvoiceSearchController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="13">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+final class InvoiceSearchController extends Controller
+{
+    public function __invoke(Request $request): JsonResponse
+    {
+        $number = $request->query('number');
+        $invoices = Invoice::whereRaw("number = '$number'")->get(['number', 'amount']);
+
+        return response()->json(['data' => $invoices]);
+    }
+}
+      </code></pre>
+      <p class="code-label">routes/api.php: dalam kumpulan <code>auth:sanctum</code> v1</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::get('search/invoices', InvoiceSearchController::class)
+    ->middleware('can:view-bursary-reports');
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+?number=INV0000007
+{"data":[{"number":"INV0000007","amount":"480.00"}]}
+
+?number=x' OR '1'='1
+SQL: ... where number = 'x' OR '1'='1'
+{"data":[ 2000 invois ]}
+
+?number=x' UNION SELECT email, password FROM users -- -
+{"data":[
+ {"number":"aisyah@graduate.utm.my","amount":"$2y$12$Nybq…"},
+ {"number":"badrul@graduate.utm.my","amount":"$2y$12$vUKf…"},
+ {"number":"siti@utm.my","amount":"$2y$12$MnL/…"}]}
+      </code></pre>
+      <div class="callout warn" style="font-size:.5em">Input menjadi sebahagian daripada <strong>kod SQL</strong>. <code>UNION</code> menyambung query kedua: emel dan hash kata laluan semua pengguna keluar melalui medan <code>number</code> dan <code>amount</code>.</div>
+      <p style="font-size:.48em" class="muted">Hanya Bendahari boleh panggil endpoint ini. Token Bendahari yang dicuri sudah cukup.</p>
+    </div>
+  </div>
+  <aside class="notes">Diuji melalui HTTP dengan token Puan Siti. Ruang selepas -- dibuang oleh middleware TrimStrings, sebab itu payload berakhir dengan "-- -". Cubaan "; DROP TABLE payments" gagal dengan ralat 1064 kerana PDO MySQL tidak menjalankan dua kenyataan sekali gus. Jangan anggap itu perlindungan: UNION sudah cukup untuk mencuri data.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">SQL injection · pembaikan</span>
+  <h2>Binding + validasi</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/InvoiceSearchController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12-14|16">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+final class InvoiceSearchController extends Controller
+{
+    public function __invoke(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'number' => ['required', 'string', 'regex:/^INV\d{7}$/'],
+        ]);
+
+        $invoices = Invoice::where('number', $data['number'])->get(['number', 'amount']);
+
+        return response()->json(['data' => $invoices]);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Binding sahaja (<code>where()</code>), payload <code>x' OR '1'='1</code></p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+select * from `invoices` where `number` = 'x\' OR \'1\'=\'1'
+→ 0 invois
+      </code></pre>
+      <p class="code-label">Binding + regex, kedua-dua payload</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+422  {"message":"The number field format is invalid.", ...}
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li><code>where()</code> hantar nilai <strong>berasingan</strong> daripada SQL. DB anggap ia data, bukan kod</li>
+        <li>Perlu SQL mentah? <code>whereRaw('number = ?', [$number])</code>: tanda <code>?</code> juga binding (diuji: 0 invois)</li>
+        <li>Nama kolum tidak boleh di-binding. Untuk <code>?sort=</code>, guna <code>Rule::in(['due_date', 'amount'])</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">XSS (Cross-Site Scripting)</span>
+  <h2>Nama pelajar yang mengandungi skrip</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.53em">Pelajar kemas kini nama profil kepada:</p>
+      <pre class="xs"><code class="language-html" data-trim>
+&lt;script src="https://jahat.example/x.js"&gt;&lt;/script&gt;
+      </code></pre>
+      <p class="code-label">resources/views/bursary/overdue.blade.php (Modul 2)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+&lt;td&gt;{{ $invoice->student->name }}&lt;/td&gt;
+      </code></pre>
+      <pre class="xs"><code class="language-html" data-trim>
+&lt;td&gt;&amp;lt;script src=&amp;quot;https://jahat.example/x.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/td&gt;
+      </code></pre>
+      <p style="font-size:.5em" class="muted"><code>{{ }}</code> menukar <code>&lt;</code> kepada <code>&amp;lt;</code>. Pelayar papar teks, tidak jalankan skrip.</p>
+    </div>
+    <div>
+      <p class="code-label">Seseorang tukar kepada <code>{!! !!}</code> "supaya nama tebal boleh dipapar"</p>
+      <pre class="xs"><code class="language-php" data-trim>
+&lt;td&gt;{!! $invoice->student->name !!}&lt;/td&gt;
+      </code></pre>
+      <pre class="xs"><code class="language-html" data-trim>
+&lt;td&gt;&lt;script src="https://jahat.example/x.js"&gt;&lt;/script&gt;&lt;/td&gt;
+      </code></pre>
+      <div class="callout warn" style="font-size:.5em">Skrip berjalan dalam pelayar <strong>Puan Siti</strong>, dengan sesi Bendahari. Cookie sesi HttpOnly tidak boleh dibaca, tetapi skrip tidak perlu membacanya: ia boleh terus memanggil <code>/api/v1/search/invoices</code> dan menghantar hasilnya keluar. Perlindungan CSRF (Cross-Site Request Forgery) juga tidak membantu, kerana skrip berjalan dari laman kita sendiri.</div>
+      <ul style="font-size:.5em">
+        <li>Blade: sentiasa <code>{{ }}</code> untuk data pengguna</li>
+        <li>SPA (Single Page Application): elak <code>innerHTML</code>, <code>v-html</code>, <code>dangerouslySetInnerHTML</code> dengan data dari API</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Output dijana dengan Blade::render() pada Laravel 13. Fungsi e() ialah fungsi yang sama yang digunakan oleh {{ }}. Jika memang perlu HTML dari pengguna (contoh: editor teks kaya), gunakan pustaka pembersih HTML dengan senarai tag yang dibenarkan, jangan tulis penapis sendiri.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">CSRF (Cross-Site Request Forgery)</span>
+  <h2>Ulang kaji: kenapa 419 wujud</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="steps" style="font-size:.53em">
+        <li>Puan Siti log masuk portal Bendahari. Pelayar simpan cookie sesi</li>
+        <li>Dia buka laman lain yang mengandungi borang tersembunyi yang <code>POST</code> ke portal Bendahari</li>
+        <li>Pelayar <strong>automatik</strong> sertakan cookie sesi. Tanpa perlindungan, request itu sah</li>
+      </ol>
+      <p class="code-label">Request tanpa token CSRF</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+POST /login
+419  {"message":"CSRF token mismatch."}
+      </code></pre>
+    </div>
+    <div>
+      <table style="font-size:.5em">
+        <thead><tr><th>Pelanggan</th><th>Perlindungan</th></tr></thead>
+        <tbody>
+          <tr><td>Borang Blade</td><td><code>@csrf</code> dalam setiap <code>&lt;form&gt;</code></td></tr>
+          <tr><td>Portal Bendahari (SPA, Single Page Application)</td><td>Cookie <code>XSRF-TOKEN</code> → header <code>X-XSRF-TOKEN</code></td></tr>
+          <tr><td>Aplikasi mudah alih (token)</td><td>Tidak perlu: token tidak dihantar automatik oleh pelayar</td></tr>
+        </tbody>
+      </table>
+      <ul style="font-size:.5em">
+        <li>Lapisan kedua: cookie sesi Laravel <code>SameSite=lax</code> secara lalai (<code>config/session.php</code>). Pelayar tidak hantar cookie untuk <code>POST</code> dari laman lain</li>
+        <li><strong>Jangan</strong> kecualikan route daripada semakan CSRF untuk "selesaikan 419". Cari punca: token tiada atau sesi tamat</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Rujuk Bahagian Laravel Sanctum, slide "SPA auth · diuji" (Hari 2): baris 1 dan 7 ialah 419. Pengecualian CSRF hanya wajar untuk webhook dari pihak luar yang disahkan dengan tandatangan, bukan cookie.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Mass assignment · 1 / 2</span>
+  <h2>Kemas kini profil, jadi Bendahari</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/ProfileController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="13">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+final class ProfileController extends Controller
+{
+    public function update(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        // "fillable menyusahkan, guna forceFill"
+        $user->forceFill($request->all())->save();
+
+        return response()->json(['name' => $user->name, 'role' => $user->role]);
+    }
+}
+      </code></pre>
+      <p class="code-label">routes/api.php: dalam kumpulan <code>auth:sanctum</code> v1</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::patch('profile', [ProfileController::class, 'update']);
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Aisyah hantar satu medan tambahan</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+PATCH /api/v1/profile   name=Aisyah Binti Ali, role=bursary
+200  {"name":"Aisyah Binti Ali","role":"bursary"}
+
+GET /api/v1/reports/collections
+200  {"date":"2026-11-22","total":"5990.00"}
+
+GET /api/v1/invoices/7          (milik Badrul)
+200
+      </code></pre>
+      <div class="callout warn" style="font-size:.5em"><code>forceFill()</code> abaikan senarai fillable. Satu medan <code>role</code> dalam request menukar pelajar menjadi Bendahari: Gate dan <code>InvoicePolicy::view</code> kini membenarkan semua.</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Mass assignment · 2 / 2</span>
+  <h2>Tiga cara menulis baris yang sama</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Kod dalam <code>ProfileController::update()</code></th><th>Hasil <code>role=bursary</code> (diuji)</th></tr></thead>
+    <tbody>
+      <tr><td><code>$user->forceFill($request->all())->save()</code></td><td><code>bursary</code>: bahaya</td></tr>
+      <tr><td><code>$user->update($request->all())</code></td><td><code>student</code>: <code>role</code> dibuang <strong>senyap</strong> kerana tiada dalam <code>#[Fillable]</code></td></tr>
+      <tr><td><code>$user->update($request->validate(['name' => [...]]))</code></td><td><code>student</code>: hanya <code>name</code> sampai ke model</td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:.5em">
+    <div>
+      <p class="code-label">AppServiceProvider::boot(): tambahan</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use Illuminate\Database\Eloquent\Model;
+
+Model::preventSilentlyDiscardingAttributes(! $this->app->isProduction());
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$user->update($request->all())  dengan role=bursary
+MassAssignmentException: Add fillable property [role]
+to allow mass assignment on [App\Models\User].
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">Terbaik: <code>ProfileController::update()</code></p>
+      <pre class="xs"><code class="language-php" data-trim>
+$data = $request->validate([
+    'name' => ['required', 'string', 'max:100'],
+]);
+
+$user = $request->user();
+$user->update($data);
+      </code></pre>
+      <p style="font-size:.5em">Dua pagar: <code>validate()</code> pilih medan yang dibenarkan, <code>#[Fillable]</code> menahan jika ada yang terlepas. Semasa development, medan yang dibuang terus menjadi ralat supaya pembangun nampak.</p>
+    </div>
+  </div>
+  <aside class="notes">Inilah sebab role sengaja tiada dalam #[Fillable] pada model User (Bahagian Laravel Sanctum, slide "User dengan HasApiTokens"). Peranan hanya ditukar oleh kod pentadbir yang menulis $user->role = 'bursary' secara eksplisit.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Input sanitization</span>
+  <h2>Sahkan input, kodkan output</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Langkah</th><th>Laravel</th><th>Contoh dalam modul ini</th></tr></thead>
+    <tbody>
+      <tr><td>Buang ruang di hujung, <code>""</code> → <code>null</code></td><td>Middleware <code>TrimStrings</code>, <code>ConvertEmptyStringsToNull</code> (aktif secara lalai)</td><td>Sebab payload perlu <code>-- -</code>, bukan <code>-- </code></td></tr>
+      <tr><td>Senarai putih bentuk</td><td><code>regex</code>, <code>date_format</code>, <code>Rule::enum</code>, <code>Rule::in</code></td><td><code>INV\d{7}</code>, <code>Y-m-d</code>, <code>PaymentMethod</code></td></tr>
+      <tr><td>Hanya medan yang dijangka</td><td><code>$request->validate()</code> / <code>$request->validated()</code></td><td><code>ProfileController</code></td></tr>
+      <tr><td>Nilai ke DB sebagai data</td><td>Binding: <code>where()</code>, <code>?</code></td><td><code>InvoiceSearchController</code></td></tr>
+      <tr><td>Kodkan semasa <strong>papar</strong></td><td><code>{{ }}</code>, API Resource (JSON)</td><td>Dashboard Bendahari</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn" style="font-size:.53em; margin-top:.6em">Jangan "bersihkan" input dengan <code>strip_tags()</code> atau buang tanda petik, kemudian anggap selamat. Nama <strong>O'Brien</strong> sah, dan penapis buatan sendiri selalu terlepas satu kes. Simpan apa adanya, sahkan bentuknya, kodkan bila dipapar.</div>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Konfigurasi produksi</span>
+  <h2>APP_DEBUG membocorkan struktur DB</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">APP_DEBUG=true</span></h3>
+      <p class="code-label"><code>InvoiceSearchController</code> versi lama, payload <code>x'; DROP TABLE payments; -- -</code></p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+500
+{"message":"SQLSTATE[42000]: Syntax error or access violation:
+ 1064 ... (Connection: mysql, Host: 127.0.0.1, Port: 3306,
+ Database: utm_m3_scratch, SQL: select `number`, `amount`
+ from `invoices` where number = 'x'; DROP TABLE payments; -- -')",
+ "exception":"Illuminate\\Database\\QueryException",
+ "file":"/…/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+ "line":864,
+ "trace":[ … ]}
+      </code></pre>
+      <p style="font-size:.5em">Penyerang kini tahu: jenis DB, hos, nama DB, query penuh dan laluan fail pelayan. Itu peta untuk serangan seterusnya.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">APP_DEBUG=false</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+500  {"message":"Server Error"}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+419  {"message":"CSRF token mismatch."}
+404  {"message":"No query results for model [App\\Models\\Invoice] 999999"}
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li>Ralat 4xx kekal bermaklumat; ralat 500 hanya "Server Error". Butiran penuh masih ada dalam <code>storage/logs/laravel.log</code></li>
+        <li>Semak <code>.env</code> pelayan: <code>APP_ENV=production</code>, <code>APP_DEBUG=false</code></li>
+      </ul>
+      <div class="callout" style="font-size:.5em">Dengan <code>APP_DEBUG=true</code>, ralat 419 pun membawa 43 baris <code>trace</code> dengan laluan fail penuh (diuji).</div>
+    </div>
+  </div>
+</section>
+
+<section data-timing="420">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 7 minit</span>
+  <h2>Cari lima lubang</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\{Invoice, Payment};
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+final class PaymentHistoryController extends Controller
+{
+    public function index(Request $request, Invoice $invoice)
+    {
+        $sort = $request->query('sort', 'paid_at');
+
+        return DB::select("select * from payments
+            where invoice_id = {$invoice->id} order by $sort");
+    }
+
+    public function update(Request $request, Payment $payment)
+    {
+        $payment->forceFill($request->all())->save();
+
+        return $payment;
+    }
+}
+
+// routes/api.php, di luar semua kumpulan:
+Route::get('invoices/{invoice}/payments', [PaymentHistoryController::class, 'index']);
+Route::get('payments/{payment}/update', [PaymentHistoryController::class, 'update']);
+      </code></pre>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:.5em">
+        <li class="fragment">Tiada <code>auth:sanctum</code> dan tiada policy: sesiapa boleh baca bayaran sesiapa: IDOR (Insecure Direct Object Reference)</li>
+        <li class="fragment"><code>$sort</code> masuk terus ke SQL: SQL injection. Guna <code>Rule::in([...])</code> dan <code>orderBy()</code></li>
+        <li class="fragment"><code>forceFill($request->all())</code>: ubah <code>amount</code> dan <code>paid_at</code>. Guna <code>validate()</code></li>
+        <li class="fragment"><code>GET</code> mengubah data, dan tiada <code>throttle</code></li>
+        <li class="fragment">Pulangkan baris DB / model mentah: semua kolum bocor. Guna <code>PaymentResource</code></li>
+      </ol>
+    </div>
+  </div>
+  <aside class="notes">Setiap meja tulis lubang yang dijumpai, kemudian tekan anak panah untuk dedahkan satu demi satu. Markah: satu mata setiap lubang beserta pembaikan yang betul.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SARAPAN 10:00                                              -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">10:00 – 10:15 pagi</span>
+  <h1 style="margin:.1em 0 .2em">Sarapan · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: senarai semak dan lab akhir Modul 3</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- LAB, RINGKASAN, SETERUSNYA                                 -->
+<!-- ============================================================ -->
+
+<section data-timing="240">
+  <span class="kicker">Sebelum produksi</span>
+  <h2>Senarai semak keselamatan API</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <table style="font-size:.5em">
+      <thead><tr><th>Semak</th><th>Cara</th></tr></thead>
+      <tbody>
+        <tr><td>Setiap route ada pengesahan yang betul</td><td><code>php artisan route:list -v</code>: lihat lajur middleware</td></tr>
+        <tr><td>Setiap route dengan <code>{id}</code> ada policy</td><td>Cari <code>Gate::authorize</code> dalam <code>show</code>, <code>update</code>, <code>destroy</code></td></tr>
+        <tr><td>Log masuk dan bayaran ada <code>throttle</code></td><td><code>route:list</code>; cuba 6 kali</td></tr>
+        <tr><td>Token tamat tempoh</td><td><code>createToken(..., expiresAt)</code>, <code>tokensExpireIn()</code></td></tr>
+      </tbody>
+    </table>
+    <table style="font-size:.5em">
+      <thead><tr><th>Semak</th><th>Cara</th></tr></thead>
+      <tbody>
+        <tr><td>Tiada input dalam SQL mentah</td><td><code>grep -rn "whereRaw\|DB::raw\|DB::select" app/</code></td></tr>
+        <tr><td>Tiada <code>{!! !!}</code> dengan data pengguna</td><td><code>grep -rn "{!!" resources/views</code></td></tr>
+        <tr><td>Tiada <code>forceFill($request-&gt;all())</code></td><td><code>grep -rn "request->all()" app/</code></td></tr>
+        <tr><td><code>APP_DEBUG=false</code>, kunci Passport dalam env</td><td>Semak <code>.env</code> pelayan</td></tr>
+        <tr><td>Pakej tiada kelemahan diketahui</td><td><code>composer audit</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">Senarai ini juga menjadi soalan semakan dalam Code review meja selepas Lab 3.</aside>
+</section>
+
+<section data-timing="1800" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 3 · 30 minit · individu, dibantu rakan semeja · baki <span data-countdown>30:00</span></span>
+  <h2>Kukuhkan API yuran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-3-lab</code>: API yang berfungsi, dengan lima lubang dari modul ini.</p>
+      <ol class="steps" style="font-size:.54em">
+        <li><strong>Policy:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">InvoicePolicy</code> + <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Gate::authorize</code> dalam v1 dan v2. Aisyah → invois 7 = <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">403</code></li>
+        <li><strong>FormRequest:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">StorePaymentRequest</code> guna <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">can('pay')</code>. <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">bash lab/spa-pay.sh</code> = <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">403</code>, bukan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">500</code></li>
+        <li><strong>SQL injection:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">InvoiceSearchController</code> dengan binding + regex. <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">x' OR '1'='1</code> = <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">422</code></li>
+        <li><strong>Mass assignment:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">ProfileController</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">validate()</code>; <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">preventSilentlyDiscardingAttributes</code></li>
+        <li><strong>Debug:</strong> <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">APP_DEBUG=false</code>; ralat 500 hanya <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Server Error</code></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Output curl <strong>sebelum dan selepas</strong> untuk setiap langkah. Langkah 4: <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">role=bursary</code> tidak lagi mengubah peranan.</p>
+      <p>Siap awal? Jalankan senarai semak keselamatan (slide sebelum ini) pada branch anda dan betulkan apa yang dijumpai, termasuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">{!! !!}</code> tersembunyi dalam satu fail Blade.</p>
+    </div>
+  </div>
+  <aside class="notes">Persediaan branch modul-3-lab: kod akhir Bahagian Laravel Passport dengan lima lubang (tiada Gate dalam show, authorize() Modul 1, whereRaw dalam InvoiceSearchController, forceFill dalam ProfileController, APP_DEBUG=true) serta satu {!! $invoice->student->name !!} dalam resources/views/bursary/overdue.blade.php. lab/spa-pay.sh: skrip curl yang log masuk sebagai siti@utm.my melalui /sanctum/csrf-cookie dan /login, kemudian POST /api/v1/payments dengan cookie dan X-XSRF-TOKEN.</aside>
+</section>
+
+<section data-timing="600">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Code review meja · 10 minit</span>
+  <h2>Semak kod rakan semeja</h2>
+  <div class="rule"></div>
+  <table style="font-size:.55em">
+    <thead><tr><th>Soalan semakan</th><th>Cari dalam kod</th></tr></thead>
+    <tbody>
+      <tr><td>Setiap method dengan model dari URL ada semakan pemilik?</td><td><code>show(Invoice $invoice)</code> tanpa <code>Gate::authorize</code></td></tr>
+      <tr><td>Ada input pengguna dalam rentetan SQL?</td><td><code>"... '$var'"</code> dalam <code>whereRaw</code>, <code>DB::select</code></td></tr>
+      <tr><td>Medan dari request terus ke model?</td><td><code>$request-&gt;all()</code>, <code>forceFill</code></td></tr>
+      <tr><td>Peraturan akses ditulis di dua tempat?</td><td><code>student_id ===</code> di luar <code>InvoicePolicy</code></td></tr>
+      <tr><td>Response dedah kolum dalaman?</td><td><code>return $model</code> tanpa Resource</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.55em; margin-top:.8em; text-align:center">Setiap meja pilih <strong>satu penemuan terbaik</strong> untuk dikongsi (1 minit).</p>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Ringkasan</span>
+  <h2>Modul 3 dalam satu slide</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>Topik</th><th>Dilihat dalam modul ini</th><th>Ingat</th></tr></thead>
+    <tbody>
+      <tr><td>API architecture</td><td>v1 dan v2 untuk invois yang sama</td><td>Resource = kontrak; versi baru hanya untuk perubahan yang memecahkan</td></tr>
+      <tr><td>Sanctum</td><td>401 → 200; 403 ability; 429 selepas 3 bayaran</td><td>Token untuk aplikasi, cookie + CSRF (Cross-Site Request Forgery) untuk SPA (Single Page Application); header <code>Accept</code></td></tr>
+      <tr><td>Passport</td><td>Token client 1 jam, scope <code>payments:read</code></td><td>Client credentials untuk sistem; kunci dalam env</td></tr>
+      <tr><td>Policies &amp; Gates</td><td>IDOR (Insecure Direct Object Reference) 200 → 403; portal 500 → 403</td><td>Ability hadkan token, policy hadkan pengguna</td></tr>
+      <tr><td>Security hardening</td><td>2000 invois dan hash kata laluan → 422</td><td>Binding, <code>{{ }}</code>, <code>validate()</code>, <code>APP_DEBUG=false</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em; margin-top:.8em"><strong>Uji seperti penyerang.</strong> Setiap lubang dalam modul ini dijumpai dengan curl biasa: tukar id, buang header, tambah medan, masukkan tanda petik.</div>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Seterusnya</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Modul 4 — Skalabiliti &amp; Automasi</h1>
+  <p class="cover-sub">Resit emel, laporan malam dan notifikasi bayaran tanpa membuat pengguna menunggu:</p>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-list-check"></i>Queues &amp; Jobs</span>
+    <span><i class="fa-solid fa-server"></i>Queue drivers</span>
+    <span><i class="fa-regular fa-clock"></i>Scheduled tasks</span>
+    <span><i class="fa-solid fa-tower-broadcast"></i>Events, listeners &amp; broadcasting</span>
+  </div>
+  <h3 style="margin-top:1.6em"><i class="fa-regular fa-comments" style="color:var(--accent); margin-right:.4em"></i>Soalan &amp; perbincangan</h3>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

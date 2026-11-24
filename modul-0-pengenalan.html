@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pengenalan — Kursus Laravel Advanced · UTM</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* Intro: aksen emas UTM, susun atur di tengah */
+  :root { --accent: #f0a91f; --accent-soft: #2a2010; --maroon: #7a0a2e; }
+
+  .reveal .slides section { text-align: center; }
+  .reveal .slides section .left { text-align: left; }
+  .reveal .kicker { color: var(--accent); }
+  .reveal h2 { margin-bottom: .2em; }
+  .rule { width: 72px; height: 4px; background: var(--accent); border-radius: 2px; margin: .35em auto .9em; }
+  .lead { font-size: .62em; color: var(--muted); max-width: 900px; margin: 0 auto 1em; }
+
+  /* footer jenama pada setiap slide kecuali cover */
+  .brand-footer {
+    position: fixed; left: 28px; right: 28px; bottom: 14px; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font); font-size: 13px; color: var(--muted); pointer-events: none;
+  }
+  .brand-footer .l { display: flex; align-items: center; gap: 10px; }
+  .brand-footer .emblem { width: 30px; height: 30px; border-radius: 50%; background: #fff; padding: 2px; }
+  .brand-footer .r { margin-right: 120px; }
+  .reveal-viewport.is-cover .brand-footer { display: none; }
+
+  /* cover */
+  .logo-plate { display: inline-block; background: #fff; border-radius: 16px; padding: 18px 34px; box-shadow: 0 10px 40px rgba(0,0,0,.45); }
+  .logo-plate img { height: 104px; display: block; margin: 0; }
+  .cover-title { font-size: 2.3em !important; margin: .55em 0 .1em !important; }
+  .cover-sub { font-size: .8em; color: var(--muted); margin: 0; }
+  .meta { display: inline-flex; margin-top: 1.4em; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .meta div { padding: 12px 26px; border-right: 1px solid var(--line); font-size: .5em; text-align: left; }
+  .meta div:last-child { border-right: 0; }
+  .meta .lbl { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-size: .78em; margin-bottom: .25em; }
+  .meta .val { color: var(--ink); font-weight: 600; font-size: 1.1em; }
+  .presenter { margin-top: 1.6em; font-size: .55em; color: var(--muted); }
+  .presenter strong { color: var(--ink); }
+
+  /* trainer */
+  .trainer { display: grid; grid-template-columns: 230px 1fr; gap: 44px; align-items: center; max-width: 1040px; margin: .6em auto 0; text-align: left; }
+  .avatar { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--accent);
+            background: var(--panel) url("assets/trainer.jpg") 46% 38% / 170% no-repeat;
+            box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+  .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: .9em; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+  .stat .n { font-size: 1.45em; font-weight: 800; color: var(--accent); line-height: 1; }
+  .stat .d { font-size: .48em; color: var(--muted); margin-top: .35em; }
+
+  .card { text-align: left; }
+  .card .ico-badge + h3 { margin-top: .5em !important; }
+  .card.center .ico-badge { margin: 0 auto; }
+  .card.center { text-align: center; }
+  .num { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 1.1em; letter-spacing: .05em; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: .4em; }
+  .chip { font-size: .85em; padding: .2em .7em; border-radius: 999px; background: var(--code-bg); border: 1px solid var(--line); color: var(--ink); }
+
+  .roadmap { display: flex; gap: 8px; margin: 10px 0 10px; text-align: left; }
+  .roadmap .seg { border-radius: 10px; padding: 14px; font-size: .5em; min-height: 210px; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--c); }
+  .roadmap .seg .m { font-family: var(--mono); font-weight: 700; font-size: .95em; color: var(--c); }
+  .roadmap .seg h3 { font-size: 1.2em; margin: .35em 0 .3em; }
+  .roadmap .seg p { margin: 0; color: var(--muted); }
+  .roadmap .seg .h { margin-top: auto; font-weight: 700; font-size: 1.1em; color: var(--c); }
+
+  .box   { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .t     { font-size:22px; fill:#e8ecf3; font-weight:700; }
+  .t-s   { font-size:16px; fill:#9aa5b8; }
+  .t-n   { font-size:40px; font-weight:800; font-family: var(--mono); }
+
+  .contact { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; font-size: .68em; margin-top: 1em; }
+  .contact .k { color: var(--muted); }
+
+  .reveal table { margin: 0 auto; text-align: left; }
+  ul.check, ul.cross { text-align: left; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Universiti Teknologi Malaysia</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- 1. Cover -->
+<section data-timing="60" class="cover" data-state="is-cover">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <h1 class="cover-title" style="border:0; padding:0">Kursus Laravel Advanced</h1>
+  <p class="cover-sub">Reka Bentuk Senibina ICT</p>
+  <div class="rule" style="margin-top:.9em"></div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">±28 jam · 6 modul</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-building-columns"></i>&nbsp; Mod</span><span class="val">In-house / Hybrid</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13</span></div>
+  </div>
+  <p class="presenter"><span class="avatar" style="display:inline-block; width:46px; height:46px; border-width:2px; vertical-align:middle; margin-right:10px; box-shadow:none"></span>Disampaikan oleh <strong>Muhammad Hamizi Jaminan</strong> · Senior Full-stack Developer &amp; Trainer</p>
+  <aside class="notes">Selamat datang. Perkenalkan diri ringkas, kemudian terus ke slide trainer.</aside>
+</section>
+
+<!-- 2. Trainer -->
+<section data-timing="180">
+  <span class="kicker">Kenali trainer anda</span>
+  <h2>Muhammad Hamizi Jaminan</h2>
+  <div class="rule"></div>
+  <div class="trainer">
+    <div class="avatar" role="img" aria-label="Muhammad Hamizi Jaminan"></div>
+    <div>
+      <p style="font-size:.68em; margin:0; color:var(--accent); font-weight:600">Senior Full-stack Developer &amp; Trainer</p>
+      <p style="font-size:.6em; margin-top:.6em">Lebih 20 tahun dalam pembangunan web dan perisian. Pendekatan latihan yang <strong>praktikal dan hands-on</strong> — berasaskan aplikasi dunia sebenar dan kemahiran menyelesaikan masalah.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="n"><i class="fa-solid fa-code" style="font-size:.6em; margin-right:.35em"></i>20+</div><div class="d">tahun pengalaman pembangunan</div></div>
+        <div class="stat"><div class="n"><i class="fa-solid fa-chalkboard-user" style="font-size:.6em; margin-right:.35em"></i>60+</div><div class="d">sesi latihan dikendalikan</div></div>
+        <div class="stat"><div class="n"><i class="fa-solid fa-layer-group" style="font-size:.6em; margin-right:.35em"></i>5</div><div class="d">bahasa utama: PHP, Go, Python, Node.js, Java</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Kepakaran -->
+<section data-timing="120">
+  <span class="kicker">Bidang kepakaran</span>
+  <h2>Dari kod hingga ke produksi</h2>
+  <div class="rule"></div>
+  <div class="cols-3">
+    <div class="card"><h3><i class="fa-brands fa-php"></i>PHP</h3>
+      <div class="chips"><span class="chip">Laravel</span><span class="chip">CodeIgniter</span><span class="chip">CakePHP</span><span class="chip">Phalcon</span><span class="chip">Symfony</span></div></div>
+    <div class="card"><h3><i class="fa-brands fa-golang"></i>Go · Python · Node.js · Java</h3>
+      <div class="chips"><span class="chip">Fiber</span><span class="chip">Flask</span><span class="chip">Django</span><span class="chip">Express.js</span><span class="chip">Next.js</span><span class="chip">NestJS</span><span class="chip">Spring Boot</span></div></div>
+    <div class="card"><h3><i class="fa-solid fa-database"></i>Pangkalan data</h3>
+      <div class="chips"><span class="chip">MySQL / MariaDB</span><span class="chip">PostgreSQL</span><span class="chip">Oracle</span><span class="chip">MongoDB</span><span class="chip">ClickHouse</span></div></div>
+    <div class="card"><h3><i class="fa-solid fa-cloud"></i>Cloud</h3>
+      <div class="chips"><span class="chip">AWS (Amazon Web Services)</span><span class="chip">Azure</span><span class="chip">Google Cloud</span></div></div>
+    <div class="card"><h3><i class="fa-brands fa-docker"></i>DevOps &amp; CI/CD</h3>
+      <p class="muted" style="margin:-.2em 0 .2em; font-size:.85em">Continuous Integration / Continuous Delivery</p>
+      <div class="chips"><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Jenkins</span></div></div>
+    <div class="card"><h3><i class="fa-brands fa-git-alt"></i>Version control</h3>
+      <div class="chips"><span class="chip">Git</span><span class="chip">SVN</span></div></div>
+  </div>
+  <p class="small" style="margin-top:1em">Pernah melatih agensi kerajaan · syarikat swasta · startup teknologi · institusi pendidikan</p>
+</section>
+
+<!-- 4. Tentang kursus -->
+<section data-timing="60">
+  <span class="kicker">Tentang kursus</span>
+  <h2>Untuk siapa kursus ini?</h2>
+  <div class="rule"></div>
+  <div class="cols-4">
+    <div class="card"><span class="ico-badge"><i class="fa-solid fa-users"></i></span><h3 style="margin-top:.4em">Sasaran peserta</h3><p>Developer PHP/Laravel peringkat <strong>intermediate ke atas</strong>.</p></div>
+    <div class="card"><span class="ico-badge"><i class="fa-solid fa-list-check"></i></span><h3 style="margin-top:.4em">Prasyarat</h3><p>Asas Laravel: routing, controller, model, migration.</p></div>
+    <div class="card"><span class="ico-badge"><i class="fa-solid fa-bullseye"></i></span><h3 style="margin-top:.4em">Matlamat</h3><p>Dari “kod yang berfungsi” kepada sistem yang <strong>bersih, laju, selamat dan boleh skala</strong>.</p></div>
+    <div class="card"><span class="ico-badge"><i class="fa-solid fa-laptop-code"></i></span><h3 style="margin-top:.4em">Praktikal</h3><p>Live coding dan hands-on lab dalam setiap modul, atas satu projek yang sama.</p></div>
+  </div>
+  <p class="lead" style="margin-top:1.2em">Semua contoh dan lab menggunakan <strong>PHP 8.4</strong> dan <strong>Laravel 13</strong>.</p>
+</section>
+
+<!-- 5. Peta kursus -->
+<section data-timing="180">
+  <span class="kicker">Peta kursus</span>
+  <h2>6 modul · ±28 jam</h2>
+  <div class="rule"></div>
+  <div class="roadmap">
+    <div class="seg" style="flex:6; --c:#6ea8ff"><span class="m">MODUL 1</span><h3>Senibina Kod &amp; Corak Reka Bentuk</h3><p>SOLID, Service Layer, Repository, Dependency Injection (DI)</p><span class="h">6 jam</span></div>
+    <div class="seg" style="flex:6; --c:#ff6b57"><span class="m">MODUL 2</span><h3>Optimasi Data &amp; Prestasi</h3><p>Eloquent lanjutan, N+1, Redis, indexing, transaksi</p><span class="h">6 jam</span></div>
+    <div class="seg" style="flex:6; --c:#f0a91f"><span class="m">MODUL 3</span><h3>Integrasi &amp; Keselamatan API</h3><p>REST (Representational State Transfer), Sanctum, Passport, Policies, hardening</p><span class="h">6 jam</span></div>
+    <div class="seg" style="flex:4.6; --c:#4cc47f"><span class="m">MODUL 4</span><h3>Skalabiliti &amp; Automasi</h3><p>Queue, Scheduler, Events, Broadcasting</p><span class="h">4 jam</span></div>
+    <div class="seg" style="flex:4.6; --c:#b48cff"><span class="m">MODUL 5</span><h3>Pengujian &amp; Kualiti</h3><p>Unit, Feature, TDD (Test-Driven Development), logging</p><span class="h">4 jam</span></div>
+    <div class="seg" style="flex:3.4; --c:#5fd4d4"><span class="m">MODUL 6</span><h3>Dipandu AI</h3><p>Prompt, review, boilerplate, batas</p><span class="h">2 jam</span></div>
+  </div>
+  <p class="small">Lebar setiap blok berkadar dengan jam. Setiap modul membina atas kod dari modul sebelumnya.</p>
+</section>
+
+<!-- 6. Hasil pembelajaran -->
+<section data-timing="120">
+  <span class="kicker">Apa yang anda bawa pulang</span>
+  <h2>Hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <table style="max-width:1100px">
+    <thead><tr><th style="width:20%">Modul</th><th>Selepas modul ini, peserta boleh…</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong> · Senibina</td><td>Refactor codebase sedia ada menggunakan Service Layer dan Repository Pattern</td></tr>
+      <tr><td><strong>2</strong> · Prestasi</td><td>Optimasi response time API dan elak query bottleneck dalam sistem produksi</td></tr>
+      <tr><td><strong>3</strong> · API</td><td>Bina dan secure API endpoint yang sedia untuk integrasi pihak ketiga</td></tr>
+      <tr><td><strong>4</strong> · Skalabiliti</td><td>Offload heavy tasks ke background dan bina sistem modular berasaskan event</td></tr>
+      <tr><td><strong>5</strong> · Pengujian</td><td>Deploy dengan yakin menggunakan automated test suite dan pantau sistem secara proaktif</td></tr>
+      <tr><td><strong>6</strong> · AI</td><td>Integrasi AI assistant dalam workflow harian tanpa mengorbankan kualiti kod</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 7. Kaedah -->
+<section data-timing="120">
+  <span class="kicker">Kaedah penyampaian</span>
+  <h2>Kitaran setiap modul</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1160 290" role="img" aria-label="Kitaran: teori, live coding, lab, code review">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <g>
+      <rect class="box" x="0" y="20" width="250" height="170" rx="14" style="stroke:#6ea8ff"/>
+      <text class="t-n" x="125" y="80" text-anchor="middle" style="fill:#6ea8ff">01</text>
+      <text class="t" x="125" y="125" text-anchor="middle">Teori</text>
+      <text class="t-s" x="125" y="155" text-anchor="middle">Konsep &amp; kenapa ia penting</text>
+    </g>
+    <g>
+      <rect class="box" x="300" y="20" width="250" height="170" rx="14" style="stroke:#ff6b57"/>
+      <text class="t-n" x="425" y="80" text-anchor="middle" style="fill:#ff6b57">02</text>
+      <text class="t" x="425" y="125" text-anchor="middle">Live coding</text>
+      <text class="t-s" x="425" y="155" text-anchor="middle">Demo langkah demi langkah</text>
+    </g>
+    <g>
+      <rect class="box" x="600" y="20" width="250" height="170" rx="14" style="stroke:#4cc47f"/>
+      <text class="t-n" x="725" y="80" text-anchor="middle" style="fill:#4cc47f">03</text>
+      <text class="t" x="725" y="125" text-anchor="middle">Hands-on lab</text>
+      <text class="t-s" x="725" y="155" text-anchor="middle">Peserta tulis kod sendiri</text>
+    </g>
+    <g>
+      <rect class="box" x="900" y="20" width="250" height="170" rx="14" style="stroke:#f0a91f"/>
+      <text class="t-n" x="1025" y="80" text-anchor="middle" style="fill:#f0a91f">04</text>
+      <text class="t" x="1025" y="125" text-anchor="middle">Code review</text>
+      <text class="t-s" x="1025" y="155" text-anchor="middle">Bincang &amp; baiki bersama</text>
+    </g>
+    <path d="M250 105 L295 105" stroke="#9aa5b8" stroke-width="3" marker-end="url(#ah)"/>
+    <path d="M550 105 L595 105" stroke="#9aa5b8" stroke-width="3" marker-end="url(#ah)"/>
+    <path d="M850 105 L895 105" stroke="#9aa5b8" stroke-width="3" marker-end="url(#ah)"/>
+    <path d="M1025 190 C 1025 270, 125 270, 125 195" stroke="#9aa5b8" stroke-width="2" stroke-dasharray="6 6" fill="none" marker-end="url(#ah)"/>
+    <text class="t-s" x="575" y="275" text-anchor="middle">modul seterusnya membina atas kod yang sama</text>
+  </svg>
+  <p class="lead" style="margin-top:.6em">Pendekatan <strong>project-based</strong> — satu kes kajian, <strong>Sistem Bayaran Yuran Pelajar</strong>, digunakan dari Modul 1 hingga Modul 5.</p>
+</section>
+
+<!-- 8. Persediaan -->
+<section data-timing="120">
+  <span class="kicker">Sebelum kita mula</span>
+  <h2>Terminal kursus: Git Bash</h2>
+  <div class="rule"></div>
+  <div class="cols left">
+    <div>
+      <div class="card bad" style="margin-bottom:14px">
+        <h3><i class="fa-solid fa-triangle-exclamation"></i>Kenapa bukan PowerShell atau CMD?</h3>
+        <p>Slide kursus ini guna arahan seperti <code>curl -H</code>, <code>grep</code>, <code>time</code> dan <code>DB_CONNECTION=mysql php artisan test</code>. Dalam PowerShell atau CMD, arahan ini gagal atau berkelakuan lain.</p>
+      </div>
+      <div class="card good">
+        <h3><i class="fa-solid fa-check"></i>Dalam Git Bash</h3>
+        <p>Semua arahan berjalan tepat seperti dalam slide. Salin, tampal, jalankan.</p>
+      </div>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:.62em">
+        <li>Pasang <strong>Git for Windows</strong>: <code>git-scm.com/download/win</code>. Git Bash disertakan</li>
+        <li>VS Code: <code>Ctrl+Shift+P</code> → <em>Terminal: Select Default Profile</em> → <strong>Git Bash</strong></li>
+        <li>Buka terminal baru dan semak:</li>
+      </ol>
+      <pre class="sm"><code class="language-bash" data-trim>
+php -v
+curl --version
+grep --version
+      </code></pre>
+      <p style="font-size:.55em">Ketiga-tiganya mesti menjawab. Jika <code>php: command not found</code>, tambah folder PHP (Laragon, Herd atau XAMPP) ke <code>PATH</code> Windows dan buka semula terminal.</p>
+    </div>
+  </div>
+  <aside class="notes">Peserta guna Windows; kursus diseragamkan pada Git Bash supaya semua arahan dalam slide boleh disalin terus. Git for Windows membawa curl, grep dan time. jq tidak disertakan; ia hanya muncul dalam satu contoh carian log Modul 5 dan tidak wajib. Arahan interaktif seperti php artisan tinker dalam tetingkap Git Bash berasingan (mintty) mungkin perlu winpty php artisan tinker; terminal Git Bash dalam VS Code biasanya tidak perlu. Langkah ini tidak diuji pada mesin Windows semasa penyediaan; cuba pada satu PC makmal sebelum kursus.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Sebelum kita mula</span>
+  <h2>Semak persekitaran anda</h2>
+  <div class="rule"></div>
+  <div class="cols left">
+    <pre class="sm"><code class="language-bash" data-trim>
+php -v            # PHP 8.4
+composer -V       # Composer 2.x
+git --version
+mysql --version   # atau psql --version
+redis-cli ping    # PONG (Modul 2 &amp; 4)
+
+git clone &lt;url-starter-repo> laravel-advanced
+cd laravel-advanced
+composer install
+cp .env.example .env &amp;&amp; php artisan key:generate
+php artisan migrate --seed
+php artisan --version  # Laravel Framework 13.x
+php artisan test       # semua mesti lulus
+    </code></pre>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3><i class="fa-solid fa-toolbox"></i>Perlu dipasang</h3>
+        <ul class="check" style="margin:0">
+          <li>PHP 8.4, Composer, Git</li>
+          <li>MySQL / MariaDB atau PostgreSQL</li>
+          <li>Redis</li>
+          <li>Editor: VS Code / PhpStorm</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><i class="fa-brands fa-docker"></i>Alternatif mudah</h3>
+        <p><strong>Laravel Sail</strong> (Docker) atau <strong>Laravel Herd</strong> — semua servis siap tanpa pemasangan manual.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Bahan -->
+<section data-timing="60">
+  <span class="kicker">Bahan disediakan</span>
+  <h2>Apa yang peserta terima</h2>
+  <div class="rule"></div>
+  <div class="cols-3">
+    <div class="card center" style="padding:30px 22px"><span class="ico-badge"><i class="fa-solid fa-file-pdf"></i></span><h3 style="margin-top:.5em">Slide PDF</h3><p>Setiap modul, lengkap dengan contoh kod &amp; infografik</p></div>
+    <div class="card center" style="padding:30px 22px"><span class="ico-badge"><i class="fa-brands fa-github"></i></span><h3 style="margin-top:.5em">Starter repository</h3><p>GitHub — satu branch untuk titik mula setiap lab</p></div>
+    <div class="card center" style="padding:30px 22px"><span class="ico-badge"><i class="fa-solid fa-clipboard-list"></i></span><h3 style="margin-top:.5em">Cheat sheet</h3><p>Reference card ringkas untuk rujukan harian</p></div>
+  </div>
+</section>
+
+<!-- 10. Etika kelas -->
+<section data-timing="120">
+  <span class="kicker">Supaya semua mendapat manfaat penuh</span>
+  <h2>Persetujuan bersama</h2>
+  <div class="rule"></div>
+  <div class="cols" style="max-width:1000px; margin:0 auto">
+    <ul class="check" style="font-size:.66em">
+      <li>Tanya bila-bila masa — tiada soalan yang remeh</li>
+      <li>Kongsi masalah sebenar dari sistem anda</li>
+      <li>Lab: cuba dahulu, kemudian minta bantuan</li>
+      <li>Code review: kritik kod, bukan orang</li>
+    </ul>
+    <ul class="check" style="font-size:.66em">
+      <li>Telefon dalam mod senyap</li>
+      <li>Kembali tepat masa selepas rehat</li>
+      <li>Commit kerja lab ke branch sendiri</li>
+      <li>Jika ketinggalan, maklumkan segera</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 11. Suai kenal -->
+<section data-timing="300">
+  <span class="kicker">Sesi suai kenal · 30 saat setiap peserta</span>
+  <h2>Kenali rakan sekelas</h2>
+  <div class="rule"></div>
+  <div class="cols-4">
+    <div class="card center"><span class="ico-badge"><i class="fa-solid fa-id-badge"></i></span><h3 style="margin-top:.5em">Nama</h3><p>&amp; jabatan / unit</p></div>
+    <div class="card center"><span class="ico-badge"><i class="fa-solid fa-server"></i></span><h3 style="margin-top:.5em">Sistem</h3><p>Yang sedang dibangun / diselenggara</p></div>
+    <div class="card center"><span class="ico-badge"><i class="fa-solid fa-triangle-exclamation"></i></span><h3 style="margin-top:.5em">Cabaran</h3><p>Satu masalah Laravel yang paling sukar</p></div>
+    <div class="card center"><span class="ico-badge"><i class="fa-solid fa-star"></i></span><h3 style="margin-top:.5em">Harapan</h3><p>Satu perkara yang ingin dibawa pulang</p></div>
+  </div>
+  <aside class="notes">Bajet 6 minit dianggarkan untuk ~12 peserta (30 saat seorang). Laraskan data-timing ikut bilangan sebenar. Catat cabaran peserta di papan putih — rujuk semula bila topik berkaitan muncul dalam modul.</aside>
+</section>
+
+<!-- 12. Hubungi -->
+<section data-timing="60">
+  <span class="kicker">Hubungi trainer</span>
+  <h2>Soalan selepas kursus?</h2>
+  <div class="rule"></div>
+  <div class="trainer" style="max-width:900px">
+    <div class="avatar" role="img" aria-label="Muhammad Hamizi Jaminan"></div>
+    <div>
+      <h3 style="font-size:1em; margin:0">Muhammad Hamizi Jaminan</h3>
+      <p style="font-size:.55em; color:var(--muted); margin:.2em 0 0">Senior Full-stack Developer &amp; Trainer</p>
+      <div class="contact">
+        <span class="k"><i class="fa-solid fa-phone"></i>&nbsp; Telefon</span><span>019-300 0898</span>
+        <span class="k"><i class="fa-solid fa-envelope"></i>&nbsp; Emel</span><span><a href="mailto:hello@hamizi.net">hello@hamizi.net</a></span>
+        <span class="k"><i class="fa-brands fa-linkedin"></i>&nbsp; LinkedIn</span><span><a href="https://www.linkedin.com/in/hymns/">linkedin.com/in/hymns</a></span>
+        <span class="k"><i class="fa-solid fa-globe"></i>&nbsp; Laman web</span><span><a href="https://www.hamizi.net">hamizi.net</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. Mula -->
+<section data-timing="60" class="cover" data-state="is-cover">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia" style="height:80px"></div>
+  <p class="kicker" style="margin-top:2em; display:block">Jom mula</p>
+  <h1 style="border:0; padding:0; margin:.1em 0">Modul 1</h1>
+  <p class="cover-sub">Senibina Kod &amp; Corak Reka Bentuk</p>
+  <p style="font-size:.55em; margin-top:1.6em"><a href="modul-1-senibina-kod.html">Buka slide Modul 1 <i class="fa-solid fa-arrow-right"></i></a></p>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280, height: 720, margin: 0.06,
+    hash: true, slideNumber: 'c/t',
+    transition: 'fade', transitionSpeed: 'fast',
+    center: true,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>

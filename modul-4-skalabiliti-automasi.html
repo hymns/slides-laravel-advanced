@@ -1,0 +1,1792 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul 4 — Skalabiliti &amp; Automasi</title>
+<link rel="stylesheet" href="vendor/reveal/reset.min.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.min.css">
+<link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* gaya SVG khusus modul ini */
+  .box      { fill:#151a23; stroke:#3a4352; stroke-width:2; }
+  .box-p    { fill:#14233a; stroke:#6ea8ff; stroke-width:2; }
+  .box-a    { fill:#2a2010; stroke:#f0a91f; stroke-width:2; }
+  .box-g    { fill:#12271b; stroke:#4cc47f; stroke-width:2; }
+  .box-w    { fill:#2b1a0e; stroke:#f5873a; stroke-width:2; }
+  .box-b    { fill:#2a1416; stroke:#ff6b6b; stroke-width:2; }
+  .box-d    { fill:#232a36; stroke:#9aa5b8; stroke-width:2; }
+  .box-i    { fill:#0b0d12; stroke:#6ea8ff; stroke-width:2; stroke-dasharray:7 5; }
+  .t        { font-size:20px; fill:#e8ecf3; font-weight:600; }
+  .t-s      { font-size:15px; fill:#9aa5b8; }
+  .t-w      { font-size:20px; fill:#ffffff; font-weight:600; }
+  .t-ws     { font-size:15px; fill:#b9c3d3; }
+  .t-i      { font-size:14px; fill:#6ea8ff; font-style:italic; }
+  .t-h      { font-size:16px; fill:#f0a91f; font-weight:700; letter-spacing:.08em; }
+  .arr      { stroke:#9aa5b8; stroke-width:2.5; fill:none; marker-end:url(#ah); }
+  .arr-p    { stroke:#6ea8ff; stroke-width:2.5; fill:none; marker-end:url(#ahp); }
+  .arr-a    { stroke:#f0a91f; stroke-width:2.5; fill:none; marker-end:url(#aha); }
+  .arr-i    { stroke:#6ea8ff; stroke-width:2.5; fill:none; stroke-dasharray:8 6; marker-end:url(#ahi); }
+
+  .solid-card { text-align:center; padding:22px 14px; }
+  .solid-card .letter { font-size:2.6em; font-weight:800; line-height:1; color:var(--primary); }
+  .solid-card h3 { font-size:1em; margin:.4em 0 .3em; }
+  .solid-card .acr { display:inline-block; margin-top:.4em; font-family:var(--mono); font-size:.85em; font-weight:700; color:var(--accent); border:1px solid #5e4a1f; background:var(--accent-soft); border-radius:6px; padding:.05em .5em; }
+  .solid-card p { font-size:.95em; color:var(--muted); }
+
+  .resp { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.62em; }
+  .resp .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  .resp .arrow { color:var(--muted); }
+  .resp code { white-space:nowrap; }
+
+  .timeline { display:grid; grid-template-columns: repeat(6, 1fr); gap:10px; margin-top:20px; }
+  .timeline .slot { border-radius:10px; padding:16px 14px; font-size:.55em; min-height:190px; position:relative; }
+  .timeline .slot .time { font-family:var(--mono); font-weight:700; font-size:1.05em; display:block; margin-bottom:.5em; }
+  .timeline .slot h3 { font-size:1.25em; margin:0 0 .3em; }
+  .timeline .slot p { margin:0; color:var(--muted); }
+
+  .tree { font-family:var(--mono); font-size:.5em; line-height:1.5; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 20px; white-space:pre; }
+  .tree .n { color:var(--good); font-weight:700; }
+  .reveal section.lab .tree { background:#0b2e20; border-color:#1d5a3f; color:#e9f6ee; }
+  .reveal section.lab .tree .n { color:#9be3b7; }
+  .reveal section.lab .card { background:#164b34; border-color:#226b4b; color:#e9f6ee; }
+  .reveal section.lab .card h3 { color:#fff; }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .vs h3 { margin-bottom:.2em; }
+  ol.steps { font-size:.6em; margin-top:.6em; }
+  ol.steps li { margin:.35em 0; }
+  .fix-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .fix-grid .card { font-size:.42em; padding:8px 12px; }
+  .fix-grid .card h3 { font-size:1.1em; margin:0 0 .15em; }
+  .fix-grid .card p { margin:0; }
+  .fix-grid .card p.full { color:var(--muted); font-size:.9em; margin-bottom:.2em; }
+  .reveal pre.xxs { font-size:.33em; }
+  .why-dto { font-size:.5em !important; }
+  .why-dto th { font-size:.95em; }
+  .why-dto td { padding:9px 10px !important; vertical-align:top; }
+  .why-dto td i { width:1.2em; color:var(--muted); }
+  .why-dto td.ok { color:var(--good); } .why-dto td.ok i { color:var(--good); }
+  .why-dto td.no { color:var(--bad); }  .why-dto td.no i { color:var(--bad); }
+  .why-dto td code { color:var(--ink) !important; }
+  .why-lbl { font-size:.45em; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 .5em; }
+  .grep-hint { font-size:.8em; color:var(--muted); margin:.2em 0 .1em; }
+  .grep-hint pre { font-size:.85em; margin:.25em 0 0; }
+  .grep-hint pre code { padding:6px 10px; white-space:pre; }
+</style>
+</head>
+<body>
+<div class="brand-footer">
+  <div class="l"><img class="emblem" src="assets/utm-logo.png" alt="">Kursus Laravel Advanced · Modul 4 · Skalabiliti &amp; Automasi</div>
+  <div class="r"><i class="fa-solid fa-user-tie"></i>&nbsp; Muhammad Hamizi Jaminan</div>
+</div>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- HARI 3 · PEMBUKA & BAHAGIAN 01: QUEUES & JOBS              -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Kursus Laravel Advanced · Modul 4 / 6</span>
+  <h1 style="margin-top:.1em">Skalabiliti &amp; Automasi</h1>
+  <div class="topic-chips">
+    <span><i class="fa-solid fa-list-check"></i>Queues &amp; Jobs</span>
+    <span><i class="fa-solid fa-server"></i>Queue drivers</span>
+    <span><i class="fa-regular fa-clock"></i>Scheduled tasks</span>
+    <span><i class="fa-solid fa-diagram-project"></i>Events &amp; listeners</span>
+    <span><i class="fa-solid fa-tower-broadcast"></i>Broadcasting</span>
+  </div>
+  <div class="meta">
+    <div><span class="lbl"><i class="fa-regular fa-clock"></i>&nbsp; Tempoh</span><span class="val">4 jam</span></div>
+    <div><span class="lbl"><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Format</span><span class="val">Teori · Live coding · Lab</span></div>
+    <div><span class="lbl"><i class="fa-brands fa-laravel"></i>&nbsp; Stack</span><span class="val">PHP 8.4 · Laravel 13 · MySQL 8 · Redis</span></div>
+  </div>
+  <p class="presenter"><span class="avatar-sm"></span>Muhammad Hamizi Jaminan · Trainer</p>
+  <aside class="notes">Modul 4 bermula Hari 3 sejurus selepas Modul 3 (kira-kira 11:04 pagi). Tekan Shift+T di slide ini supaya jam sesi bermula dari sini. Semua output dalam modul ini (masa respons, output worker, isi jadual jobs, log) diambil daripada larian sebenar pada Laravel 13.43 dengan 200,000 invois (data Modul 2). Masa dalam output worker ialah UTC kerana config/app.php guna 'timezone' => 'UTC'.</aside>
+</section>
+
+<section data-timing="120">
+  <span class="kicker">Tentang modul ini</span>
+  <h2>Objektif &amp; hasil pembelajaran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card primary">
+      <h3><i class="fa-solid fa-bullseye"></i>Objektif</h3>
+      <p>Peserta mampu mereka bentuk sistem yang <strong>tidak terganggu semasa trafik tinggi</strong> menggunakan pemprosesan tak segerak.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-graduation-cap"></i>Hasil pembelajaran</h3>
+      <p>Peserta boleh memindahkan kerja berat ke background, mengurus job yang gagal, menjadualkan tugas harian, dan membina sistem modular dengan event.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Dalam Modul 1 kita tulis <code>SendPaymentReceipt implements ShouldQueue</code> dan berkata "emel dihantar di background". Hari ini kita buka background itu: <strong>siapa</strong> yang menghantar, <strong>di mana</strong> kerja menunggu, dan <strong>apa berlaku</strong> bila ia gagal.</div>
+</section>
+
+<section data-timing="60">
+  <span class="kicker">Agenda</span>
+  <h2>Jadual Modul 4</h2>
+  <div class="rule"></div>
+  <div class="timeline">
+    <div class="slot" style="background:var(--panel)"><span class="time">H3 11:08</span><h3>Queues &amp; Jobs</h3><p>Dispatch, worker, failed jobs, retry</p></div>
+    <div class="slot" style="background:var(--primary-soft)"><span class="time">H3 12:27</span><h3>Queue drivers</h3><p>Database, Redis, Amazon SQS (Simple Queue Service)</p></div>
+    <div class="slot" style="background:var(--accent-soft)"><span class="time">H3 2:00</span><h3>Scheduled tasks</h3><p>Peringatan yuran setiap pagi</p></div>
+    <div class="slot" style="background:var(--warn-soft)"><span class="time">H3 2:29</span><h3>Events &amp; listeners</h3><p>Listener, observer</p></div>
+    <div class="slot" style="background:var(--good-soft)"><span class="time">H3 3:03</span><h3>Broadcasting</h3><p>Dashboard Bendahari secara langsung</p></div>
+    <div class="slot" style="background:var(--panel); border:1px solid var(--accent)"><span class="time" style="color:#ffb4a8">H3 3:24</span><h3 style="color:#fff">Lab</h3><p style="color:#b9c3d3">Peringatan automatik</p></div>
+  </div>
+  <p class="small" style="margin-top:1em; text-align:center"><i class="fa-solid fa-mug-hot"></i>&nbsp; Sarapan 10:00 – 10:15 pagi · Makan tengah hari 1:00 – 2:00 petang · Minum petang 3:45 – 4:00 petang (Hari 1 – 3; Hari 4 rehat Jumaat 12:15 – 2:45 petang).<br>Modul 4: Hari 3, 11:04 pagi – 4:05 petang.</p>
+  <aside class="notes">Selepas Modul 4, Modul 5 bermula kira-kira 4:05 petang Hari 3 dan bersambung pada Hari 4.</aside>
+</section>
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-list-check"></i></div>
+  <div class="big-num">BAHAGIAN 01</div>
+  <h2>Queues &amp; Jobs</h2>
+  <p>Job dispatch, queue workers, failed jobs dan retry strategy</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Masalah</span>
+  <h2>Puan Siti tunggu 3.76 saat untuk satu laporan</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/CollectionExportController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="19-22|25">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+final class CollectionExportController extends Controller
+{
+    public function store(Request $request): JsonResponse
+    {
+        $year = $request->integer('year');
+        $path = "reports/kutipan-{$year}.csv";
+        Storage::makeDirectory('reports');
+        $handle = fopen(Storage::path($path), 'w');
+        fputcsv($handle, ['rujukan', 'invois', 'kaedah', 'amaun', 'tarikh']);
+
+        Payment::with('invoice')->whereYear('paid_at', $year)->lazyById(1000)
+            ->each(fn (Payment $p) => fputcsv($handle, [
+                $p->reference, $p->invoice->number, $p->method->value, $p->amount, $p->paid_at,
+            ]));
+        fclose($handle);
+
+        return response()->json(['path' => $path], 201);
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">routes/api.php (dalam prefix v1)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+Route::post(
+    'reports/collections/exports',
+    [CollectionExportController::class, 'store'],
+)->middleware(['auth:sanctum', 'can:view-bursary-reports']);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -X POST .../api/v1/reports/collections/exports \
+    -H "Authorization: Bearer 2|…" -d year=2025
+201  {"path":"reports/kutipan-2025.csv"}   3.758 s
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li>Fail CSV (Comma-Separated Values) 60,249 baris, untuk semua bayaran tahun 2025</li>
+        <li><code>lazyById(1000)</code>: ambil 1,000 rekod setiap kali, bukan 60 ribu sekaligus, supaya memori kekal rendah</li>
+        <li>Selama 3.76 s, satu proses PHP di pelayan <strong>terikat</strong> pada request ini</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Gate view-bursary-reports dari Bahagian Policies &amp; Gates, Modul 3. Masa 3.758 s diukur dengan curl -w %{time_total} pada 200,000 invois / 120,000 bayaran. Storage::makeDirectory perlu: tanpa folder reports, fopen gagal dengan "Failed to open stream: No such file or directory". Storage::path() pulangkan laluan penuh dalam storage/app/private.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Kenapa ia masalah</span>
+  <h2>Kerja berat dalam request vs dalam queue</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 330" style="max-width:1000px; margin:0 auto" role="img" aria-label="Perbandingan masa: eksport dalam request mengambil 3.76 saat; dengan queue, response 0.038 saat dan worker buat eksport di belakang">
+    <text class="t-h" x="0" y="24">TANPA QUEUE</text>
+    <rect class="box-p" x="0" y="40" width="150" height="56" rx="8"/>
+    <text class="t" x="75" y="74" text-anchor="middle" style="font-size:16px">Request</text>
+    <rect class="box-b" x="160" y="40" width="760" height="56" rx="8"/>
+    <text class="t" x="540" y="74" text-anchor="middle" style="font-size:16px">Tulis 60,249 baris laporan · proses PHP sibuk</text>
+    <rect class="box-g" x="930" y="40" width="170" height="56" rx="8"/>
+    <text class="t" x="1015" y="74" text-anchor="middle" style="font-size:16px">201 · 3.76 s</text>
+
+    <g class="fragment">
+    <text class="t-h" x="0" y="150">DENGAN QUEUE</text>
+    <rect class="box-p" x="0" y="166" width="150" height="56" rx="8"/>
+    <text class="t" x="75" y="200" text-anchor="middle" style="font-size:16px">Request</text>
+    <rect class="box-a" x="160" y="166" width="70" height="56" rx="8"/>
+    <text class="t-s" x="195" y="200" text-anchor="middle">simpan</text>
+    <rect class="box-g" x="240" y="166" width="190" height="56" rx="8"/>
+    <text class="t" x="335" y="200" text-anchor="middle" style="font-size:16px">202 · 0.038 s</text>
+    <path d="M195 222 L195 262" stroke="#9aa5b8" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <rect class="box-d" x="160" y="266" width="160" height="56" rx="8"/>
+    <text class="t" x="240" y="300" text-anchor="middle" style="font-size:16px">Jadual jobs</text>
+    <rect class="box-i" x="330" y="266" width="590" height="56" rx="8"/>
+    <text class="t" x="625" y="300" text-anchor="middle" style="font-size:16px">Worker: tulis laporan · 3 s · Puan Siti tidak menunggu</text>
+    <rect class="box-g" x="930" y="266" width="170" height="56" rx="8"/>
+    <text class="t" x="1015" y="300" text-anchor="middle" style="font-size:16px">Emel + lampiran</text>
+    </g>
+  </svg>
+  <div class="cols" style="font-size:.52em; margin-top:.4em">
+    <p><strong>Pengguna:</strong> 3.76 s menunggu, dan jika pelayar ditutup, kerja mungkin terhenti separuh jalan.</p>
+    <p><strong>Pelayan:</strong> bilangan proses PHP terhad. Jika 10 Bendahari eksport serentak, pelajar yang mahu membayar terpaksa beratur.</p>
+  </div>
+  <aside class="notes">Tekan anak panah untuk dedahkan baris kedua. Nombor 0.038 s dan 3 s diukur selepas eksport dipindahkan ke job (dua slide lagi). Queue = senarai kerja yang menunggu; worker = proses berasingan yang mengambil kerja dari senarai itu dan menjalankannya.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Langkah 1 · cipta job</span>
+  <h2>php artisan make:job ExportCollectionReport</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Jobs/ExportCollectionReport.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="11|13|15|19-20|22">
+namespace App\Jobs;
+
+use App\Mail\CollectionReportReady;
+use App\Models\Payment;
+use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+
+final class ExportCollectionReport implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct(public User $requestedBy, public int $year) {}
+
+    public function handle(): void
+    {
+        // kod eksport dari slide "Puan Siti tunggu 3.76 saat untuk satu laporan",
+        // tanpa diubah, kecuali $year menjadi $this->year
+
+        Mail::to($this->requestedBy->email)->send(new CollectionReportReady($path));
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li><code>ShouldQueue</code>: tanda "jangan jalankan sekarang, masukkan ke queue". Interface yang sama seperti listener Modul 1</li>
+        <li><code>Queueable</code>: trait yang memberi <code>dispatch()</code>, <code>onQueue()</code>, <code>delay()</code> dan simpan model sebagai id</li>
+        <li><strong>Constructor</strong> = data yang job perlukan. Ia disimpan, kemudian dibaca semula oleh worker</li>
+        <li><strong><code>handle()</code></strong> = kerja sebenar. Kod eksport dipindah tanpa diubah</li>
+        <li>Siap: hantar emel dengan fail dilampirkan</li>
+      </ul>
+      <div class="callout" style="font-size:.5em">Job tiada <code>$request</code>. Semua yang diperlukan mesti dihantar melalui constructor: pengguna dan tahun.</div>
+    </div>
+  </div>
+  <aside class="notes">CollectionReportReady ialah Mailable biasa dengan attachments() => [Attachment::fromStorage($this->path)]. Kodnya tidak ditunjukkan kerana Mailable bukan fokus modul ini.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Langkah 2 · dispatch</span>
+  <h2>Controller hanya menghantar kerja</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Http/Controllers/Api/V1/CollectionExportController.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="12|14-16">
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Jobs\ExportCollectionReport;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+final class CollectionExportController extends Controller
+{
+    public function store(Request $request): JsonResponse
+    {
+        ExportCollectionReport::dispatch($request->user(), $request->integer('year'));
+
+        return response()->json([
+            'message' => 'Laporan sedang dijana. Ia akan dihantar ke emel anda.',
+        ], 202);
+    }
+}
+      </code></pre>
+      <p class="code-label">.env</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+QUEUE_CONNECTION=database
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -X POST .../api/v1/reports/collections/exports \
+    -H "Authorization: Bearer 2|…" -d year=2025
+202  {"message":"Laporan sedang dijana. Ia akan dihantar ke emel anda."}
+     0.038 s
+      </code></pre>
+      <ul style="font-size:.54em">
+        <li><strong>202 Accepted</strong>: "permintaan diterima, belum siap". Lebih jujur daripada 201</li>
+        <li><code>dispatch()</code> menerima argumen yang sama seperti constructor job</li>
+        <li><code>QUEUE_CONNECTION=database</code> ialah lalai Laravel 13: job disimpan dalam jadual <code>jobs</code></li>
+      </ul>
+      <div class="callout warn" style="font-size:.5em">Dengan <code>QUEUE_CONNECTION=sync</code>, job dijalankan <strong>serta-merta dalam request</strong>. Response kembali 3.76 s. Semak <code>.env</code> dahulu bila "queue tidak laju".</div>
+    </div>
+  </div>
+  <aside class="notes">3.758 s → 0.038 s, kira-kira 100 kali lebih pantas dari sudut pengguna. Jadual jobs dicipta oleh migration lalai Laravel (0001_01_01_000002_create_jobs_table), bersama job_batches dan failed_jobs.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Di dalam queue</span>
+  <h2>Apa yang sebenarnya disimpan?</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+mysql> SELECT queue, attempts FROM jobs;
+queue    attempts
+default  0
+
+payload.displayName = "App\Jobs\ExportCollectionReport"
+payload.data.command =
+  O:31:"App\Jobs\ExportCollectionReport":2:{
+    s:11:"requestedBy";O:45:"Illuminate\Contracts\Database\ModelIdentifier":5:{
+        s:5:"class";s:15:"App\Models\User";s:2:"id";i:3; ... }
+    s:4:"year";i:2026;
+  }
+  </code></pre>
+  <div class="cols" style="font-size:.52em; margin-top:.4em">
+    <div>
+      <p>Model <code>User</code> disimpan sebagai <strong><code>ModelIdentifier</code></strong>: nama class + <code>id</code> 3 sahaja. Worker ambil semula rekod segar dari DB sebelum <code>handle()</code>.</p>
+    </div>
+    <div>
+      <p>Akibatnya: jika rekod dipadam sebelum worker sempat, job gagal. Dan nilai yang <strong>bukan</strong> model (seperti <code>year</code>) disimpan apa adanya, jadi jangan hantar objek besar atau sambungan fail.</p>
+    </div>
+  </div>
+  <aside class="notes">Payload diambil terus dari jadual jobs (lajur payload ialah JSON; data.command ialah objek PHP yang diserialize). Ini dari trait Queueable, yang termasuk SerializesModels. Baris "..." memendekkan medan relations, connection dan collectionClass.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Langkah 3 · worker</span>
+  <h2>php artisan queue:work</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan queue:work
+ 2026-11-22 06:39:52 App\Jobs\ExportCollectionReport ........ RUNNING
+ 2026-11-22 06:39:56 App\Jobs\ExportCollectionReport ........ 3s DONE
+
+storage/logs/laravel.log  (MAIL_MAILER=log)
+To: siti@utm.my
+Subject: Laporan kutipan sedia
+Content-Disposition: attachment; filename=kutipan-2025.csv
+  </code></pre>
+  <div class="cols" style="font-size:.52em; margin-top:.4em">
+    <ul>
+      <li>Worker ialah proses PHP yang <strong>terus berjalan</strong>, ambil job satu demi satu</li>
+      <li>Tiada worker = job menunggu selama-lamanya. Response tetap 202, tetapi emel tidak pernah sampai</li>
+    </ul>
+    <ul>
+      <li><code>--once</code>: proses satu job kemudian berhenti (berguna semasa debug)</li>
+      <li><code>--stop-when-empty</code>: berhenti bila queue kosong</li>
+    </ul>
+  </div>
+  <aside class="notes">Masa dalam output ialah UTC (config/app.php 'timezone' => 'UTC'); 06:39 UTC = 2:39 petang waktu Malaysia. Dalam pembangunan, buka terminal kedua untuk queue:work. Ini juga sebab resit Modul 1 "tidak sampai" bila peserta lupa jalankan worker.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Kaitan dengan Modul 1</span>
+  <h2>Listener <code>ShouldQueue</code> juga sebuah job</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ curl -X POST .../api/v1/payments -H "Authorization: Bearer 1|…" \
+    -d invoice_id=6 -d method=fpx
+201  {"data":{"id":2048,"invoice_id":6,"method":"fpx","amount":"1250.00",...}}
+     0.053 s
+
+mysql> SELECT id, queue, attempts FROM jobs;
+1   default  0     displayName: App\Listeners\SendPaymentReceipt
+
+$ php artisan queue:work --once
+ App\Listeners\SendPaymentReceipt ............ RUNNING
+ App\Listeners\SendPaymentReceipt ............ 35.79ms DONE
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li>Bayaran berjaya dalam 0.053 s. Resit belum dihantar: ia menunggu dalam <code>jobs</code></li>
+        <li>Laravel membungkus listener <code>ShouldQueue</code> sebagai job secara automatik</li>
+        <li>Semua yang anda pelajari tentang job (worker, retry, failed jobs) terpakai juga pada listener ini</li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Resit dalam log: <code>To: p7@graduate.utm.my</code>, <code>Subject: Resit bayaran INV0000006</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Rujuk slide "Event selepas transaksi berjaya" dalam Modul 1 (PaymentReceived, SendPaymentReceipt). Token 1|… ialah token Aisyah dari Modul 3.</aside>
+</section>
+
+<section data-timing="1200" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 1 · 20 minit · individu, dibantu rakan semeja · baki <span data-countdown>20:00</span></span>
+  <h2>Pindahkan eksport laporan ke queue</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Branch <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">modul-4-start</code>. <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">CollectionExportController</code> versi segerak sudah ada.</p>
+      <ol class="steps" style="font-size:.55em">
+        <li>Ukur dahulu: curl dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">-w "%{time_total}"</code>, token Puan Siti, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">year=2025</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan make:job ExportCollectionReport</code>, pindahkan kod eksport ke <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">handle()</code></li>
+        <li>Controller: <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">dispatch()</code> dan pulangkan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">202</code></li>
+        <li>Ukur semula. Semak jadual <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">jobs</code> ada satu baris</li>
+        <li>Terminal kedua: <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">php artisan queue:work</code>. Semak fail dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">storage/app/private/reports</code> dan emel dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">storage/logs/laravel.log</code></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Dua masa curl (sebelum dan selepas), output <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">queue:work</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">DONE</code>, dan baris <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Subject: Laporan kutipan sedia</code> dalam log.</p>
+      <p>Siap awal? Hantar job ke queue bernama <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">reports</code> dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">->onQueue('reports')</code>. Kenapa worker anda tidak lagi mengambilnya? (Jawapan dalam Bahagian Queue Drivers, 12:27 tengah hari.)</p>
+    </div>
+  </div>
+  <aside class="notes">Branch modul-4-start: kod akhir Modul 3, ditambah CollectionExportController segerak, route reports/collections/exports, Mailable CollectionReportReady, MAIL_MAILER=log, QUEUE_CONNECTION=database, dan data besar Modul 2. Masa sebenar bergantung pada mesin peserta; di mesin trainer 3.76 s → 0.038 s.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Bila job gagal</span>
+  <h2>Sistem kewangan sedang down</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Jobs/SyncPaymentToFinance.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="14|16|22-28">
+namespace App\Jobs;
+
+use App\Models\Payment;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Http;
+
+final class SyncPaymentToFinance implements ShouldQueue
+{
+    use Queueable;
+
+    public int $tries = 4;
+
+    public array $backoff = [10, 30, 60];
+
+    public function __construct(public Payment $payment) {}
+
+    public function handle(): void
+    {
+        Http::timeout(5)
+            ->post(config('services.finance.url').'/payments', [
+                'reference' => $this->payment->reference,
+                'amount' => $this->payment->amount,
+            ])
+            ->throw();
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">config/services.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+'finance' => [
+    'url' => env('FINANCE_URL'),
+],
+      </code></pre>
+      <ul style="font-size:.53em">
+        <li>Setiap bayaran perlu dihantar ke <strong>sistem kewangan universiti</strong> (pelanggan Passport dalam Modul 3)</li>
+        <li><code>$tries = 4</code>: cuba paling banyak 4 kali</li>
+        <li><code>$backoff = [10, 30, 60]</code>: tunggu 10 s sebelum cubaan ke-2, 30 s sebelum ke-3, 60 s sebelum ke-4</li>
+        <li><code>->throw()</code>: jadikan status 4xx/5xx satu exception. Tanpanya, 503 dianggap "berjaya" dan job tidak dicuba semula</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Http ialah HTTP client Laravel (pembalut Guzzle). Dalam ujian, FINANCE_URL menghala ke pelayan stub yang pulangkan 503 {"message":"Service Unavailable"}. Untuk produksi, backoff lebih panjang seperti [60, 300, 900] lebih munasabah.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Retry strategy</span>
+  <h2>Empat cubaan, jarak semakin panjang</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan queue:work
+ 06:42:43 App\Jobs\SyncPaymentToFinance ...... RUNNING
+ 06:42:43 App\Jobs\SyncPaymentToFinance ...... 50.20ms FAIL
+ 06:42:55 App\Jobs\SyncPaymentToFinance ...... RUNNING
+ 06:42:56 App\Jobs\SyncPaymentToFinance ...... 16.69ms FAIL
+ 06:43:26 App\Jobs\SyncPaymentToFinance ...... RUNNING
+ 06:43:26 App\Jobs\SyncPaymentToFinance ...... 35.74ms FAIL
+ 06:44:26 App\Jobs\SyncPaymentToFinance ...... RUNNING
+ 06:44:26 App\Jobs\SyncPaymentToFinance ...... 38.06ms FAIL
+      </code></pre>
+      <p class="code-label">Log pelayan sistem kewangan</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+06:42:43 POST /payments
+06:42:56 POST /payments     +13 s
+06:43:26 POST /payments     +30 s
+06:44:26 POST /payments     +60 s
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li>Jarak ikut <code>$backoff</code>. Jarak pertama 13 s, bukan 10 s: worker hanya menyemak queue setiap 3 s bila tiada kerja (<code>--sleep=3</code>)</li>
+        <li><strong>Kenapa jarak semakin panjang?</strong> Sistem yang baru pulih tidak dibanjiri semula oleh ratusan cubaan serentak</li>
+        <li>Selepas cubaan ke-4 gagal, job <strong>tidak hilang</strong>. Ia dipindah ke jadual <code>failed_jobs</code></li>
+      </ul>
+      <div class="callout" style="font-size:.52em">Bayaran pelajar tetap berjaya dari awal. Yang tertangguh hanyalah salinan ke sistem kewangan.</div>
+    </div>
+  </div>
+  <aside class="notes">Diukur dengan backoff [10, 30, 60] sebenar (kira-kira 2 minit). Tarikh dalam output worker dibuang supaya muat; masa ialah UTC.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Failed jobs</span>
+  <h2>Lihat, faham, cuba semula</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan queue:failed
+ 2026-11-22 06:44:26 bae0c5de-3370-4a2a-acf1-3fe6e939bc69 database@default App\Jobs\SyncPaymentToFinance
+
+mysql> SELECT exception FROM failed_jobs;
+Illuminate\Http\Client\RequestException: HTTP request returned status code 503:
+{"message":"Service Unavailable"}
+
+# sistem kewangan sudah pulih
+$ php artisan queue:retry all
+ INFO  Pushing failed queue jobs back onto the queue.
+ bae0c5de-3370-4a2a-acf1-3fe6e939bc69 ........ 13.59ms DONE
+
+$ php artisan queue:work --once
+ App\Jobs\SyncPaymentToFinance ............... 39.52ms DONE
+
+$ php artisan queue:failed
+ INFO  No failed jobs found.
+  </code></pre>
+  <div class="cols" style="font-size:.52em; margin-top:.4em">
+    <p><code>queue:retry &lt;uuid&gt;</code> untuk satu job sahaja. <code>queue:forget &lt;uuid&gt;</code> untuk buang tanpa cuba semula.</p>
+    <p>Lajur <code>exception</code> menyimpan stack trace penuh. Baca baris pertama dahulu: ia biasanya sudah cukup.</p>
+  </div>
+  <aside class="notes">queue:retry tidak menjalankan job; ia hanya memasukkannya semula ke queue. Worker yang menjalankannya. Baris "13.59ms DONE" di bawah queue:retry ialah masa memasukkan semula, bukan masa job.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Selepas cubaan terakhir</span>
+  <h2>Beritahu pengguna / developer dengan <code>failed()</code></h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Jobs/SyncPaymentToFinance.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use Illuminate\Support\Facades\Log;
+use Throwable;
+
+// ... dalam class SyncPaymentToFinance
+
+public function failed(?Throwable $exception): void
+{
+    Log::critical('Bayaran gagal dihantar ke sistem kewangan', [
+        'reference' => $this->payment->reference,
+        'error' => $exception?->getMessage(),
+    ]);
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+local.CRITICAL: Bayaran gagal dihantar ke sistem kewangan
+  {"reference":"REF200000","error":"HTTP request returned status code 503: …"}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li>Dipanggil <strong>sekali</strong>, selepas semua cubaan habis. Bukan pada setiap kegagalan</li>
+        <li>Tempat untuk amaran: log <code>critical</code>, emel kepada pentadbir, atau tanda rekod "perlu semakan"</li>
+        <li>Jangan buat kerja berisiko di sini. Jika <code>failed()</code> sendiri gagal, tiada lagi yang menangkapnya</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Diuji dengan backoff dipendekkan sementara kepada [1, 1, 1] supaya cepat; kod di slide memaparkan nilai sebenar. Log channel dan amaran dibincang lanjut dalam Modul 5 (Log Management).</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Retry yang selamat</span>
+  <h2>Bagaimana jika cubaan pertama sebenarnya berjaya?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card bad">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i>Senario</h3>
+      <p>Sistem kewangan terima bayaran dan simpan, tetapi response lambat. <code>Http::timeout(5)</code> tamat, job dikira gagal dan dicuba semula. Bayaran yang sama kini <strong>direkod dua kali</strong>.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-key"></i>Penyelesaian: idempotent</h3>
+      <p>Hantar kunci unik yang sama setiap cubaan: <code>reference</code> bayaran. Penerima simpan sekali sahaja untuk setiap <code>reference</code>, dan pulangkan berjaya untuk cubaan berulang.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.8em; font-size:.55em"><strong>Idempotent</strong> (hasil sama walau diulang): soalan pertama untuk setiap job yang ada <code>$tries</code> lebih dari 1. "Jika job ini berjalan dua kali, apa yang rosak?"</div>
+  <aside class="notes">Konsep yang sama seperti kunci unik dan locking untuk double payment dalam Modul 2. Job yang menulis ke DB sendiri boleh guna updateOrCreate() atau unique index untuk jadi idempotent.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Klik dua kali</span>
+  <h2><code>ShouldBeUnique</code>: satu laporan, satu job</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Jobs/ExportCollectionReport.php (ubah)</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="1|3|7-10">
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+
+final class ExportCollectionReport implements ShouldQueue, ShouldBeUnique
+{
+    // ... use Queueable, constructor
+
+    public function uniqueId(): string
+    {
+        return (string) $this->year;
+    }
+
+    // ... handle() tidak berubah
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# Puan Siti klik "Eksport 2025" dua kali
+202 202
+jobs: 2     ← tanpa ShouldBeUnique
+
+202 202
+jobs: 1     ← dengan ShouldBeUnique
+
+# selepas job siap, klik lagi
+jobs: 1     ← kunci dilepaskan, boleh eksport semula
+      </code></pre>
+      <ul style="font-size:.53em">
+        <li>Job kedua dengan <code>uniqueId()</code> yang sama <strong>tidak dimasukkan</strong> selagi yang pertama belum siap</li>
+        <li>Response tetap 202: pengguna tidak perlu tahu</li>
+        <li>Kunci disimpan dalam cache, jadi perlukan cache driver yang menyokong lock (database atau Redis)</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Masalah double-click yang sama seperti double payment dalam Modul 2, tetapi di peringkat job. Tanpa ShouldBeUnique, dua eksport 2025 masing-masing ambil 3–4 s worker untuk fail yang sama.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · selepas deploy</span>
+  <h2>Worker masih guna kod sebelum ini</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# worker sedang berjalan
+# subjek emel ditukar: 'Resit bayaran' → 'Resit rasmi UTM'
+# satu bayaran baru
+
+storage/logs/laravel.log:
+Subject: Resit bayaran INV0003332      ← kod lama
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li>Worker memuatkan kod <strong>sekali</strong> semasa bermula, kemudian berjalan berjam-jam</li>
+        <li>Fail yang ditukar tidak dibaca semula. Deploy nampak "tidak berkesan" untuk semua kerja background</li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan queue:restart
+ INFO  Broadcasting queue restart signal.
+
+# terminal worker:
+ Worker STOPPED Received restart signal
+
+# worker dimulakan semula, bayaran baru:
+Subject: Resit rasmi UTM INV0003332    ← kod baru
+      </code></pre>
+      <ul style="font-size:.5em">
+        <li><code>queue:restart</code> minta setiap worker berhenti <strong>selepas</strong> job semasa siap. Tiada job terputus separuh jalan</li>
+        <li>Masukkan dalam skrip deploy. Supervisor (dua slide lagi) yang memulakan worker semula</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Isyarat restart disimpan dalam cache; setiap worker menyemaknya antara job. Diuji: e-mel ketiga selepas fail ditukar masih guna subjek lama; selepas queue:restart dan worker baru, subjek baharu. Subjek dikembalikan kepada "Resit bayaran" selepas demo.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Kenapa emel tidak sampai?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Eksport pulangkan 202, tetapi Puan Siti tiada emel. Jadual <code>jobs</code> ada 1 baris</td><td class="fragment">Tiada worker berjalan. Jalankan <code>queue:work</code></td></tr>
+      <tr><td>2</td><td>Response eksport masih 3.7 s walaupun kod guna <code>dispatch()</code></td><td class="fragment"><code>QUEUE_CONNECTION=sync</code> dalam <code>.env</code></td></tr>
+      <tr><td>3</td><td>Job sistem kewangan gagal 4 kali. Di mana ia sekarang?</td><td class="fragment">Jadual <code>failed_jobs</code>. Lihat dengan <code>queue:failed</code>, cuba semula dengan <code>queue:retry</code></td></tr>
+      <tr><td>4</td><td>Subjek emel sudah ditukar dan di-deploy, tetapi emel baru masih guna subjek lama</td><td class="fragment">Worker belum dimulakan semula: <code>queue:restart</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan. Semua empat situasi telah dilihat dalam bahagian ini.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 02: QUEUE DRIVERS                                 -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-server"></i></div>
+  <div class="big-num">BAHAGIAN 02</div>
+  <h2>Queue Drivers</h2>
+  <p>Database, Redis dan Amazon SQS (Simple Queue Service)</p>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Perbandingan</span>
+  <h2>Di mana job menunggu?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th></th><th><code>database</code></th><th><code>redis</code></th><th><code>sqs</code></th></tr></thead>
+    <tbody>
+      <tr><td>Perlu pasang</td><td>Tiada. Jadual <code>jobs</code> dalam DB sedia ada</td><td>Pelayan Redis (sudah ada untuk cache, Modul 2)</td><td>Akaun AWS (Amazon Web Services) dan pakej <code>aws/aws-sdk-php</code></td></tr>
+      <tr><td>Beban pada DB utama</td><td>Ada: setiap job = tulis, kunci, padam dalam DB yang sama dengan bayaran</td><td>Tiada</td><td>Tiada</td></tr>
+      <tr><td>Pemantauan</td><td>Query SQL pada <code>jobs</code> dan <code>failed_jobs</code></td><td><strong>Laravel Horizon</strong>: dashboard, metrik, konfigurasi worker dalam kod</td><td>Konsol AWS</td></tr>
+      <tr><td>Had yang perlu tahu</td><td>Jadual besar perlahankan query</td><td>Data dalam memori: tetapkan persistence Redis</td><td>Delay maksimum 15 minit; tiada Horizon</td></tr>
+      <tr><td>Sesuai untuk</td><td>Permulaan, trafik sederhana</td><td>Trafik tinggi, perlu nampak apa yang berlaku</td><td>Sistem yang sudah di AWS, tidak mahu urus pelayan queue</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.52em; margin-top:.6em">Kod job <strong>tidak berubah</strong> antara driver. Hanya <code>QUEUE_CONNECTION</code> dalam <code>.env</code> yang ditukar.</div>
+  <aside class="notes">Amazon SQS (Simple Queue Service) tidak diuji dalam kursus ini kerana memerlukan akaun AWS; maklumat delay 15 minit dan pakej aws/aws-sdk-php datang daripada dokumentasi Laravel. Horizon hanya untuk Redis: composer require laravel/horizon, kemudian php artisan horizon menggantikan queue:work.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Tukar ke Redis</span>
+  <h2>Satu baris dalam <code>.env</code></h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">.env</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+QUEUE_CONNECTION=redis
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# satu bayaran baru, sebelum worker berjalan
+$ redis-cli keys '*'
+1) "laravel-database-queues:default:notify"
+2) "laravel-database-queues:default"
+
+$ redis-cli llen laravel-database-queues:default
+(integer) 1
+
+$ php artisan queue:work --once
+ App\Listeners\SendPaymentReceipt ........ 37.30ms DONE
+
+mysql> SELECT COUNT(*) FROM jobs;
+0
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li>Job kini satu item dalam senarai Redis bernama <code>queues:default</code>. Jadual <code>jobs</code> kosong</li>
+        <li>Awalan <code>laravel-database-</code> datang dari <code>REDIS_PREFIX</code> lalai (nama aplikasi + <code>-database-</code>)</li>
+        <li>Sambungan Redis guna tetapan yang sama seperti cache Modul 2: <code>REDIS_HOST</code>, <code>REDIS_PORT</code></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Diuji dengan Redis tempatan; REDIS_CLIENT=phpredis seperti dalam Modul 2. Job yang sudah ada dalam jadual jobs tidak berpindah ke Redis bila driver ditukar: habiskan dahulu dengan worker lama.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Ukur, jangan andaikan</span>
+  <h2>Adakah Redis lebih laju?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.55em">
+    <thead><tr><th>Job kosong</th><th><code>database</code> (MySQL 8)</th><th><code>redis</code></th></tr></thead>
+    <tbody>
+      <tr><td>2,000 job · 1 worker</td><td>2.52 s · <strong>793 job/s</strong></td><td>3.40 s · <strong>588 job/s</strong></td></tr>
+      <tr><td>8,000 job · 4 worker serentak</td><td>3.79 s · <strong>2,111 job/s</strong></td><td>3.98 s · <strong>2,009 job/s</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="font-size:.53em; margin-top:.6em">
+    <div>
+      <p><strong>Pada skala ini, hampir sama.</strong> Walaupun hari puncak bayaran yuran mencecah beberapa ribu bayaran sejam, itu masih jauh di bawah 2,000 job sesaat.</p>
+    </div>
+    <div>
+      <p><strong>Jadi kenapa pilih Redis?</strong> Untuk mengasingkan beban queue daripada DB bayaran, dan untuk Horizon. Bukan kerana "Redis lebih laju".</p>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.52em; margin-top:.4em">Empat worker memproses 2.6 kali lebih banyak job daripada satu. Tambah worker biasanya lebih berkesan daripada tukar driver.</div>
+  <div class="cols" style="font-size:.66em; margin-top:.4em">
+    <div class="card">
+      <h3><i class="fa-solid fa-laptop-code"></i>Cara tambah worker: mesin anda</h3>
+      <p>Setiap proses <code>queue:work</code> ialah satu worker. Buka 4 terminal dan jalankan arahan yang sama dalam setiap satu:</p>
+      <p style="text-align:center"><code style="font-size:1.3em">php artisan queue:work</code></p>
+      <p>Keempat-empatnya mengambil job dari queue yang sama; satu job hanya diambil oleh satu worker.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-server"></i>Cara tambah worker: pelayan</h3>
+      <p>Jangan buka terminal; ia mati bila anda log keluar. Biar Supervisor menjalankannya:</p>
+      <p style="text-align:center"><code style="font-size:1.3em">numprocs=4</code></p>
+      <p>Konfigurasi Supervisor penuh ada dua slide lagi.</p>
+    </div>
+  </div>
+  <aside class="notes">Diukur pada mesin trainer: NoopJob dengan handle() kosong, queue:work --stop-when-empty --sleep=0, MySQL 8 dan Redis tempatan. Setiap worker memproses kira-kira 2,000 job. Ukuran 4 worker dijalankan sebagai 4 proses queue:work serentak, sama seperti 4 terminal. Bilangan worker yang sesuai bergantung pada CPU dan jenis job: mula dengan bilangan teras CPU, ukur, kemudian laraskan. Nombor akan berbeza pada pelayan sebenar; yang penting ialah cara mengukur.</aside>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Queue bernama</span>
+  <h2>Resit pelajar tidak menunggu laporan</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">CollectionExportController (ubah satu baris)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+ExportCollectionReport::dispatch($request->user(), $request->integer('year'))
+    ->onQueue('reports');
+      </code></pre>
+      <p class="code-label">Dua eksport, kemudian satu bayaran</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+mysql> SELECT id, queue FROM jobs;
+22  default   ← resit (dihantar terakhir)
+20  reports
+21  reports
+
+$ php artisan queue:work --queue=default,reports
+ 06:46:23 App\Listeners\SendPaymentReceipt ..... 26.27ms DONE
+ 06:46:27 App\Jobs\ExportCollectionReport ...... 4s DONE
+ 06:46:31 App\Jobs\ExportCollectionReport ...... 3s DONE
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li><code>--queue=default,reports</code>: kosongkan <code>default</code> dahulu, baru ambil <code>reports</code></li>
+        <li>Resit dihantar terakhir tetapi diproses <strong>pertama</strong></li>
+      </ul>
+      <div class="callout warn" style="font-size:.5em"><strong>Perangkap:</strong> <code>php artisan queue:work</code> tanpa <code>--queue</code> hanya mendengar <code>default</code>. Job <code>reports</code> kekal dalam jadual selama-lamanya:
+<pre style="margin:.4em 0 0; box-shadow:none"><code class="language-plaintext" data-trim>
+$ php artisan queue:work --stop-when-empty
+ App\Listeners\SendPaymentReceipt ... DONE
+ Worker STOPPED Queue empty
+jobs: 17 reports, 18 reports      ← masih menunggu
+</code></pre></div>
+    </div>
+  </div>
+  <aside class="notes">Ini jawapan cabaran "siap awal" Lab 1. Alternatif: worker berasingan untuk setiap queue (contohnya 3 worker default, 1 worker reports) supaya laporan tidak pernah menghalang resit langsung.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Produksi</span>
+  <h2>Siapa yang memastikan worker sentiasa hidup?</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">/etc/supervisor/conf.d/yuran-worker.conf</p>
+      <pre class="sm"><code class="language-ini" data-trim>
+[program:yuran-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/yuran/artisan queue:work --queue=default,reports --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=4
+redirect_stderr=true
+stdout_logfile=/var/www/yuran/storage/logs/worker.log
+stopwaitsecs=3600
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><strong>Supervisor</strong>: pengurus proses Linux. Jika worker mati, ia dimulakan semula (<code>autorestart</code>)</li>
+        <li><code>numprocs=4</code>: empat worker serentak, seperti ukuran tadi</li>
+        <li><code>--max-time=3600</code>: worker berhenti sendiri selepas sejam dan Supervisor mulakan yang baru. Elak kebocoran memori</li>
+        <li><code>stopwaitsecs</code>: beri masa job panjang habis sebelum dimatikan</li>
+      </ul>
+      <div class="callout" style="font-size:.5em">Skrip deploy: <code>php artisan queue:restart</code>. Supervisor mulakan semula worker dengan kod baru.</div>
+    </div>
+  </div>
+  <aside class="notes">Konfigurasi ini berdasarkan contoh dalam dokumentasi Laravel (Queues, Supervisor Configuration), disesuaikan dengan laluan /var/www/yuran; ia tidak diuji di pelayan dalam kursus ini. Pasang dengan sudo apt-get install supervisor, kemudian supervisorctl reread, supervisorctl update, supervisorctl start "yuran-worker:*". Jika guna Horizon, Supervisor menjalankan php artisan horizon, bukan queue:work.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Pilih driver dan worker</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Situasi</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Sistem baru, satu pelayan, tiada Redis. Perlu queue minggu ini</td><td class="fragment"><code>database</code>. Tiada apa perlu dipasang</td></tr>
+      <tr><td>2</td><td>Pentadbir mahu dashboard untuk lihat job gagal dan masa menunggu</td><td class="fragment"><code>redis</code> + Laravel Horizon</td></tr>
+      <tr><td>3</td><td>Job peringatan perlu dihantar 2 jam selepas invois dicipta, dengan SQS (Simple Queue Service)</td><td class="fragment">Tidak boleh terus: delay maksimum SQS 15 minit. Guna scheduler (bahagian seterusnya) atau driver lain</td></tr>
+      <tr><td>4</td><td>Worker mati jam 2 pagi kerana kehabisan memori. Pagi esok, 300 resit belum dihantar</td><td class="fragment">Supervisor dengan <code>autorestart</code> dan <code>--max-time</code></td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Sebelum makan</span>
+  <h2>Ringkasan pagi</h2>
+  <div class="rule"></div>
+  <table style="font-size:.55em">
+    <thead><tr><th>Konsep</th><th>Satu ayat</th></tr></thead>
+    <tbody>
+      <tr><td>Job</td><td>Class <code>ShouldQueue</code> dengan <code>handle()</code>; data masuk melalui constructor</td></tr>
+      <tr><td>Worker</td><td>Proses <code>queue:work</code> yang berjalan berterusan; tanpanya job menunggu selama-lamanya</td></tr>
+      <tr><td>Retry</td><td><code>$tries</code> + <code>$backoff</code>; selepas habis, <code>failed_jobs</code> dan <code>failed()</code></td></tr>
+      <tr><td>Selamat diulang</td><td>Idempotent dengan kunci unik; <code>ShouldBeUnique</code> untuk klik dua kali</td></tr>
+      <tr><td>Driver</td><td>Database untuk mula, Redis untuk Horizon; kod job tidak berubah</td></tr>
+      <tr><td>Produksi</td><td>Supervisor, <code>--max-time</code>, dan <code>queue:restart</code> setiap deploy</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Baki masa sebelum 1:00 untuk soalan dan peserta yang belum siap Lab 1.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- MAKAN TENGAH HARI 1:00                                     -->
+<!-- ============================================================ -->
+
+<section data-timing="3600" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-utensils"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">1:00 – 2:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Makan tengah hari</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>60:00</p>
+  <p class="cover-sub">Seterusnya: peringatan yuran yang dihantar sendiri setiap pagi</p>
+  <aside class="notes">Selepas makan, tekan Shift+T di slide seterusnya supaya pemasa jadual bermula semula dari situ.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 03: SCHEDULED TASKS                               -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-regular fa-clock"></i></div>
+  <div class="big-num">BAHAGIAN 03</div>
+  <h2>Scheduled Tasks</h2>
+  <p>Laravel Scheduler dan automasi berasaskan cron</p>
+  <aside class="notes">Sesi petang bermula. Tekan Shift+T di slide ini supaya pemasa jadual bermula semula dari 2:00 petang.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Masalah</span>
+  <h2>Siapa yang tekan butang setiap pagi?</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card bad">
+      <h3><i class="fa-solid fa-user-clock"></i>Hari ini</h3>
+      <p>Pegawai Bendahari jalankan query invois lewat 7 hari, salin emel ke Outlook, hantar satu demi satu. Cuti? Tiada peringatan.</p>
+    </div>
+    <div class="card good">
+      <h3><i class="fa-solid fa-robot"></i>Matlamat</h3>
+      <p>Setiap hari jam 8:00 pagi, sistem cari invois yang lewat tepat 7 hari dan masukkan satu emel peringatan untuk setiap invois ke queue.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.8em; font-size:.55em">Dua langkah: (1) tulis <strong>command artisan</strong> yang buat kerja itu sekali, (2) beritahu <strong>scheduler</strong> bila ia perlu berjalan.</div>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Langkah 1 · command</span>
+  <h2>php artisan make:command SendFeeReminders</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Console/Commands/SendFeeReminders.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10-11|16-18|21-24|26">
+namespace App\Console\Commands;
+
+use App\Mail\FeeReminder;
+use App\Models\Invoice;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+
+#[Signature('invoices:send-reminders')]
+#[Description('Hantar peringatan untuk invois yang lewat 7 hari')]
+final class SendFeeReminders extends Command
+{
+    public function handle(): int
+    {
+        $invoices = Invoice::overdue()
+            ->whereDate('due_date', today()->subDays(7))
+            ->with('student');
+
+        $count = 0;
+        $invoices->lazyById(500)->each(function (Invoice $invoice) use (&$count) {
+            Mail::to($invoice->student->email)->queue(new FeeReminder($invoice));
+            $count++;
+        });
+
+        $this->info("{$count} peringatan dimasukkan ke queue.");
+
+        return self::SUCCESS;
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.53em">
+        <li><code>#[Signature]</code> = nama command. Laravel 13 menjana stub dengan attribute PHP, seperti <code>#[Fillable]</code> dalam Modul 3</li>
+        <li><code>overdue()</code>: scope dari Bahagian Advanced Eloquent, Modul 2</li>
+        <li><code>Mail::...->queue()</code>, bukan <code>send()</code>: command selesai dalam setengah saat; 278 emel dihantar oleh worker</li>
+        <li><code>use (&amp;$count)</code>: closure menambah pemboleh ubah di luarnya</li>
+        <li><code>self::SUCCESS</code> = kod keluar 0, supaya cron tahu ia berjaya</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">FeeReminder ialah Mailable biasa dengan subjek "Peringatan: invois INV… lewat 7 hari". Command stub Laravel 13 dijana dengan #[Signature('app:send-fee-reminders')] dan #[Description('Command description')]; kedua-duanya ditukar.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Uji dengan tangan dahulu</span>
+  <h2>Jalankan command sekali</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+    <pre class="xs"><code class="language-plaintext" data-trim>
+$ time php artisan invoices:send-reminders
+278 peringatan dimasukkan ke queue.
+real  0.512s
+
+mysql> SELECT COUNT(*) FROM jobs;
+278
+
+$ php artisan queue:work --once
+ App\Mail\FeeReminder ................ 18.90ms DONE
+
+storage/logs/laravel.log:
+Subject: Peringatan: invois INV0000009 lewat 7 hari
+    </code></pre>
+    <p class="code-label">Windows PowerShell</p>
+    <pre class="xs"><code class="language-powershell" data-trim>
+PS> (Measure-Command {
+>>     php artisan invoices:send-reminders | Out-Default
+>> }).TotalSeconds
+    </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li><code>time</code> di depan arahan: mengukur berapa lama arahan berjalan (Linux, macOS, Git Bash). <code>real</code> = masa sebenar dari mula hingga tamat</li>
+        <li>Di Windows, guna <code>Measure-Command</code> dalam PowerShell (bawah kiri). <code>| Out-Default</code> supaya output command masih dipaparkan</li>
+        <li>Command sendiri cepat: hanya cari invois dan masukkan ke queue</li>
+        <li>278 emel = 278 job. Worker yang hantar, dengan retry jika pelayan emel gagal</li>
+        <li>Pastikan command berfungsi dengan tangan <strong>sebelum</strong> dijadualkan. Ralat dalam scheduler lebih sukar dilihat</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Data Modul 2 (200,000 invois), dijalankan pada 22 November 2026. Bilangan bergantung pada tarikh hari ini; peserta akan dapat nombor berbeza. Mailable yang di-queue dipaparkan oleh worker dengan nama class Mailable itu sendiri. time juga mencetak baris user dan sys (masa CPU); hanya real dipaparkan di sini. Measure-Command mengikut dokumentasi Microsoft (Measure-Command, contoh dengan Out-Default); tidak diuji pada Windows dalam penyediaan kursus. Ia mencetak bilangan saat sahaja, contohnya 0.5xxx.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Langkah 2 · jadual</span>
+  <h2>Semua jadual dalam satu fail</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">routes/console.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="3-7|9|10">
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('invoices:send-reminders')
+    ->dailyAt('08:00')
+    ->timezone('Asia/Kuala_Lumpur')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command('sanctum:prune-expired --hours=24')->daily();
+Schedule::command('queue:prune-failed --hours=168')->daily();
+      </code></pre>
+      <table style="font-size:.48em; margin-top:.4em">
+        <thead><tr><th>Kaedah</th><th>Bila</th></tr></thead>
+        <tbody>
+          <tr><td><code>everyFiveMinutes()</code></td><td>Setiap 5 minit</td></tr>
+          <tr><td><code>hourly()</code></td><td>Setiap jam, minit ke-0</td></tr>
+          <tr><td><code>dailyAt('08:00')</code></td><td>Setiap hari 8:00</td></tr>
+          <tr><td><code>weeklyOn(1, '07:00')</code></td><td>Setiap Isnin 7:00</td></tr>
+          <tr><td><code>cron('0 8 1 * *')</code></td><td>Ungkapan cron penuh: 8:00 pada hari 1 setiap bulan</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <ul style="font-size:.52em">
+        <li><code>timezone()</code>: 8:00 pagi waktu Malaysia, bukan waktu pelayan</li>
+        <li><code>withoutOverlapping()</code>: jika larian semalam belum habis, jangan mula yang baru</li>
+        <li><code>onOneServer()</code>: jika ada dua pelayan aplikasi, hanya satu yang menjalankannya (perlukan cache bersama: database atau Redis)</li>
+        <li><code>sanctum:prune-expired</code>: buang token Modul 3 yang tamat tempoh</li>
+        <li><code>queue:prune-failed --hours=168</code>: buang failed jobs lebih 7 hari</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Fail routes/console.php sudah wujud dalam setiap projek Laravel 13. Schedule::job(new SomeJob) juga boleh, untuk menjadualkan job terus tanpa command.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · zon masa</span>
+  <h2>Kenapa 8:00 pagi tertulis <code>0 0 * * *</code>?</h2>
+  <div class="rule"></div>
+  <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan schedule:list
+ 0 0 * * *  php artisan invoices:send-reminders ......... Next Due: 17 hours from now
+ 0 0 * * *  php artisan sanctum:prune-expired --hours=24  Next Due: 17 hours from now
+ 0 0 * * *  php artisan queue:prune-failed --hours=168 .. Next Due: 17 hours from now
+
+$ php artisan schedule:list --timezone=Asia/Kuala_Lumpur
+ 0 8 * * *  php artisan invoices:send-reminders ......... Next Due: 17 hours from now
+  </code></pre>
+  <div class="cols" style="font-size:.53em; margin-top:.4em">
+    <div>
+      <p><code>config/app.php</code> guna <code>'timezone' =&gt; 'UTC'</code> (Coordinated Universal Time). 8:00 pagi Malaysia = 00:00 UTC. Jadual betul; paparannya dalam UTC.</p>
+    </div>
+    <div>
+      <p>Tetapi <code>daily()</code> <strong>tanpa</strong> <code>timezone()</code> berjalan 00:00 UTC = <strong>8:00 pagi</strong> Malaysia, bukan tengah malam. Sentiasa nyatakan <code>timezone()</code> untuk tugas yang bergantung pada waktu tempatan.</p>
+    </div>
+  </div>
+  <aside class="notes">Output sebenar pada 22 November 2026, kira-kira 2:48 petang waktu Malaysia. Untuk prune token dan failed jobs, waktu tepat tidak penting, jadi daily() tanpa timezone() tidak mengapa.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Di pelayan</span>
+  <h2>Satu baris cron untuk semua jadual</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">crontab -e (pengguna www-data)</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+* * * * * cd /var/www/yuran && php artisan schedule:run >> /dev/null 2>&1
+      </code></pre>
+      <p class="code-label">Apa yang berlaku setiap minit</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan schedule:run          # bila tiada yang perlu berjalan
+ INFO  No scheduled commands are ready to run.
+
+$ php artisan schedule:run          # pada 8:00 pagi
+ Running ['artisan' invoices:send-reminders] ..... 517.97ms DONE
+      </code></pre>
+      <p class="code-label">Mesin pembangun</p>
+      <pre class="xs"><code class="language-bash" data-trim>
+php artisan schedule:work
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li>Cron hanya memanggil <code>schedule:run</code> setiap minit. Laravel yang memutuskan tugas mana yang sudah tiba masanya</li>
+        <li>Tambah tugas baru = ubah <code>routes/console.php</code> dan deploy. Tiada perlu sentuh crontab lagi</li>
+        <li><code>schedule:work</code>: jalankan <code>schedule:run</code> setiap minit di terminal, tanpa cron</li>
+      </ul>
+      <div class="callout warn" style="font-size:.5em">Scheduler hanya <strong>memasukkan</strong> 278 emel ke queue. Tanpa worker (Bahagian Queues &amp; Jobs), tiada satu pun dihantar.</div>
+    </div>
+  </div>
+  <aside class="notes">Output kedua diambil dengan jadual ditukar sementara kepada everyMinute() supaya ia berjalan serta-merta; laluan penuh binari PHP dalam baris kedua output dibuang supaya muat. Cron entry ini tidak diuji pada pelayan Linux dalam kursus; ia baris standard daripada dokumentasi Laravel.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Tulis jadualnya</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Keperluan</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Laporan kutipan semalam kepada Bendahari, setiap hari bekerja jam 7:30 pagi</td><td class="fragment"><code>->weekdays()->at('07:30')->timezone('Asia/Kuala_Lumpur')</code></td></tr>
+      <tr><td>2</td><td>Tugas jalan 20 minit tetapi dijadualkan setiap 15 minit</td><td class="fragment"><code>->withoutOverlapping()</code></td></tr>
+      <tr><td>3</td><td>Dua pelayan di belakang load balancer; peringatan dihantar dua kali</td><td class="fragment"><code>->onOneServer()</code> dengan cache bersama</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu. weekdays() dan at() boleh digabung: weekdays() hadkan kepada Isnin–Jumaat, at() tetapkan masa harian.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 04: EVENTS & LISTENERS                            -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-diagram-project"></i></div>
+  <div class="big-num">BAHAGIAN 04</div>
+  <h2>Events &amp; Listeners</h2>
+  <p>Senibina decoupled dan observer pattern</p>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Ulang kaji Modul 1</span>
+  <h2>Satu event, pendengar yang tidak saling kenal</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 260" style="max-width:980px; margin:0 auto" role="img" aria-label="PaymentService menghantar event PaymentReceived; listener SendPaymentReceipt mendengar">
+    <defs><marker id="m4e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <rect class="box-d" x="0" y="90" width="230" height="80" rx="10"/>
+    <text class="t" x="115" y="124" text-anchor="middle" style="font-size:17px">PaymentService</text>
+    <text class="t-s" x="115" y="148" text-anchor="middle">rekod bayaran</text>
+    <path d="M230 130 L345 130" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m4e)"/>
+    <text class="t-ws" x="288" y="118" text-anchor="middle">dispatch</text>
+    <rect class="box-a" x="350" y="90" width="260" height="80" rx="10"/>
+    <text class="t" x="480" y="124" text-anchor="middle" style="font-size:17px">PaymentReceived</text>
+    <text class="t-s" x="480" y="148" text-anchor="middle">selepas commit</text>
+    <path d="M610 130 L745 60" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m4e)"/>
+    <rect class="box-g" x="750" y="20" width="350" height="80" rx="10"/>
+    <text class="t" x="925" y="54" text-anchor="middle" style="font-size:17px">SendPaymentReceipt</text>
+    <text class="t-s" x="925" y="78" text-anchor="middle">ShouldQueue · emel resit</text>
+    <g class="fragment">
+    <path d="M610 130 L745 200" stroke="#9aa5b8" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#m4e)"/>
+    <rect class="box-i" x="750" y="160" width="350" height="80" rx="10"/>
+    <text class="t" x="925" y="194" text-anchor="middle" style="font-size:17px">Listener baru?</text>
+    <text class="t-s" x="925" y="218" text-anchor="middle">PaymentService tidak perlu tahu</text>
+    </g>
+  </svg>
+  <ul style="font-size:.53em; margin-top:.4em">
+    <li><strong>Event</strong> = "sesuatu telah berlaku" (bayaran diterima). <strong>Listener</strong> = "apa yang perlu dibuat bila ia berlaku"</li>
+    <li>PaymentService hanya umumkan. Ia tidak tahu siapa yang mendengar, dan tidak perlu diubah bila pendengar bertambah</li>
+  </ul>
+  <aside class="notes">Rujuk slide "Event selepas transaksi berjaya" dalam Modul 1. Tekan anak panah untuk dedahkan listener baru.</aside>
+</section>
+
+<section data-timing="420">
+  <span class="kicker">Keperluan baru · hantar ke sistem kewangan</span>
+  <h2>Panggil terus, atau umumkan event?</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">app/Services/PaymentService.php · dalam pay()</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8">
+return DB::transaction(function () use (
+    $invoice, $student, $data, $amount, $reference,
+) {
+    $payment = $this->invoices->recordPayment($invoice, [
+        'student_id' => $student->id, 'method' => $data->method,
+        'amount' => $amount, 'reference' => $reference, 'paid_at' => now(),
+    ]);
+    SyncPaymentToFinance::dispatch($payment);
+
+    return $payment;
+});
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# QUEUE_CONNECTION=database   → DONE
+# QUEUE_CONNECTION=redis
+ App\Jobs\SyncPaymentToFinance ...... 7.50ms FAIL
+failed_jobs: Illuminate\Database\Eloquent\ModelNotFoundException:
+  No query results for model [App\Models\Payment].
+      </code></pre>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Services/PaymentService.php · dalam pay()</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="8">
+return DB::transaction(function () use (
+    $invoice, $student, $data, $amount, $reference,
+) {
+    $payment = $this->invoices->recordPayment($invoice, [
+        'student_id' => $student->id, 'method' => $data->method,
+        'amount' => $amount, 'reference' => $reference, 'paid_at' => now(),
+    ]);
+    PaymentReceived::dispatch($payment);
+
+    return $payment;
+});
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# QUEUE_CONNECTION=redis
+ App\Listeners\SendPaymentReceipt ... 26.57ms DONE
+ App\Jobs\SyncPaymentToFinance ...... 33.66ms DONE
+      </code></pre>
+    </div>
+  </div>
+  <div class="callout warn" style="font-size:.5em; margin-top:.3em">Dengan Redis, worker ambil job <strong>sebelum</strong> transaksi commit, jadi bayaran belum wujud. Dengan database driver, baris job berada dalam transaksi yang sama, jadi pepijat ini tersembunyi sehingga hari anda tukar driver. Event <code>ShouldDispatchAfterCommit</code> menunggu commit.</div>
+  <aside class="notes">Diuji dengan sleep(4) sebelum commit supaya worker sempat mengambil job. Job SEBELUM terus masuk failed_jobs tanpa retry, walaupun $tries = 4: Laravel gagalkan job serta-merta bila model dalam payload tidak dijumpai. Bayaran itu sebenarnya wujud selepas commit. Pilihan lain: SyncPaymentToFinance::dispatch($payment)->afterCommit(). Baris broadcast dibuang daripada output SELEPAS kerana broadcasting diajar kemudian.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Listener kedua</span>
+  <h2>Tambah pendengar tanpa sentuh PaymentService</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Listeners/SendPaymentToFinance.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+namespace App\Listeners;
+
+use App\Events\PaymentReceived;
+use App\Jobs\SyncPaymentToFinance;
+
+final class SendPaymentToFinance
+{
+    public function handle(PaymentReceived $event): void
+    {
+        SyncPaymentToFinance::dispatch($event->payment);
+    }
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+$ php artisan event:list --event=PaymentReceived
+ App\Events\PaymentReceived
+ ⇂ App\Listeners\SendPaymentReceipt@handle (ShouldQueue)
+ ⇂ App\Listeners\SendPaymentToFinance@handle
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.54em">
+        <li>Tiada pendaftaran: event discovery membaca type-hint <code>handle(PaymentReceived $event)</code> dalam <code>app/Listeners</code></li>
+        <li>Listener ini <strong>tidak</strong> <code>ShouldQueue</code>: ia hanya menghantar job, kerja sebenar dan retry ada dalam <code>SyncPaymentToFinance</code></li>
+        <li><code>event:list</code>: cara pantas untuk semak siapa mendengar apa</li>
+      </ul>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+# satu bayaran melalui API
+201  0.096 s
+jobs: App\Listeners\SendPaymentReceipt
+      App\Jobs\SyncPaymentToFinance
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Alternatif: jadikan SyncPaymentToFinance sendiri sebagai listener ShouldQueue dengan $tries dan $backoff. Kita kekalkan job berasingan supaya ia juga boleh dihantar semula secara manual (contohnya dari command untuk bayaran lama).</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Observer pattern</span>
+  <h2>Subjek memberitahu, pemerhati bertindak</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ul style="font-size:.56em">
+        <li><strong>Observer pattern</strong>: satu objek (subjek) memberitahu senarai pemerhati bila keadaannya berubah. Subjek tidak tahu apa yang pemerhati buat</li>
+        <li>Event &amp; listener ialah bentuk umum: <em>anda</em> tentukan bila event dihantar</li>
+        <li><strong>Model observer</strong> ialah bentuk khusus Eloquent: Laravel hantar event sendiri bila model dicipta, dikemas kini atau dipadam</li>
+      </ul>
+    </div>
+    <table style="font-size:.5em">
+      <thead><tr><th>Method observer</th><th>Dipanggil bila</th></tr></thead>
+      <tbody>
+        <tr><td><code>creating</code> / <code>created</code></td><td>Sebelum / selepas <code>INSERT</code></td></tr>
+        <tr><td><code>updating</code> / <code>updated</code></td><td>Sebelum / selepas <code>UPDATE</code></td></tr>
+        <tr><td><code>saving</code> / <code>saved</code></td><td>Kedua-dua insert dan update</td></tr>
+        <tr><td><code>deleting</code> / <code>deleted</code></td><td>Sebelum / selepas <code>DELETE</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout" style="font-size:.53em; margin-top:.6em">Keperluan audit: setiap kali <strong>amaun invois</strong> diubah, catat nilai lama dan baru. Tidak kira dari controller mana ia diubah.</div>
+</section>
+
+<section data-timing="360">
+  <span class="kicker">Model observer</span>
+  <h2>InvoiceObserver dengan <code>#[ObservedBy]</code></h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">app/Observers/InvoiceObserver.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="10|11|12-14">
+namespace App\Observers;
+
+use App\Models\Invoice;
+use Illuminate\Support\Facades\Log;
+
+final class InvoiceObserver
+{
+    public function updated(Invoice $invoice): void
+    {
+        if ($invoice->wasChanged('amount')) {
+            Log::warning('Amaun invois diubah', [
+                'invoice' => $invoice->number,
+                'dari' => $invoice->getOriginal('amount'),
+                'kepada' => $invoice->amount,
+            ]);
+        }
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">app/Models/Invoice.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Observers\InvoiceObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+
+#[ObservedBy(InvoiceObserver::class)]
+class Invoice extends Model
+{
+    // ... seperti Modul 2
+}
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li><code>#[ObservedBy]</code>: attribute PHP yang mendaftarkan observer pada model. Tiada service provider</li>
+        <li><code>wasChanged('amount')</code>: hanya log bila amaun sebenarnya berubah</li>
+        <li>Dalam <code>updated()</code>, <code>getOriginal()</code> masih memegang nilai lama</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Baris 10 ialah semakan wasChanged, 11 ialah log, 12–14 ialah data log. Observer biasa berjalan serta-merta dalam request yang sama; tambah ShouldQueue pada observer jika kerjanya berat.</aside>
+</section>
+
+<section data-timing="240">
+  <span class="kicker">Perangkap · mass update</span>
+  <h2>Observer tidak nampak semua perubahan</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag good">DICATAT</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+$invoice = Invoice::find(20006);
+$invoice->update(['amount' => 1100]);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+local.WARNING: Amaun invois diubah
+  {"invoice":"INV0020006","dari":"15.00","kepada":1100}
+      </code></pre>
+      <p style="font-size:.5em">Model dimuatkan, diubah, disimpan: Laravel hantar event <code>updated</code>.</p>
+    </div>
+    <div>
+      <h3><span class="tag bad">TIDAK DICATAT</span></h3>
+      <pre class="xs"><code class="language-php" data-trim>
+Invoice::whereKey(40006)->update(['amount' => 1100]);
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Invoice::find(40006)->amount   → "1100.00"
+storage/logs/laravel.log       → (tiada apa-apa)
+      </code></pre>
+      <p style="font-size:.5em">Satu query <code>UPDATE</code> terus ke DB. Tiada model dimuatkan, jadi tiada event dan tiada observer.</p>
+    </div>
+  </div>
+  <div class="callout warn" style="font-size:.53em; margin-top:.4em">Untuk audit yang mesti lengkap: tutup jalan pintas (semua perubahan amaun melalui satu service yang guna <code>$invoice->update()</code>), atau rekod di peringkat DB.</div>
+  <aside class="notes">Diuji dalam tinker: kedua-dua invois kini 1100.00, tetapi hanya 20006 ada baris log. Perkara yang sama untuk Invoice::where(...)->delete() dan increment() pada query builder.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Bila guna yang mana</span>
+  <h2>Panggil terus, event, atau observer?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th></th><th>Panggil terus</th><th>Event &amp; listener</th><th>Model observer</th></tr></thead>
+    <tbody>
+      <tr><td>Dicetuskan oleh</td><td>Kod anda</td><td>Kod anda, <code>Event::dispatch()</code></td><td>Eloquent, setiap simpan / padam</td></tr>
+      <tr><td>Contoh</td><td>Kira penalti sebelum bayar (perlu jawapan serta-merta)</td><td>Bayaran diterima → resit, sistem kewangan</td><td>Audit amaun invois</td></tr>
+      <tr><td>Kekuatan</td><td>Jelas, mudah dibaca</td><td>Tambah tindakan tanpa ubah pengirim</td><td>Tidak boleh terlupa bila guna model</td></tr>
+      <tr><td>Kelemahan</td><td>Class membesar dengan setiap keperluan</td><td>Aliran lebih sukar diikut: guna <code>event:list</code></td><td>Senyap untuk mass update; logik "tersembunyi"</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="font-size:.53em; margin-top:.6em">Peraturan mudah: jika pemanggil <strong>perlukan hasil</strong>, panggil terus. Jika ia hanya <strong>mengumumkan</strong> sesuatu telah berlaku, guna event.</div>
+</section>
+
+<section data-timing="180">
+  <span class="kicker"><i class="fa-solid fa-users"></i>&nbsp; Kuiz meja · 3 minit</span>
+  <h2>Event, listener atau observer?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th>#</th><th>Keperluan</th><th>Jawapan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Bila bayaran diterima, kemas kini statistik dashboard Bendahari</td><td class="fragment">Listener baru untuk <code>PaymentReceived</code></td></tr>
+      <tr><td>2</td><td>Setiap invois baru mesti dapat nombor <code>INV</code> berturutan sebelum disimpan</td><td class="fragment">Observer <code>creating()</code></td></tr>
+      <tr><td>3</td><td>Kira penalti lewat dan tunjuk jumlah kepada pelajar sebelum dia bayar</td><td class="fragment">Panggil terus <code>LatePenaltyCalculator</code>: hasil diperlukan serta-merta</td></tr>
+      <tr><td>4</td><td>Script import kemas kini 5,000 amaun dengan <code>Invoice::whereIn(...)->update()</code>. Audit kosong. Kenapa?</td><td class="fragment">Mass update tidak mencetuskan observer</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">Tekan anak panah untuk dedahkan jawapan satu demi satu selepas setiap meja beri jawapan. LatePenaltyCalculator dari slide SRP, Modul 1.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- BAHAGIAN 05: BROADCASTING, LAB 2                           -->
+<!-- ============================================================ -->
+
+<section data-timing="60" class="divider" data-state="no-footer">
+  <div class="div-ico"><i class="fa-solid fa-tower-broadcast"></i></div>
+  <div class="big-num">BAHAGIAN 05</div>
+  <h2>Broadcasting</h2>
+  <p>Event masa nyata ke pelayar (overview)</p>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Dashboard Bendahari</span>
+  <h2>Tanya setiap 5 saat, atau diberitahu?</h2>
+  <div class="rule"></div>
+  <svg class="info" viewBox="0 0 1100 300" style="max-width:1000px; margin:0 auto" role="img" aria-label="Polling: pelayar bertanya setiap 5 saat. Broadcasting: pelayan menolak mesej bila bayaran berlaku">
+    <defs><marker id="m4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5b8"/></marker></defs>
+    <text class="t-h" x="0" y="24">POLLING</text>
+    <rect class="box-p" x="0" y="40" width="200" height="70" rx="10"/>
+    <text class="t" x="100" y="80" text-anchor="middle" style="font-size:16px">Dashboard</text>
+    <rect class="box-d" x="880" y="40" width="220" height="70" rx="10"/>
+    <text class="t" x="990" y="80" text-anchor="middle" style="font-size:16px">Laravel</text>
+    <path d="M200 60 L875 60" stroke="#9aa5b8" stroke-width="2" marker-end="url(#m4b)"/>
+    <path d="M880 92 L205 92" stroke="#9aa5b8" stroke-width="2" marker-end="url(#m4b)"/>
+    <text class="t-ws" x="540" y="52" text-anchor="middle">"ada bayaran baru?" setiap 5 s = 720 request sejam, setiap tab</text>
+    <text class="t-ws" x="540" y="112" text-anchor="middle">"tiada" … "tiada" … "tiada" … "ya, 1"</text>
+
+    <g class="fragment">
+    <text class="t-h" x="0" y="170">BROADCASTING</text>
+    <rect class="box-p" x="0" y="186" width="200" height="70" rx="10"/>
+    <text class="t" x="100" y="226" text-anchor="middle" style="font-size:16px">Dashboard</text>
+    <rect class="box-i" x="400" y="186" width="260" height="70" rx="10"/>
+    <text class="t" x="530" y="216" text-anchor="middle" style="font-size:16px">Pelayan WebSocket</text>
+    <text class="t-s" x="530" y="240" text-anchor="middle">Reverb / Pusher / Soketi</text>
+    <rect class="box-d" x="880" y="186" width="220" height="70" rx="10"/>
+    <text class="t" x="990" y="226" text-anchor="middle" style="font-size:16px">Laravel</text>
+    <path d="M200 206 L395 206" stroke="#9aa5b8" stroke-width="2" stroke-dasharray="6 5"/>
+    <text class="t-ws" x="298" y="198" text-anchor="middle">sambungan terbuka</text>
+    <path d="M875 221 L665 221" stroke="#9aa5b8" stroke-width="2.5" marker-end="url(#m4b)"/>
+    <text class="t-ws" x="770" y="212" text-anchor="middle">bayaran diterima</text>
+    <path d="M400 240 L205 240" stroke="#4cc47f" stroke-width="2.5" marker-end="url(#m4b)"/>
+    <text class="t-ws" x="298" y="270" text-anchor="middle" style="fill:#4cc47f">tolak sekali, serta-merta</text>
+    </g>
+  </svg>
+  <p style="font-size:.53em; margin-top:.3em"><strong>WebSocket</strong>: sambungan yang kekal terbuka antara pelayar dan pelayan, supaya pelayan boleh menghantar mesej tanpa diminta. Laravel tidak memegang sambungan ini sendiri; ia menyerahkan mesej kepada pelayan WebSocket.</p>
+  <aside class="notes">Tekan anak panah untuk dedahkan baris kedua. 720 = 3,600 saat / 5 saat. Bahagian ini overview: kita lihat bahagian Laravel (event dan payload) yang boleh diuji tanpa pelayan WebSocket.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Pilihan pelayan</span>
+  <h2>Siapa yang memegang sambungan?</h2>
+  <div class="rule"></div>
+  <table style="font-size:.52em">
+    <thead><tr><th></th><th>Jenis</th><th>Catatan</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Laravel Reverb</strong></td><td>Dihoskan sendiri, pakej rasmi Laravel</td><td>Dipasang melalui <code>php artisan install:broadcasting</code>; berjalan dengan <code>php artisan reverb:start</code></td></tr>
+      <tr><td><strong>Pusher Channels</strong></td><td>Perkhidmatan berbayar (SaaS, Software as a Service)</td><td>Tiada pelayan untuk diurus; had sambungan ikut pelan</td></tr>
+      <tr><td><strong>Soketi</strong></td><td>Dihoskan sendiri, sumber terbuka</td><td>Bercakap protokol Pusher, jadi Laravel guna driver <code>pusher</code> yang dihalakan ke pelayan sendiri</td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="font-size:.53em; margin-top:.6em">
+    <p>Ketiga-tiganya guna protokol Pusher, jadi kod Laravel dan kod pelayar (<strong>Laravel Echo</strong>) hampir sama. Yang berubah ialah <code>.env</code>.</p>
+    <p>Untuk UTM: data bayaran kekal dalam rangkaian sendiri dengan Reverb atau Soketi. Pusher paling cepat untuk mula.</p>
+  </div>
+  <aside class="notes">Tiada pelayan WebSocket diuji dalam kursus ini; maklumat ini daripada dokumentasi Laravel (Broadcasting) dan Soketi. install:broadcasting bertanya secara interaktif sama ada mahu pasang Reverb; ia juga mendaftar routes/channels.php dalam bootstrap/app.php. Untuk ujian tanpa pelayan, BROADCAST_CONNECTION=log menulis setiap broadcast ke storage/logs/laravel.log.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Bahagian Laravel</span>
+  <h2>Event yang sama, kini juga dihantar ke pelayar</h2>
+  <div class="rule"></div>
+  <div class="cols-60">
+    <div>
+      <p class="code-label">app/Events/PaymentReceived.php</p>
+      <pre class="xs"><code class="language-php" data-trim data-line-numbers="9|15-18|20-23">
+namespace App\Events;
+
+use App\Models\Payment;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Illuminate\Foundation\Events\Dispatchable;
+
+final class PaymentReceived implements ShouldDispatchAfterCommit, ShouldBroadcast
+{
+    use Dispatchable;
+
+    public function __construct(public Payment $payment) {}
+
+    public function broadcastOn(): array
+    {
+        return [new PrivateChannel('bursary')];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'payment.received';
+    }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p class="code-label">routes/channels.php</p>
+      <pre class="xs"><code class="language-php" data-trim>
+use App\Models\User;
+use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::channel('bursary', fn (User $user) => $user->isBursary());
+      </code></pre>
+      <ul style="font-size:.52em">
+        <li><code>ShouldBroadcast</code>: selain listener biasa, event ini juga dihantar ke pelayan WebSocket</li>
+        <li><code>PrivateChannel('bursary')</code>: hanya pengguna yang lulus semakan dalam <code>channels.php</code> boleh mendengar. Pelajar tidak boleh</li>
+        <li><code>broadcastAs()</code>: nama event yang pelayar dengar</li>
+        <li>Broadcast juga melalui <strong>queue</strong>: worker menunjukkan <code>App\Events\PaymentReceived ... DONE</code></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">isBursary() dari model User, Modul 3. Laravel memanggil fungsi channel dengan pengguna yang log masuk semasa pelayar meminta kebenaran untuk saluran private-bursary. Guna ShouldBroadcastNow jika mahu broadcast tanpa queue.</aside>
+</section>
+
+<section data-timing="300">
+  <span class="kicker">Perangkap · payload</span>
+  <h2>Apa yang sampai ke pelayar?</h2>
+  <div class="rule"></div>
+  <div class="vs">
+    <div>
+      <h3><span class="tag bad">SEBELUM</span></h3>
+      <p class="code-label">BROADCAST_CONNECTION=log · storage/logs/laravel.log</p>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Broadcasting [App\Events\PaymentReceived]
+  on channels [private-bursary] with payload:
+{
+    "payment": {
+        "student_id": 7,
+        "method": "card",
+        "amount": "1100.00",
+        "reference": "FPX424150",
+        "paid_at": "2026-11-22T06:49:19.000000Z",
+        "invoice_id": 20006,
+        "updated_at": "2026-11-22T06:49:19.000000Z",
+        "created_at": "2026-11-22T06:49:19.000000Z",
+        "id": 131072
+    }
+}
+      </code></pre>
+      <p style="font-size:.5em">Tanpa <code>broadcastWith()</code>, <strong>setiap</strong> property public dihantar, termasuk seluruh model.</p>
+    </div>
+    <div>
+      <h3><span class="tag good">SELEPAS</span></h3>
+      <p class="code-label">app/Events/PaymentReceived.php (tambah)</p>
+      <pre class="xs"><code class="language-php" data-trim>
+public function broadcastWith(): array
+{
+    return [
+        'invoice' => $this->payment->invoice->number,
+        'amount' => $this->payment->amount,
+        'method' => $this->payment->method->value,
+    ];
+}
+      </code></pre>
+      <pre class="xs"><code class="language-plaintext" data-trim>
+Broadcasting [payment.received]
+  on channels [private-bursary] with payload:
+{
+    "invoice": "INV0040006",
+    "amount": "1100.00",
+    "method": "ewallet",
+    "socket": null
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">Prinsip yang sama seperti API Resource dalam Modul 3: jangan pulangkan model terus. socket ditambah oleh Laravel (id sambungan pengirim, untuk toOthers()). Dua bayaran berbeza digunakan untuk SEBELUM dan SELEPAS.</aside>
+</section>
+
+<section data-timing="180">
+  <span class="kicker">Di pelayar</span>
+  <h2>Laravel Echo mendengar saluran</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p class="code-label">resources/js/dashboard.js</p>
+      <pre class="xs"><code class="language-javascript" data-trim>
+window.Echo.private('bursary')
+    .listen('.payment.received', (e) => {
+        addRow(e.invoice, e.amount, e.method);
+    });
+      </code></pre>
+    </div>
+    <div>
+      <ul style="font-size:.55em">
+        <li><code>private('bursary')</code>: Echo minta kebenaran dari Laravel dahulu (fungsi dalam <code>channels.php</code>)</li>
+        <li><code>'.payment.received'</code>: titik di hadapan kerana kita guna <code>broadcastAs()</code>. Tanpa titik, Echo cari <code>App\Events\payment.received</code></li>
+        <li><code>addRow()</code>: fungsi dashboard anda sendiri</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="font-size:.53em; margin-top:.6em">Kesemua aliran: pelajar bayar → <code>PaymentReceived</code> selepas commit → resit, sistem kewangan dan dashboard Bendahari, masing-masing melalui queue. <code>PaymentService</code> tidak berubah sejak Modul 1.</div>
+  <aside class="notes">Kod Echo ini tidak diuji dalam kursus (tiada pelayan WebSocket); ia mengikut dokumentasi Laravel Broadcasting. Persediaan Echo dalam pelayar (pakej laravel-echo dan pusher-js) ikut dokumentasi tersebut.</aside>
+</section>
+
+<section data-timing="1200" class="lab">
+  <span class="kicker"><i class="fa-solid fa-laptop-code"></i>&nbsp; Lab 2 · 20 minit · individu, dibantu rakan semeja · baki <span data-countdown>20:00</span></span>
+  <h2>Peringatan yuran automatik</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <p style="font-size:.58em">Sambung dari Lab 1. Mailable <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">FeeReminder</code> sudah disediakan dalam branch.</p>
+      <ol class="steps" style="font-size:.54em">
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">make:command SendFeeReminders</code>: cari invois lewat tepat 7 hari, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Mail::...->queue()</code> satu emel setiap invois</li>
+        <li>Jalankan dengan tangan. Bandingkan bilangan dengan query:<br><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">SELECT COUNT(*) FROM invoices WHERE paid_at IS NULL AND due_date = CURDATE() - INTERVAL 7 DAY</code></li>
+        <li>Jadualkan dalam <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">routes/console.php</code>: 8:00 pagi waktu Malaysia, <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">withoutOverlapping()</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">schedule:list --timezone=Asia/Kuala_Lumpur</code> mesti tunjuk <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">0 8 * * *</code></li>
+        <li><code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">queue:work --stop-when-empty</code>, semak subjek emel dalam log</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-flag-checkered"></i>Bukti siap</h3>
+      <p>Output command (bilangan sama dengan query), output <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">schedule:list</code>, dan satu baris <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Subject: Peringatan: …</code> dalam log.</p>
+      <p>Siap awal? Tambah <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">InvoiceObserver</code> yang log setiap perubahan amaun. Uji dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">$invoice-&gt;update()</code> dan dengan <code style="background:#0b2e20;color:#9be3b7;border-color:#1d5a3f">Invoice::whereKey()-&gt;update()</code>. Terangkan beza hasilnya kepada rakan semeja.</p>
+    </div>
+  </div>
+  <aside class="notes">Jika bilangan 0, tiada invois dalam data yang lewat tepat 7 hari pada tarikh hari ini; minta peserta tukar subDays(7) kepada subDays(8) untuk menguji, kemudian kembalikan. Query MySQL guna tarikh DB, manakala today() Laravel guna UTC; pada 3:25 petang waktu Malaysia kedua-duanya sama tarikh.</aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- MINUM PETANG 3:45                                          -->
+<!-- ============================================================ -->
+
+<section data-timing="900" class="cover" data-state="no-footer">
+  <div class="div-ico" style="display:inline-flex; align-items:center; justify-content:center; width:110px; height:110px; border-radius:28px; background:var(--accent-soft); border:1px solid #5e4a1f; color:var(--accent); font-size:50px"><i class="fa-solid fa-mug-hot"></i></div>
+  <span class="kicker" style="display:block; margin-top:1em">3:45 – 4:00 petang</span>
+  <h1 style="margin:.1em 0 .2em">Minum petang · 15 minit</h1>
+  <p style="font-size:2.2em; font-weight:800; margin:.1em 0" data-countdown>15:00</p>
+  <p class="cover-sub">Seterusnya: ringkasan Modul 4, kemudian Modul 5</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- RINGKASAN, SETERUSNYA                                      -->
+<!-- ============================================================ -->
+
+<section data-timing="180">
+  <span class="kicker">Ringkasan</span>
+  <h2>Modul 4 dalam satu slide</h2>
+  <div class="rule"></div>
+  <table style="font-size:.5em">
+    <thead><tr><th>Bahagian</th><th>Masalah → hasil (diukur)</th><th>Yang perlu diingat</th></tr></thead>
+    <tbody>
+      <tr><td>Queues &amp; Jobs</td><td>Eksport 3.76 s → 202 dalam 0.038 s</td><td>Tiada worker = tiada kerja; <code>queue:restart</code> setiap deploy</td></tr>
+      <tr><td>Failed jobs &amp; retry</td><td>Sistem kewangan 503 → 4 cubaan → <code>failed_jobs</code> → <code>queue:retry</code></td><td><code>$tries</code>, <code>$backoff</code>, <code>failed()</code>, idempotent</td></tr>
+      <tr><td>Queue drivers</td><td>Database 2,111 vs Redis 2,009 job/s (4 worker)</td><td>Pilih kerana ciri; tambah worker dahulu</td></tr>
+      <tr><td>Scheduled tasks</td><td>278 peringatan dalam 0.5 s, setiap hari 8:00</td><td>Satu baris cron; nyatakan <code>timezone()</code></td></tr>
+      <tr><td>Events &amp; listeners</td><td>Job dalam transaksi: <code>ModelNotFoundException</code> dengan Redis → event selepas commit</td><td>Umumkan dengan event; observer senyap untuk mass update</td></tr>
+      <tr><td>Broadcasting</td><td>Polling 720 request sejam → satu mesej bila perlu</td><td><code>PrivateChannel</code> + <code>broadcastWith()</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout good" style="font-size:.55em; margin-top:.8em"><strong>Kerja berat ke background, kerja tambahan ke listener.</strong> <code>PaymentService</code> masih sama seperti Modul 1, tetapi sistem kini menghantar resit, menyalin ke sistem kewangan, dan mengemas kini dashboard.</div>
+</section>
+
+<section data-timing="60" class="cover" data-state="no-footer">
+  <div class="logo-plate sm"><img src="assets/utm-logo-full.png" alt="Universiti Teknologi Malaysia"></div>
+  <span class="kicker" style="display:block; margin-top:1.6em">Seterusnya</span>
+  <h1 style="margin-top:.1em; font-size:1.7em">Modul 5 — Pengujian &amp; Kualiti Sistem</h1>
+  <p class="cover-sub">Bagaimana kita tahu semua yang dibina sejak Modul 1 masih berfungsi selepas setiap perubahan?</p>
+  <div class="topic-chips" style="max-width:1000px; margin-left:auto; margin-right:auto">
+    <span><i class="fa-solid fa-flask"></i>Unit &amp; feature testing</span>
+    <span><i class="fa-solid fa-rotate"></i>Test-driven development</span>
+    <span><i class="fa-solid fa-file-lines"></i>Log management</span>
+    <span><i class="fa-solid fa-heart-pulse"></i>Monitoring</span>
+  </div>
+  <h3 style="margin-top:1.6em"><i class="fa-regular fa-comments" style="color:var(--accent); margin-right:.4em"></i>Soalan &amp; perbincangan</h3>
+  <aside class="notes">Modul 5 bermula sejurus selepas ini (kira-kira 4:05 petang Hari 3). Ia akan menunjukkan cara menguji kod hari ini tanpa worker sebenar, contohnya Queue::fake() dan Event::fake().</aside>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.min.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.min.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.min.js"></script>
+<script src="assets/pacing.js"></script>
+<script>
+  // Double-click: toggle fullscreen (except on links, buttons and code)
+  document.addEventListener('dblclick', function (e) {
+    if (e.target.closest('a, button, input, textarea, pre, code')) return;
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) {
+      (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    } else {
+      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    }
+  });
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    center: true,
+    pdfSeparateFragments: false,
+    plugins: [RevealHighlight, RevealNotes, RevealPacing],
+  });
+</script>
+</body>
+</html>
